@@ -12,14 +12,25 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
+ * 
+ *  This file is store for labconcepts (Test Specimens & Tests)
  */
-
-//model of an observation
-Ext.define('Screener.model.Obs', {
-    extend: 'Ext.data.Model',
-    fields: ['person', 'obsDatetime', 'concept', 'value',
-    {
-        name: 'id',
-        persist: false
-    }]
-});
+Ext.define('Laboratory.store.concept', {
+    extend: 'Ext.data.Store',
+    model: 'Laboratory.model.Concept',
+    //groupField: 'Specimen',
+    proxy: {
+        type: 'rest',
+        url: '',
+        headers: {
+            "Accept": "application/json",
+            "Authorization": "Basic " + window.btoa("admin:Admin123"),
+            "Content-Type": "application/json"
+        },
+        reader: {
+            type: 'json',
+            root: 'setMembers'
+        }
+    },
+    autoLoad: true,
+})

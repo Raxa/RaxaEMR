@@ -12,14 +12,32 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
+ * 
+ * This file is model for labconcepts (Test Specimens & Tests)
  */
-
-//model of an observation
-Ext.define('Screener.model.Obs', {
+Ext.define('Laboratory.model.Concept', {
     extend: 'Ext.data.Model',
-    fields: ['person', 'obsDatetime', 'concept', 'value',
-    {
-        name: 'id',
-        persist: false
-    }]
+      fields: [{
+            name: 'Specimen',
+            type: 'string',
+//	    mapping: 'display',
+        }, {
+            name: 'Test',
+            type: 'string',
+	 	    mapping: 'display',
+        }, {
+            name: 'Result'
+        }, {
+            name: 'Units',
+            type: 'string'
+        }, {
+            name: 'Flag',
+            type: 'string'
+        },{
+	    	name: 'Uuid',
+	  		type: 'string',
+	    	mapping: 'uuid'	
+	}],
+
 });
+

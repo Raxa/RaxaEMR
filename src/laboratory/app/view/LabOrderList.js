@@ -12,14 +12,25 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
+ * 
+ *  This is a grid panel which contains list of orders
  */
+Ext.define('Laboratory.view.LabOrderList', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.laborderlistgrid',
+    layout: 'fit',
 
-//model of an observation
-Ext.define('Screener.model.Obs', {
-    extend: 'Ext.data.Model',
-    fields: ['person', 'obsDatetime', 'concept', 'value',
-    {
-        name: 'id',
-        persist: false
+    groupField: 'orderlist',
+
+    columns: [{
+        xtype: 'gridcolumn',
+        width: 200,
+        text: 'Order List',
+        dataIndex: 'orderlist',
+    }, {
+        xtype: 'gridcolumn',
+        width: 200,
+        text: 'Order List',
+        dataIndex: 'ConceptName',
     }]
 });
