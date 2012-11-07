@@ -12,7 +12,7 @@
                 padding: 0px;
             }
             canvas {
-                border: 1px solid #9C9898;
+                /*border: 1px solid #9C9898;*/
             }
         </style>
         <script src="src/lib/kinetic-v4.0.5.min.js"></script>
@@ -32,9 +32,9 @@
             var HISTORY_ITEM_DIM = 64;
 
             var CONTROL_BASE_X = DRAWABLE_X_MAX + 8;
-            var CONTROL_BASE_Y = DRAWABLE_Y_MIN;
-            var CONTROL_ITEM_SPACING = 8;
-            var CONTROL_ITEM_DIM = 48;
+            var CONTROL_BASE_Y = DRAWABLE_Y_MIN - 6;
+            var CONTROL_ITEM_SPACING = 3;
+            var CONTROL_ITEM_DIM = 52;
 
             function isInDrawableArea(myX, myY) {
               up = {
@@ -62,445 +62,453 @@
               
               var historyYOffset = HISTORY_BASE_Y;
 
-              document.getElementById("drawMode").addEventListener("click", function() {
-                mode = "draw";
-              }, false);
+              layer = new Kinetic.Layer();
+              loadedImageLayer = new Kinetic.Layer();  // For re-loaded thumbs
+              linesLayer = new Kinetic.Layer();
+              textLayer = new Kinetic.Layer();
+              controlsLayer = new Kinetic.Layer();
 
-              document.getElementById("eraseMode").addEventListener("click", function() {
-                mode = "erase";
-              }, false);
+              var simpleText = new Kinetic.Text({
+                x: 190,
+                y: 15,
+                text: "Simple Text",
+                fontSize: 30,
+                fontFamily: "Calibri",
+                textFill: "green"
+              });
 
-                layer = new Kinetic.Layer();
-                loadedImageLayer = new Kinetic.Layer();  // For re-loaded thumbs
-                linesLayer = new Kinetic.Layer();
-                textLayer = new Kinetic.Layer();
-                controlsLayer = new Kinetic.Layer();
+              var complexText = new Kinetic.Text({
+                x: 100,
+                y: 60,
+                stroke: '#555',
+                strokeWidth: 5,
+                fill: '#ddd',
+                text: 'COMPLEX TEXT\n\nAll the world\'s a stage, and all the men and women merely players. They have their exits and their entrances.',
+                fontSize: 14,
+                fontFamily: 'Calibri',
+                textFill: '#555',
+                width: 380,
+                padding: 20,
+                align: 'center',
+                fontStyle: 'italic',
+                shadow: {
+                  color: 'black',
+                  blur: 1,
+                  offset: [10, 10],
+                  opacity: 0.2
+                },
+                cornerRadius: 10
+              });
 
-                var simpleText = new Kinetic.Text({
-                  x: 190,
-                  y: 15,
-                  text: "Simple Text",
-                  fontSize: 30,
-                  fontFamily: "Calibri",
-                  textFill: "green"
+              stage = new Kinetic.Stage({
+                  container: "container",
+                  width: STAGE_X,
+                  height: STAGE_Y
+              });
+              GloStage = stage;
+
+              background = new Kinetic.Rect({
+                  x: 0, 
+                  y: 0, 
+                  width: stage.getWidth(),
+                  height: stage.getHeight(),
+                  fill: "white"
+              });
+  
+              layer.add(background);
+
+              // Load background image for OPD
+              var imageObj = new Image();
+              imageObj.onload = function() {
+                console.log("image loaded");
+                console.log(stage.getWidth(), stage.getHeight());
+                var backgroundImage = new Kinetic.Image({
+                  x: 0,
+                  y: 0,
+                  image: imageObj,
+                  width: stage.getWidth(),
+                  height: stage.getHeight()
                 });
+                layer.add(backgroundImage);
+                layer.draw();
+              }
+              var file = "2012.11.07_OPD-Lite_v1.0.jpg";
+              imageObj.src = file;
 
-                var complexText = new Kinetic.Text({
-                  x: 100,
-                  y: 60,
-                  stroke: '#555',
-                  strokeWidth: 5,
-                  fill: '#ddd',
-                  text: 'COMPLEX TEXT\n\nAll the world\'s a stage, and all the men and women merely players. They have their exits and their entrances.',
-                  fontSize: 14,
-                  fontFamily: 'Calibri',
-                  textFill: '#555',
-                  width: 380,
-                  padding: 20,
-                  align: 'center',
-                  fontStyle: 'italic',
-                  shadow: {
-                    color: 'black',
-                    blur: 1,
-                    offset: [10, 10],
-                    opacity: 0.2
-                  },
-                  cornerRadius: 10
+              stage.add(layer);
+              stage.add(linesLayer);
+              stage.add(textLayer); // in front of "draw" layer, i.e. cant draw on a diagnosis. for now.
+              stage.add(loadedImageLayer);
+              stage.add(controlsLayer);
+              
+              moving = false;
+
+              // Drag start
+              stage.on("mousedown", function(){
+                dragStart();
+              });
+
+              stage.on("touchstart", function(){
+                dragStart();
+              });
+
+              function dragStart() {
+                  console.log('dragStart');
+
+                  var up = stage.getUserPosition();
+                  if (! isInDrawableArea(up.x, up.y)) {
+                    return;
+                  }
+                  
+                  if (mode !== 'draw') {
+                    return;
+                  }
+
+                  if (moving){
+                      moving = false;layer.draw();
+                  } else {
+                      newLinePoints = [];
+                      prevPos = stage.getUserPosition();  // Mouse or touch
+                      newLinePoints.push(prevPos);
+                      newLine = new Kinetic.Line({
+                        points: newLinePoints,
+                        stroke: "red",
+                      });
+                      linesLayer.add(newLine);
+
+                      moving = true;    
+                      // linesLayer.drawScene();            
+
+                      // // TODO: Allow erase of lines..
+                      // newLine.on('mouseover', function(evt){
+                      //   console.log('clicked on newline');
+                      //   if (mode == 'erase') {
+                      //     console.log('fake erase');
+                      //   }
+                      // });                        
+                  }
+                }
+
+              // Keep track of current low and high
+              function updateBounds(mousePos) {
+                  var y = mousePos.y;
+                  if (y < lowY || lowY == undefined) { lowY = y; }
+                  if (y > highY || highY == undefined) { highY = y; console.log("hi = " + y)}
+              }
+
+
+              // Drag in progress
+              stage.on("mousemove", function(){ dragMove(); });
+              stage.on("touchmove", function(){ dragMove(); });
+
+              function dragMove(){
+                  var up = stage.getUserPosition();
+                  console.log(up.x, up.y);
+                  if (! isInDrawableArea(up.x, up.y)) {
+                    return;
+                  }
+
+                  // console.log('dragMove');
+                  if (mode !== 'draw') {
+                    return;
+                  }
+
+                  if (moving) {
+                      var mousePos = stage.getUserPosition();  // Mouse or touch
+                      var x = mousePos.x;
+                      var y = mousePos.y;
+                      newLinePoints.push(mousePos);
+                      updateBounds(mousePos);
+                      prevPos = mousePos;
+                      
+                      moving = true;
+                      linesLayer.drawScene();
+                  }
+              }
+              
+              // Done dragging
+              stage.on("mouseup", function(){dragComplete();});
+              stage.on("touchend", function(){dragComplete();});
+              
+              function dragComplete(){
+                  console.log('drag complete');
+                  
+                  var up = stage.getUserPosition();
+                  if (! isInDrawableArea(up.x, up.y)) {
+                    return;
+                  }
+
+                  if (mode !== 'draw') {
+                    return;
+                  }
+
+                  moving = false; 
+              }
+
+              function onSaveCanvas() {
+                /*
+                 * since the stage toDataURL() method is asynchronous, we need
+                 * to provide a callback
+                 */
+                stage.toDataURL({
+                  callback: function(dataUrl) {
+                    /*
+                     * here you can do anything you like with the data url.
+                     * In this tutorial we'll just open the url with the browser
+                     * so that you can see the result as an image
+                     */
+                    // localStorage.setItem('imageFromVisit' + imageCount, dataUrl);
+                    createThumbnail('thumbImg' + imageCount, dataUrl);
+                    imageCount++;
+                  }
                 });
+              }
 
-                stage = new Kinetic.Stage({
-                    container: "container",
-                    width: STAGE_X,
-                    height: STAGE_Y
-                });
-                GloStage = stage;
+              // Creating thumbnails..
+              // 'canvasImg'
+              function createThumbnail(imgId, dataUrl) {
+                // var dim = 64;
+                // img = document.getElementById(imgId);
+                // img.height = dim;
+                // img.width = dim;
+                // img.src = dataUrl;
+                // // img.setAttribute('onclick', 'loadImageFromPriorVisit("' + dataUrl + '");')
 
-                background = new Kinetic.Rect({
-                    x: 0, 
-                    y: 0, 
-                    width: stage.getWidth(),
-                    height: stage.getHeight(),
-                    fill: "white"
-                });
-    
-                layer.add(background);
+                addHistoryItem('name','yellow', dataUrl);
+              }
 
-                // Load background image for OPD
+              // Load 
+              function addHistoryItem(name, color, dataUrl) {
+                if (! dataUrl ) {
+                  var box = new Kinetic.Rect({
+                    x: DRAWABLE_X_MAX,
+                    y: historyYOffset,
+                    width: HISTORY_ITEM_DIM,
+                    height: HISTORY_ITEM_DIM,
+                    fill: color,  // Today
+                    stroke: "black",
+                    strokeWidth: 4,
+                    draggable: false,
+                    // name: 'thumb'
+                  });
+                  updateHistoryBar(box, '');
+                  return;
+                }
+
+                // If there is a dataUrl, then use that image to do fun stuff like create thumbz
+                var imageObj = new Image();
+                imageObj.onload = function() {
+                  var box = createHistoryLink(imageObj);
+                  updateHistoryBar(box, dataUrl);
+                }
+                imageObj.src = dataUrl;
+
+                function createHistoryLink(img) {
+                  var box = new Kinetic.Image({
+                    x: DRAWABLE_X_MAX,
+                    y: historyYOffset,
+                    width: HISTORY_ITEM_DIM,
+                    height: HISTORY_ITEM_DIM,
+                    stroke: "black",
+                    strokeWidth: 4,
+                    image: img
+                    // name: 'thumb'
+                  });
+                  return box;
+                }
+
+                function updateHistoryBar(box, dataUrl) {
+                  controlsLayer.add(box);
+                  controlsLayer.draw();
+                  box.on('click touchstart', function() {
+                    // Reset to current visit
+                    loadImageFromPriorVisit(dataUrl);
+                  });
+                  // box.on('touchstart', function() {
+                  //   // Reset to current visit
+                  //   loadImageFromPriorVisit(dataUrl);
+                  // });
+                  
+                  historyYOffset += HISTORY_ITEM_DIM + (HISTORY_ITEM_DIM / 2);
+                }
+              }
+
+              addHistoryItem('today', 'green', '');
+
+              function loadImageFromPriorVisit(dataUrl) {
+                console.log('loadImageFromPriorVisit');
+                if (! dataUrl) {
+                  console.log('no data url');
+                  // Reset to draw mode
+                  // console.log(loadedImageLayer.getChildren());
+                  // loadedImageLayer.removeChildren();
+                  // loadedImageLayer.clear();
+                  loadedImageLayer.hide();
+                  // loadedImageLayer.draw();
+
+                  // For now, reset the drawing layers..
+                  // TODO: There may be times when we want to persist ('today in progress') and look
+                  //   back at history
+                  linesLayer.removeChildren();
+                  textLayer.removeChildren();
+                  
+                  highY = DRAWABLE_Y_MIN; // Also reset highY, so that text will appear in correct place relative to doctor handwriting
+                  stage.draw();
+                  return;
+                }
+                
+                
                 var imageObj = new Image();
                 imageObj.onload = function() {
                   console.log("image loaded");
-                  console.log(stage.getWidth(), stage.getHeight());
-                  var backgroundImage = new Kinetic.Image({
+                  
+                  var priorVisitImage = new Kinetic.Image({
                     x: 0,
                     y: 0,
                     image: imageObj,
                     width: stage.getWidth(),
                     height: stage.getHeight()
                   });
-                  layer.add(backgroundImage);
-                  layer.draw();
+                  
+                  loadedImageLayer.add(priorVisitImage);
+                  loadedImageLayer.draw();
                 }
-                var file = "2012.11.07_OPD-Lite_v1.0.jpg";
-                imageObj.src = file;
+                imageObj.src = dataUrl;
 
-                stage.add(layer);
-                stage.add(linesLayer);
-                stage.add(textLayer); // in front of "draw" layer, i.e. cant draw on a diagnosis. for now.
-                stage.add(loadedImageLayer);
-                stage.add(controlsLayer);
-                
-                moving = false;
+                loadedImageLayer.show();
+              }
 
-                // Drag start
-                stage.on("mousedown", function(){
-                  dragStart();
+
+              ////////////////////////////////////////////
+              // Add Controls... Pencil, eraser, save   //
+              ////////////////////////////////////////////
+
+              // If there is a dataUrl, then use that image to do fun stuff like create thumbz
+              var pencilImageObj = new Image();
+              pencilImageObj.onload = function() {
+                var box = new Kinetic.Image({
+                  x: CONTROL_BASE_X,
+                  y: CONTROL_BASE_Y,
+                  width: CONTROL_ITEM_DIM,
+                  height: CONTROL_ITEM_DIM,
+                  stroke: "black",
+                  strokeWidth: 1,
+                  image: pencilImageObj
                 });
-
-                stage.on("touchstart", function(){
-                  dragStart();
+                box.on('click touchstart', function() {
+                  mode = "draw";
                 });
+                controlsLayer.add(box);
+                controlsLayer.draw();       
+              }
+              pencilImageObj.src = 'pencil.png';
 
-                function dragStart() {
-                    console.log('dragStart');
+              var eraserImgObj = new Image();
+              eraserImgObj.onload = function() {
+                var box = new Kinetic.Image({
+                  x: CONTROL_BASE_X,
+                  y: CONTROL_BASE_Y + CONTROL_ITEM_DIM + CONTROL_ITEM_SPACING,
+                  width: CONTROL_ITEM_DIM,
+                  height: CONTROL_ITEM_DIM,
+                  stroke: "black",
+                  strokeWidth: 1,
+                  image: eraserImgObj
+                });
+                box.on('click touchstart', function() {
+                  console.log('disabled, for now, since eraser isnt working');
+                  // mode = "erase";
+                });
+                controlsLayer.add(box);
+                controlsLayer.draw();
+              }
+              eraserImgObj.src = 'eraser.png';
 
-                    var up = stage.getUserPosition();
-                    if (! isInDrawableArea(up.x, up.y)) {
-                      return;
-                    }
-                    
-                    if (mode !== 'draw') {
-                      return;
-                    }
+              // var keyboardImgObj = new Image();
+              // keyboardImgObj.onload = function() {
+              //   // var box = createHistoryLink(imageObj);
+              //   // function createHistoryLink(img) {
+              //   var box = new Kinetic.Image({
+              //     x: CONTROL_BASE_X,
+              //     y: CONTROL_BASE_Y + CONTROL_ITEM_DIM*2 + CONTROL_ITEM_SPACING*2,
+              //     width: CONTROL_ITEM_DIM,
+              //     height: CONTROL_ITEM_DIM,
+              //     stroke: "black",
+              //     strokeWidth: 1,
+              //     image: keyboardImgObj
+              //   });
+              //   box.on('click touchstart', function() {
+              //     onAddDiagnosis();
+              //   });
+              //   controlsLayer.add(box);
+              //   controlsLayer.draw();
+              //   // updateHistoryBar(box, handler);
+              // }
+              // keyboardImgObj.src = 'keyboard.png';
 
-                    if (moving){
-                        moving = false;layer.draw();
-                    } else {
-                        newLinePoints = [];
-                        prevPos = stage.getUserPosition();  // Mouse or touch
-                        newLinePoints.push(prevPos);
-                        newLine = new Kinetic.Line({
-                          points: newLinePoints,
-                          stroke: "red",
-                        });
-                        linesLayer.add(newLine);
-
-                        moving = true;    
-                        // linesLayer.drawScene();            
-
-                        // // TODO: Allow erase of lines..
-                        // newLine.on('mouseover', function(evt){
-                        //   console.log('clicked on newline');
-                        //   if (mode == 'erase') {
-                        //     console.log('fake erase');
-                        //   }
-                        // });                        
-                    }
-                  }
-
-                // Keep track of current low and high
-                function updateBounds(mousePos) {
-                    var y = mousePos.y;
-                    if (y < lowY || lowY == undefined) { lowY = y; }
-                    if (y > highY || highY == undefined) { highY = y; console.log("hi = " + y)}
-                }
-
-
-                // Drag in progress
-                stage.on("mousemove", function(){ dragMove(); });
-                stage.on("touchmove", function(){ dragMove(); });
-
-                function dragMove(){
-                    var up = stage.getUserPosition();
-                    console.log(up.x, up.y);
-                    if (! isInDrawableArea(up.x, up.y)) {
-                      return;
-                    }
-
-                    // console.log('dragMove');
-                    if (mode !== 'draw') {
-                      return;
-                    }
-
-                    if (moving) {
-                        var mousePos = stage.getUserPosition();  // Mouse or touch
-                        var x = mousePos.x;
-                        var y = mousePos.y;
-                        newLinePoints.push(mousePos);
-                        updateBounds(mousePos);
-                        prevPos = mousePos;
-                        
-                        moving = true;
-                        linesLayer.drawScene();
-                    }
-                }
-                
-                // Done dragging
-                stage.on("mouseup", function(){dragComplete();});
-                stage.on("touchend", function(){dragComplete();});
-                
-                function dragComplete(){
-                    console.log('drag complete');
-                    
-                    var up = stage.getUserPosition();
-                    if (! isInDrawableArea(up.x, up.y)) {
-                      return;
-                    }
-
-                    if (mode !== 'draw') {
-                      return;
-                    }
-
-                    moving = false; 
-                }
-
-                // Save canvas to dataUrl. 
-
-                document.getElementById("saveCanvas").addEventListener("click", function() {
+              var saveImgObj = new Image();
+              saveImgObj.onload = function() {
+                var box = new Kinetic.Image({
+                  x: CONTROL_BASE_X,
+                  y: CONTROL_BASE_Y + CONTROL_ITEM_DIM*2 + CONTROL_ITEM_SPACING*2,
+                  width: CONTROL_ITEM_DIM,
+                  height: CONTROL_ITEM_DIM,
+                  stroke: "black",
+                  strokeWidth: 1,
+                  image: saveImgObj
+                });
+                box.on('click touchstart', function() {
                   onSaveCanvas();
-                }, false);
+                });
+                controlsLayer.add(box);
+                controlsLayer.draw();
+              }
+              saveImgObj.src = 'save.png';
 
-                function onSaveCanvas() {
-                  /*
-                   * since the stage toDataURL() method is asynchronous, we need
-                   * to provide a callback
-                   */
-                  stage.toDataURL({
-                    callback: function(dataUrl) {
-                      /*
-                       * here you can do anything you like with the data url.
-                       * In this tutorial we'll just open the url with the browser
-                       * so that you can see the result as an image
-                       */
-                      // localStorage.setItem('imageFromVisit' + imageCount, dataUrl);
-                      createThumbnail('thumbImg' + imageCount, dataUrl);
-                      imageCount++;
-                    }
-                  });
-                }
+              var plusDiagnosisImgObj = new Image();
+              plusDiagnosisImgObj.onload = function() {
+                var box = new Kinetic.Image({
+                  x: 200,
+                  y: DRAWABLE_Y_MIN - 40,
+                  width: 128,
+                  height: 30,
+                  stroke: "black",
+                  strokeWidth: 2,
+                  image: plusDiagnosisImgObj
+                });
+                box.on('click touchstart', function() {
+                  onAddDiagnosis();
+                });
+                controlsLayer.add(box);
+                controlsLayer.draw();
+              }
+              plusDiagnosisImgObj.src = 'plus_diagnosis.png';
 
-                // Creating thumbnails..
-                // 'canvasImg'
-                function createThumbnail(imgId, dataUrl) {
-                  var dim = 64;
-                  img = document.getElementById(imgId);
-                  img.height = dim;
-                  img.width = dim;
-                  img.src = dataUrl;
-                  // img.setAttribute('onclick', 'loadImageFromPriorVisit("' + dataUrl + '");')
-
-                  addHistoryItem('name','yellow', dataUrl);
-                }
-
-                // Load 
-                function addHistoryItem(name, color, dataUrl) {
-                  if (! dataUrl ) {
-                    var box = new Kinetic.Rect({
-                      x: DRAWABLE_X_MAX,
-                      y: historyYOffset,
-                      width: HISTORY_ITEM_DIM,
-                      height: HISTORY_ITEM_DIM,
-                      fill: color,  // Today
-                      stroke: "black",
-                      strokeWidth: 4,
-                      draggable: false,
-                      // name: 'thumb'
-                    });
-                    updateHistoryBar(box, '');
-                    return;
-                  }
-
-                  // If there is a dataUrl, then use that image to do fun stuff like create thumbz
-                  var imageObj = new Image();
-                  imageObj.onload = function() {
-                    var box = createHistoryLink(imageObj);
-                    updateHistoryBar(box, dataUrl);
-                  }
-                  imageObj.src = dataUrl;
-
-                  function createHistoryLink(img) {
-                    var box = new Kinetic.Image({
-                      x: DRAWABLE_X_MAX,
-                      y: historyYOffset,
-                      width: HISTORY_ITEM_DIM,
-                      height: HISTORY_ITEM_DIM,
-                      stroke: "black",
-                      strokeWidth: 4,
-                      image: img
-                      // name: 'thumb'
-                    });
-                    return box;
-                  }
-
-                  function updateHistoryBar(box, dataUrl) {
-                    controlsLayer.add(box);
-                    controlsLayer.draw();
-                    box.on('click', function() {
-                      // Reset to current visit
-                      loadImageFromPriorVisit(dataUrl);
-                    });
-                    
-                    historyYOffset += HISTORY_ITEM_DIM + (HISTORY_ITEM_DIM / 2);
-                  }
-                }
-
-                addHistoryItem('today', 'green', '');
-
-                function loadImageFromPriorVisit(dataUrl) {
-                  console.log('loadImageFromPriorVisit');
-                  if (! dataUrl) {
-                    console.log('no data url');
-                    // Reset to draw mode
-                    // console.log(loadedImageLayer.getChildren());
-                    // loadedImageLayer.removeChildren();
-                    // loadedImageLayer.clear();
-                    loadedImageLayer.hide();
-                    // loadedImageLayer.draw();
-
-                    // For now, reset the drawing layers..
-                    // TODO: There may be times when we want to persist ('today in progress') and look
-                    //   back at history
-                    linesLayer.removeChildren();
-                    textLayer.removeChildren();
-                    
-                    highY = DRAWABLE_Y_MIN; // Also reset highY, so that text will appear in correct place relative to doctor handwriting
-                    stage.draw();
-                    return;
-                  }
+              function onAddDiagnosis() {
+                // Get user input
+                console.log("add diagnosis")
+                // var input = window.prompt("What's the diagnosis?","Tuberculosis");
+                
+                function drawTextAtLowPoint(text) {
+                  console.log("drawTextAtLowPoint");
                   
-                  
-                  var imageObj = new Image();
-                  imageObj.onload = function() {
-                    console.log("image loaded");
-                    
-                    var priorVisitImage = new Kinetic.Image({
-                      x: 0,
-                      y: 0,
-                      image: imageObj,
-                      width: stage.getWidth(),
-                      height: stage.getHeight()
-                    });
-                    
-                    loadedImageLayer.add(priorVisitImage);
-                    loadedImageLayer.draw();
-                  }
-                  imageObj.src = dataUrl;
+                  // add the shapes to the layer
+                  simpleText.setAttrs({y: highY});
+                  console.log(simpleText);
+                  console.log(simpleText.y);
+                  textLayer.add(simpleText);
+                  complexText.setAttrs({y: highY + 45});
+                  textLayer.add(complexText);
+                  stage.draw();
+                } 
 
-                  loadedImageLayer.show();
-                }
-
-
-                ////////////////////////////////////////////
-                // Add Controls... Pencil, eraser, save   //
-                ////////////////////////////////////////////
-
-                // If there is a dataUrl, then use that image to do fun stuff like create thumbz
-                var pencilImageObj = new Image();
-                pencilImageObj.onload = function() {
-                  // var box = createHistoryLink(imageObj);
-                  // function createHistoryLink(img) {
-                  var box = new Kinetic.Image({
-                    x: CONTROL_BASE_X,
-                    y: CONTROL_BASE_Y,
-                    width: CONTROL_ITEM_DIM,
-                    height: CONTROL_ITEM_DIM,
-                    stroke: "black",
-                    strokeWidth: 1,
-                    image: pencilImageObj
-                  });
-                  controlsLayer.add(box);
-                  controlsLayer.draw();
-                  // updateHistoryBar(box, handler);
-                }
-                pencilImageObj.src = 'pencil.png';
-
-                var eraserImgObj = new Image();
-                eraserImgObj.onload = function() {
-                  // var box = createHistoryLink(imageObj);
-                  // function createHistoryLink(img) {
-                  var box = new Kinetic.Image({
-                    x: CONTROL_BASE_X,
-                    y: CONTROL_BASE_Y + CONTROL_ITEM_DIM + CONTROL_ITEM_SPACING,
-                    width: CONTROL_ITEM_DIM,
-                    height: CONTROL_ITEM_DIM,
-                    stroke: "black",
-                    strokeWidth: 1,
-                    image: eraserImgObj
-                  });
-                  controlsLayer.add(box);
-                  controlsLayer.draw();
-                  // updateHistoryBar(box, handler);
-                }
-                eraserImgObj.src = 'eraser.png';
-
-                var keyboardImgObj = new Image();
-                keyboardImgObj.onload = function() {
-                  // var box = createHistoryLink(imageObj);
-                  // function createHistoryLink(img) {
-                  var box = new Kinetic.Image({
-                    x: CONTROL_BASE_X,
-                    y: CONTROL_BASE_Y + CONTROL_ITEM_DIM*2 + CONTROL_ITEM_SPACING*2,
-                    width: CONTROL_ITEM_DIM,
-                    height: CONTROL_ITEM_DIM,
-                    stroke: "black",
-                    strokeWidth: 1,
-                    image: keyboardImgObj
-                  });
-                  controlsLayer.add(box);
-                  box.on('click', function() {
-                    onAddDiagnosis();
-                  });
-                  controlsLayer.draw();
-                  // updateHistoryBar(box, handler);
-                }
-                keyboardImgObj.src = 'keyboard.png';
-
-                function onAddDiagnosis() {
-                  // Get user input
-                  console.log("add diagnosis")
-                  // var input = window.prompt("What's the diagnosis?","Tuberculosis");
-                  
-                  function drawTextAtLowPoint(text) {
-                    console.log("drawTextAtLowPoint");
-                    
-                    // add the shapes to the layer
-                    simpleText.setAttrs({y: highY});
-                    console.log(simpleText);
-                    console.log(simpleText.y);
-                    textLayer.add(simpleText);
-                    complexText.setAttrs({y: highY + 45});
-                    textLayer.add(complexText);
-                    stage.draw();
-                  } 
-
-                  // inserts a dianosis wherever there's untouched space on canvas
-                  drawTextAtLowPoint("FAKE DIAGNOSIS 123");
-                  // drawTextAtLowPoint(input);
-                }
-            };
+                // inserts a dianosis wherever there's untouched space on canvas
+                drawTextAtLowPoint("FAKE DIAGNOSIS 123");
+                // drawTextAtLowPoint(input);
+              }
+          };
         </script>
     </head>
     <body>
         <div id="container" ></div>
-        <button id="drawMode">
-          Draw
-        </button>
-        <button id="eraseMode">
-          Erase
-        </button>
-        <button id="saveCanvas">
-          saveCanvas
-        </button>
-        <button id="addDiagnosis">
-          + Diagnosis
-        </button>
-        <div id="thumbs">
-          <a id='thumbLink1' href='#'>
-            <img border="1" id="thumbImg0" alt="Right click to save me!">
-            <img border="1" id="thumbImg1" alt="Right click to save me!">
-            <img border="1" id="thumbImg2" alt="Right click to save me!">
-            <img border="1" id="thumbImg3" alt="Right click to save me!">
-            <img border="1" id="thumbImg4" alt="Right click to save me!">
-          </a>
-        </div>
     </body>
 </html>
