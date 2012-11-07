@@ -47,8 +47,8 @@
             }
 
             window.onload = function() {
-              var lowY;
-              var highY;
+              var lowY = DRAWABLE_Y_MIN;
+              var highY = DRAWABLE_Y_MIN;
 
               var newLine;
               var newLinePoints = [];
@@ -281,25 +281,54 @@
 
                 // Load 
                 function addHistoryItem(name, color, dataUrl) {
-                  var box = new Kinetic.Rect({
-                    x: DRAWABLE_X_MAX,
-                    y: historyYOffset,
-                    width: HISTORY_ITEM_DIM,
-                    height: HISTORY_ITEM_DIM,
-                    fill: color,  // Today
-                    stroke: "black",
-                    strokeWidth: 4,
-                    draggable: false,
-                    // name: 'thumb'
-                  });
-                  controlsLayer.add(box);
-                  controlsLayer.draw();
-                  box.on('click', function() {
-                    // Reset to current visit
-                    loadImageFromPriorVisit(dataUrl);
-                  });
-                  
-                  historyYOffset += HISTORY_ITEM_DIM + (HISTORY_ITEM_DIM / 2);
+                  if (! dataUrl ) {
+                    var box = new Kinetic.Rect({
+                      x: DRAWABLE_X_MAX,
+                      y: historyYOffset,
+                      width: HISTORY_ITEM_DIM,
+                      height: HISTORY_ITEM_DIM,
+                      fill: color,  // Today
+                      stroke: "black",
+                      strokeWidth: 4,
+                      draggable: false,
+                      // name: 'thumb'
+                    });
+                    updateHistoryBar(box, '');
+                    return;
+                  }
+
+                  // If there is a dataUrl, then use that image to do fun stuff like create thumbz
+                  var imageObj = new Image();
+                  imageObj.onload = function() {
+                    var box = createHistoryLink(imageObj);
+                    updateHistoryBar(box, dataUrl);
+                  }
+                  imageObj.src = dataUrl;
+
+                  function createHistoryLink(dataUrl) {
+                    var box = new Kinetic.Image({
+                      x: DRAWABLE_X_MAX,
+                      y: historyYOffset,
+                      width: HISTORY_ITEM_DIM,
+                      height: HISTORY_ITEM_DIM,
+                      stroke: "black",
+                      strokeWidth: 4,
+                      image: dataUrl
+                      // name: 'thumb'
+                    });
+                    return box;
+                  }
+
+                  function updateHistoryBar(box, dataUrl) {
+                    controlsLayer.add(box);
+                    controlsLayer.draw();
+                    box.on('click', function() {
+                      // Reset to current visit
+                      loadImageFromPriorVisit(dataUrl);
+                    });
+                    
+                    historyYOffset += HISTORY_ITEM_DIM + (HISTORY_ITEM_DIM / 2);
+                  }
                 }
 
                 addHistoryItem('today', 'green', '');
@@ -320,6 +349,8 @@
                     //   back at history
                     linesLayer.removeChildren();
                     textLayer.removeChildren();
+                    
+                    highY = DRAWABLE_Y_MIN; // Also reset highY, so that text will appear in correct place relative to doctor handwriting
                     stage.draw();
                     return;
                   }
