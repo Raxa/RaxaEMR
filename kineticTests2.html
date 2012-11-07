@@ -12,6 +12,8 @@
         </style>
         <script src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.1.js"></script>
         <script>
+            imageCount = 0;
+
             window.onload = function() {
               var newLine;
               var newLinePoints = [];
@@ -134,12 +136,25 @@
                        * In this tutorial we'll just open the url with the browser
                        * so that you can see the result as an image
                        */
-                      window.open(dataUrl);
+                      localStorage.setItem('imageFromVisit' + imageCount, dataUrl);
+                      createThumbnail('thumbImg' + imageCount, dataUrl);
+                      imageCount++;
                     }
                   });
 
 
                 }, false);
+
+                // Creating thumbnails..
+                // 'canvasImg'
+                function createThumbnail(imgId, dataUrl) {
+                  var dim = 64;
+                  img = document.getElementById(imgId);
+                  img.height = dim;
+                  img.width = dim;
+                  img.src = dataUrl;
+                  img.setAttribute('onclick', 'window.open("' + dataUrl + '");')
+                }
 
             };
         </script>
@@ -155,6 +170,14 @@
         <button id="saveCanvas">
           saveCanvas
         </button>
-        <img id="canvasImg" alt="Right click to save me!">
+        <div id="thumbs">
+          <a id='thumbLink1' href='#'>
+            <img border="1" id="thumbImg0" alt="Right click to save me!">
+            <img border="1" id="thumbImg1" alt="Right click to save me!">
+            <img border="1" id="thumbImg2" alt="Right click to save me!">
+            <img border="1" id="thumbImg3" alt="Right click to save me!">
+            <img border="1" id="thumbImg4" alt="Right click to save me!">
+          </a>
+        </div>
     </body>
 </html>
