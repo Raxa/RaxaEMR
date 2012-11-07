@@ -276,12 +276,17 @@
                   img.src = dataUrl;
                   // img.setAttribute('onclick', 'loadImageFromPriorVisit("' + dataUrl + '");')
 
+                  addHistoryItem('name','yellow', dataUrl);
+                }
+
+                // Load 
+                function addHistoryItem(name, color, dataUrl) {
                   var box = new Kinetic.Rect({
                     x: DRAWABLE_X_MAX,
                     y: historyYOffset,
                     width: HISTORY_ITEM_DIM,
                     height: HISTORY_ITEM_DIM,
-                    fill: "yellow",
+                    fill: color,  // Today
                     stroke: "black",
                     strokeWidth: 4,
                     draggable: false,
@@ -290,30 +295,54 @@
                   controlsLayer.add(box);
                   controlsLayer.draw();
                   box.on('click', function() {
-                    console.log('clicked box');
+                    // Reset to current visit
                     loadImageFromPriorVisit(dataUrl);
                   });
-
+                  
                   historyYOffset += HISTORY_ITEM_DIM + (HISTORY_ITEM_DIM / 2);
                 }
 
+                addHistoryItem('today', 'green', '');
+
                 function loadImageFromPriorVisit(dataUrl) {
-                  console.log('like whoa');
+                  console.log('loadImageFromPriorVisit');
+                  if (! dataUrl) {
+                    console.log('no data url');
+                    // Reset to draw mode
+                    // console.log(loadedImageLayer.getChildren());
+                    // loadedImageLayer.removeChildren();
+                    // loadedImageLayer.clear();
+                    loadedImageLayer.hide();
+                    // loadedImageLayer.draw();
+
+                    // For now, reset the drawing layers..
+                    // TODO: There may be times when we want to persist ('today in progress') and look
+                    //   back at history
+                    linesLayer.removeChildren();
+                    textLayer.removeChildren();
+                    stage.draw();
+                    return;
+                  }
+                  
+                  
                   var imageObj = new Image();
                   imageObj.onload = function() {
                     console.log("image loaded");
                     
-                    var backgroundImage = new Kinetic.Image({
+                    var priorVisitImage = new Kinetic.Image({
                       x: 0,
                       y: 0,
                       image: imageObj,
                       width: stage.getWidth(),
                       height: stage.getHeight()
                     });
-                    loadedImageLayer.add(backgroundImage);
+                    
+                    loadedImageLayer.add(priorVisitImage);
                     loadedImageLayer.draw();
                   }
                   imageObj.src = dataUrl;
+
+                  loadedImageLayer.show();
                 }
 
                 document.getElementById("addDiagnosis").addEventListener("click", function() {
