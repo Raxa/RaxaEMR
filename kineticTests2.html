@@ -19,6 +19,21 @@
         <script>
             imageCount = 0;
 
+            var DRAWABLE_X_MIN = 100
+            var DRAWABLE_X_MAX = 500;
+            var DRAWABLE_Y_MIN = 200;
+            var DRAWABLE_Y_MAX = 600;
+
+            // function isInBounds() {
+            //   var up = stage.getUserPosition();
+            //   console.log(up);
+            //   if ((DRAWABLE_X_MIN <= up.x && up.x <= DRAWABLE_X_MAX) && (DRAWABLE_Y_MIN <= up.y && up.y <= DRAWABLE_Y_MAX)) {
+            //     return true;
+            //   } else {
+            //     return false;
+            //   }
+            // }
+
             window.onload = function() {
               var lowY;
               var highY;
@@ -74,8 +89,8 @@
 
                 stage = new Kinetic.Stage({
                     container: "container",
-                    width: 640,
-                    height: 320
+                    width: 768,
+                    height: 600 //1024
                 });
                 GloStage = stage;
 
@@ -88,12 +103,25 @@
                 });
     
                 layer.add(background);
-                line = new Kinetic.Line({
-                    points: [0, 0, 50, 50],
-                    stroke: "red"
-                });
 
-                layerLines.add(line);
+                // Load background image for OPD
+                var imageObj = new Image();
+                imageObj.onload = function() {
+                  console.log("image loaded");
+                  console.log(stage.getWidth(), stage.getHeight());
+                  var backgroundImage = new Kinetic.Image({
+                    x: 0,
+                    y: 0,
+                    image: imageObj,
+                    width: stage.getWidth(),
+                    height: stage.getHeight()
+                  });
+                  layer.add(backgroundImage);
+                  layer.draw();
+                }
+                var file = "2012.11.07_OPD-Lite_v1.0.jpg";
+                imageObj.src = file;
+
                 stage.add(layer);
                 stage.add(layerLines);
                 stage.add(textLayer); // in front of "draw" layer, i.e. cant draw on a diagnosis. for now.
@@ -117,35 +145,25 @@
                     if (moving){
                         moving = false;layer.draw();
                     } else {
-                        
-                        // var mousePos = stage.getMousePosition();
-                        // //start point and end point are the same
-                        // line.getPoints()[0].x = mousePos.x;
-                        // line.getPoints()[0].y = mousePos.y;
-                        // line.getPoints()[1].x = mousePos.x;
-                        // line.getPoints()[1].y = mousePos.y;
-
                         newLinePoints = [];
-                        // prevPos = stage.getMousePosition();
                         prevPos = stage.getUserPosition();  // Mouse or touch
-                        // console.log("mousePos = ", prevPos.x, prevPos.y);
-                        
                         newLinePoints.push(prevPos);
                         newLine = new Kinetic.Line({
                           points: newLinePoints,
                           stroke: "red",
                         });
                         layerLines.add(newLine);
+
                         moving = true;    
                         // layerLines.drawScene();            
 
-                        newLine.on('mouseover', function(evt){
-                          console.log('clicked on newline');
-                          if (mode == 'erase') {
-                            console.log('fake erase');
-                          }
-                        });
-                        
+                        // // TODO: Allow erase of lines..
+                        // newLine.on('mouseover', function(evt){
+                        //   console.log('clicked on newline');
+                        //   if (mode == 'erase') {
+                        //     console.log('fake erase');
+                        //   }
+                        // });                        
                     }
                   }
 
@@ -161,37 +179,19 @@
                 stage.on("mousemove", function(){ dragMove(); });
                 stage.on("touchmove", function(){ dragMove(); });
 
-                // function dragMove_touch(e) {
-                //   var x, y, i;
-                //   for (i = 0; i < e.targetTouches.length; i++) {
-                //       console.log()
-                //       x = e.targetTouches[i].clientX - offsetX;
-                //       y = e.targetTouches[i].clientY - offsetY;
-                //       drawCircle(x, y);
-                //   }
-                // }
-
                 function dragMove(){
-                    console.log('dragMove');
+                    // console.log('dragMove');
                     if (mode !== 'draw') {
                       return;
                     }
 
                     if (moving) {
-                        
-                        // var mousePos = stage.getMousePosition();
                         var mousePos = stage.getUserPosition();  // Mouse or touch
-
-                        // console.log("mousePos = ", mousePos.x, mousePos.y);
                         var x = mousePos.x;
                         var y = mousePos.y;
                         newLinePoints.push(mousePos);
-                        updateBounds(mousePos)
-;
-                        // console.log("moving");
-                        
+                        updateBounds(mousePos);
                         prevPos = mousePos;
-                        // console.log(newLine);
                         
                         moving = true;
                         layerLines.drawScene();
@@ -228,8 +228,6 @@
                       imageCount++;
                     }
                   });
-
-
                 }, false);
 
                 // Creating thumbnails..
