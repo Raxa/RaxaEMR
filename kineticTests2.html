@@ -27,6 +27,10 @@
             var STAGE_X = 768;  //768
             var STAGE_Y = 1024; //1024
 
+            var HISTORY_BASE_X = DRAWABLE_X_MAX;
+            var HISTORY_BASE_Y = DRAWABLE_Y_MIN + 196;
+            var HISTORY_ITEM_DIM = 64;
+
             function isInDrawableArea(myX, myY) {
               up = {
                 x : myX,
@@ -50,6 +54,8 @@
               var newLinePoints = [];
               var prevPos;
               var mode = DEFAULT_MODE;
+              
+              var historyYOffset = HISTORY_BASE_Y;
 
               document.getElementById("drawMode").addEventListener("click", function() {
                 mode = "draw";
@@ -60,8 +66,10 @@
               }, false);
 
                 layer = new Kinetic.Layer();
-                layerLines = new Kinetic.Layer();
+                loadedImageLayer = new Kinetic.Layer();  // For re-loaded thumbs
+                linesLayer = new Kinetic.Layer();
                 textLayer = new Kinetic.Layer();
+                controlsLayer = new Kinetic.Layer();
 
                 var simpleText = new Kinetic.Text({
                   x: 190,
@@ -131,8 +139,11 @@
                 imageObj.src = file;
 
                 stage.add(layer);
-                stage.add(layerLines);
+                stage.add(linesLayer);
                 stage.add(textLayer); // in front of "draw" layer, i.e. cant draw on a diagnosis. for now.
+                stage.add(loadedImageLayer);
+                stage.add(controlsLayer);
+                
                 moving = false;
 
                 // Drag start
@@ -166,10 +177,10 @@
                           points: newLinePoints,
                           stroke: "red",
                         });
-                        layerLines.add(newLine);
+                        linesLayer.add(newLine);
 
                         moving = true;    
-                        // layerLines.drawScene();            
+                        // linesLayer.drawScene();            
 
                         // // TODO: Allow erase of lines..
                         // newLine.on('mouseover', function(evt){
@@ -213,7 +224,7 @@
                         prevPos = mousePos;
                         
                         moving = true;
-                        layerLines.drawScene();
+                        linesLayer.drawScene();
                     }
                 }
                 
@@ -248,7 +259,7 @@
                        * In this tutorial we'll just open the url with the browser
                        * so that you can see the result as an image
                        */
-                      localStorage.setItem('imageFromVisit' + imageCount, dataUrl);
+                      // localStorage.setItem('imageFromVisit' + imageCount, dataUrl);
                       createThumbnail('thumbImg' + imageCount, dataUrl);
                       imageCount++;
                     }
@@ -263,7 +274,46 @@
                   img.height = dim;
                   img.width = dim;
                   img.src = dataUrl;
-                  img.setAttribute('onclick', 'window.open("' + dataUrl + '");')
+                  // img.setAttribute('onclick', 'loadImageFromPriorVisit("' + dataUrl + '");')
+
+                  var box = new Kinetic.Rect({
+                    x: DRAWABLE_X_MAX,
+                    y: historyYOffset,
+                    width: HISTORY_ITEM_DIM,
+                    height: HISTORY_ITEM_DIM,
+                    fill: "yellow",
+                    stroke: "black",
+                    strokeWidth: 4,
+                    draggable: false,
+                    // name: 'thumb'
+                  });
+                  controlsLayer.add(box);
+                  controlsLayer.draw();
+                  box.on('click', function() {
+                    console.log('clicked box');
+                    loadImageFromPriorVisit(dataUrl);
+                  });
+
+                  historyYOffset += HISTORY_ITEM_DIM + (HISTORY_ITEM_DIM / 2);
+                }
+
+                function loadImageFromPriorVisit(dataUrl) {
+                  console.log('like whoa');
+                  var imageObj = new Image();
+                  imageObj.onload = function() {
+                    console.log("image loaded");
+                    
+                    var backgroundImage = new Kinetic.Image({
+                      x: 0,
+                      y: 0,
+                      image: imageObj,
+                      width: stage.getWidth(),
+                      height: stage.getHeight()
+                    });
+                    loadedImageLayer.add(backgroundImage);
+                    loadedImageLayer.draw();
+                  }
+                  imageObj.src = dataUrl;
                 }
 
                 document.getElementById("addDiagnosis").addEventListener("click", function() {
