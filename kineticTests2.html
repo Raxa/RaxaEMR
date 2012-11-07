@@ -75,11 +75,19 @@
                         newLinePoints.push(prevPos);
                         newLine = new Kinetic.Line({
                           points: newLinePoints,
-                          stroke: "red"
+                          stroke: "red",
                         });
                         layerLines.add(newLine);
                         moving = true;    
                         // layerLines.drawScene();            
+
+                        newLine.on('mouseover', function(evt){
+                          console.log('clicked on newline');
+                          if (mode == 'erase') {
+                            console.log('fake erase');
+                          }
+                        });
+                        
                     }
 
                 });
@@ -98,16 +106,8 @@
 
                         console.log("moving");
                         
-                        
-                        // newLine.on('mouseover', function(evt){
-                        //   console.log('clicked on newline');
-                        //   if (mode == 'erase') {
-                        //     console.log('fake erase');
-                        //   }
-                        // });
-                        
                         prevPos = mousePos;
-                        console.log(newLine);
+                        // console.log(newLine);
                         
                         moving = true;
                         layerLines.drawScene();
@@ -120,7 +120,28 @@
                     }
 
                     moving = false; 
+                    gloNewLine = newLine;
+                    newLine.saveImageData();
                 });
+
+                document.getElementById("saveCanvas").addEventListener("click", function() {
+                  /*
+                   * since the stage toDataURL() method is asynchronous, we need
+                   * to provide a callback
+                   */
+                  stage.toDataURL({
+                    callback: function(dataUrl) {
+                      /*
+                       * here you can do anything you like with the data url.
+                       * In this tutorial we'll just open the url with the browser
+                       * so that you can see the result as an image
+                       */
+                      window.open(dataUrl);
+                    }
+                  });
+
+                  
+                }, false);
 
             };
         </script>
@@ -133,5 +154,9 @@
         <button id="eraseMode">
           Erase
         </button>
+        <button id="saveCanvas">
+          saveCanvas
+        </button>
+        <img id="canvasImg" alt="Right click to save me!">
     </body>
 </html>
