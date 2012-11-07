@@ -19,20 +19,28 @@
         <script>
             imageCount = 0;
 
-            var DRAWABLE_X_MIN = 100
-            var DRAWABLE_X_MAX = 500;
-            var DRAWABLE_Y_MIN = 200;
-            var DRAWABLE_Y_MAX = 600;
+            var DRAWABLE_X_MIN = 0;
+            var DRAWABLE_X_MAX = 700; // 708 - strict border
+            var DRAWABLE_Y_MIN = 240; // 230 - strict border
+            var DRAWABLE_Y_MAX = 1024;
+            var DEFAULT_MODE = "draw";  // undefined
+            var STAGE_X = 768;  //768
+            var STAGE_Y = 1024; //1024
 
-            // function isInBounds() {
-            //   var up = stage.getUserPosition();
-            //   console.log(up);
-            //   if ((DRAWABLE_X_MIN <= up.x && up.x <= DRAWABLE_X_MAX) && (DRAWABLE_Y_MIN <= up.y && up.y <= DRAWABLE_Y_MAX)) {
-            //     return true;
-            //   } else {
-            //     return false;
-            //   }
-            // }
+            function isInDrawableArea(myX, myY) {
+              up = {
+                x : myX,
+                y : myY
+              };
+
+              
+              if ((DRAWABLE_X_MIN <= up.x && up.x <= DRAWABLE_X_MAX) && (DRAWABLE_Y_MIN <= up.y && up.y <= DRAWABLE_Y_MAX)) {
+                return true;
+              } else {
+                console.log("not in drawable area: ", up.x, up.y );  
+                return false;
+              }
+            }
 
             window.onload = function() {
               var lowY;
@@ -41,7 +49,7 @@
               var newLine;
               var newLinePoints = [];
               var prevPos;
-              var mode;
+              var mode = DEFAULT_MODE;
 
               document.getElementById("drawMode").addEventListener("click", function() {
                 mode = "draw";
@@ -89,8 +97,8 @@
 
                 stage = new Kinetic.Stage({
                     container: "container",
-                    width: 768,
-                    height: 600 //1024
+                    width: STAGE_X,
+                    height: STAGE_Y
                 });
                 GloStage = stage;
 
@@ -138,6 +146,12 @@
 
                 function dragStart() {
                     console.log('dragStart');
+
+                    var up = stage.getUserPosition();
+                    if (! isInDrawableArea(up.x, up.y)) {
+                      return;
+                    }
+                    
                     if (mode !== 'draw') {
                       return;
                     }
@@ -180,6 +194,11 @@
                 stage.on("touchmove", function(){ dragMove(); });
 
                 function dragMove(){
+                    var up = stage.getUserPosition();
+                    if (! isInDrawableArea(up.x, up.y)) {
+                      return;
+                    }
+
                     // console.log('dragMove');
                     if (mode !== 'draw') {
                       return;
@@ -204,6 +223,12 @@
                 
                 function dragComplete(){
                     console.log('drag complete');
+                    
+                    var up = stage.getUserPosition();
+                    if (! isInDrawableArea(up.x, up.y)) {
+                      return;
+                    }
+
                     if (mode !== 'draw') {
                       return;
                     }
