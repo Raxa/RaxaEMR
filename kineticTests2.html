@@ -274,7 +274,7 @@
                 // img.src = dataUrl;
                 // // img.setAttribute('onclick', 'loadImageFromPriorVisit("' + dataUrl + '");')
 
-                addHistoryItem('name','yellow', dataUrl);
+                addHistoryItem('','yellow', dataUrl);
               }
 
               // Load 
@@ -292,6 +292,7 @@
                     // name: 'thumb'
                   });
                   updateHistoryBar(box, '');
+                  addText(name);
                   return;
                 }
 
@@ -331,9 +332,29 @@
                   
                   historyYOffset += HISTORY_ITEM_DIM + (HISTORY_ITEM_DIM / 2);
                 }
+
+                function addText(text) {
+                  console.log('add some text');
+                  var text = new Kinetic.Text({
+                    x: DRAWABLE_X_MAX + 8,
+                    y: historyYOffset - (HISTORY_ITEM_DIM + (HISTORY_ITEM_DIM / 2)) + HISTORY_ITEM_DIM / 3,
+                    fontSize: HISTORY_ITEM_DIM /3,
+                    fontFamily: "ComicSans",
+                    textFill: "white",
+                    text: name
+                  });
+                  text.on('click touchstart', function() {
+                    // Reset to current visit
+                    console.log('tap text');
+                    loadImageFromPriorVisit('');    // TODO: Careful. loads no visit if tapping text.
+                      // Hack just to get this working for "new" button, for now
+                  });
+                  controlsLayer.add(text);
+                  controlsLayer.draw();
+                }
               }
 
-              addHistoryItem('today', 'green', '');
+              addHistoryItem('new', 'green', '');
 
               function loadImageFromPriorVisit(dataUrl) {
                 console.log('loadImageFromPriorVisit');
@@ -463,6 +484,26 @@
                 controlsLayer.draw();
               }
               saveImgObj.src = 'save.png';
+
+              // // Overlaps with "new" history item. just to help make it easier to understand
+              // var newImgObj = new Image();
+              // newImgObj.onload = function() {
+              //   var box = new Kinetic.Image({
+              //     x: CONTROL_BASE_X,
+              //     y: CONTROL_BASE_Y + CONTROL_ITEM_DIM*3 + CONTROL_ITEM_SPACING*3,
+              //     width: CONTROL_ITEM_DIM,
+              //     height: CONTROL_ITEM_DIM,
+              //     stroke: "black",
+              //     strokeWidth: 1,
+              //     image: newImgObj
+              //   });
+              //   box.on('click touchstart', function() {
+              //     onSaveCanvas();
+              //   });
+              //   controlsLayer.add(box);
+              //   controlsLayer.draw();
+              // }
+              // newImgObj.src = 'new.png';
 
               var plusDiagnosisImgObj = new Image();
               plusDiagnosisImgObj.onload = function() {
