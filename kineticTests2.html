@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0px;
+                padding: 0px;
+            }
+            canvas {
+                border: 1px solid #9C9898;
+            }
+        </style>
+        <script src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.1.js"></script>
+        <script>
+            window.onload = function() {
+              var newLine;
+              var newLinePoints = [];
+              var prevPos;
+              var mode;
+
+              document.getElementById("drawMode").addEventListener("click", function() {
+                mode = "draw";
+              }, false);
+
+              document.getElementById("eraseMode").addEventListener("click", function() {
+                mode = "erase";
+              }, false);
+
+                layer = new Kinetic.Layer();
+                layerLines = new Kinetic.Layer();
+                stage = new Kinetic.Stage({
+                    container: "container",
+                    width: 320,
+                    height: 320
+                });
+
+                background = new Kinetic.Rect({
+                    x: 0, 
+                    y: 0, 
+                    width: stage.getWidth(),
+                    height: stage.getHeight(),
+                    fill: "white"
+                });
+    
+                layer.add(background);
+                line = new Kinetic.Line({
+                    points: [0, 0, 50, 50],
+                    stroke: "red"
+                });
+
+                layerLines.add(line);
+                stage.add(layer);
+                stage.add(layerLines)
+
+                moving = false;
+
+                stage.on("mousedown", function(){
+                    if (mode !== 'draw') {
+                      return;
+                    }
+
+                    if (moving){
+                        moving = false;layer.draw();
+                    } else {
+                        
+                        // var mousePos = stage.getMousePosition();
+                        // //start point and end point are the same
+                        // line.getPoints()[0].x = mousePos.x;
+                        // line.getPoints()[0].y = mousePos.y;
+                        // line.getPoints()[1].x = mousePos.x;
+                        // line.getPoints()[1].y = mousePos.y;
+
+                        newLinePoints = [];
+                        prevPos = stage.getMousePosition();
+                        newLinePoints.push(prevPos);
+                        newLine = new Kinetic.Line({
+                          points: newLinePoints,
+                          stroke: "red"
+                        });
+                        layerLines.add(newLine);
+                        moving = true;    
+                        // layerLines.drawScene();            
+                    }
+
+                });
+
+                stage.on("mousemove", function(){
+                    if (mode !== 'draw') {
+                      return;
+                    }
+
+                    if (moving) {
+                        
+                        var mousePos = stage.getMousePosition();
+                        var x = mousePos.x;
+                        var y = mousePos.y;
+                        newLinePoints.push(mousePos);
+
+                        console.log("moving");
+                        
+                        
+                        // newLine.on('mouseover', function(evt){
+                        //   console.log('clicked on newline');
+                        //   if (mode == 'erase') {
+                        //     console.log('fake erase');
+                        //   }
+                        // });
+                        
+                        prevPos = mousePos;
+                        console.log(newLine);
+                        
+                        moving = true;
+                        layerLines.drawScene();
+                    }
+                });
+
+                stage.on("mouseup", function(){
+                    if (mode !== 'draw') {
+                      return;
+                    }
+
+                    moving = false; 
+                });
+
+            };
+        </script>
+    </head>
+    <body>
+        <div id="container" ></div>
+        <button id="drawMode">
+          Draw
+        </button>
+        <button id="eraseMode">
+          Erase
+        </button>
+    </body>
+</html>
