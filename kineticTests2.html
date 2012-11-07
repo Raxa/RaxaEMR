@@ -1,3 +1,8 @@
+
+<!--
+  Tutorials:
+  http://jsfiddle.net/robtown/SGQq7/22/
+-->
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -10,11 +15,14 @@
                 border: 1px solid #9C9898;
             }
         </style>
-        <script src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.1.js"></script>
+        <script src="src/lib/kinetic-v4.0.5.min.js"></script>
         <script>
             imageCount = 0;
 
             window.onload = function() {
+              var lowY;
+              var highY;
+
               var newLine;
               var newLinePoints = [];
               var prevPos;
@@ -30,11 +38,46 @@
 
                 layer = new Kinetic.Layer();
                 layerLines = new Kinetic.Layer();
+                textLayer = new Kinetic.Layer();
+
+                var simpleText = new Kinetic.Text({
+                  x: 190,
+                  y: 15,
+                  text: "Simple Text",
+                  fontSize: 30,
+                  fontFamily: "Calibri",
+                  textFill: "green"
+                });
+
+                var complexText = new Kinetic.Text({
+                  x: 100,
+                  y: 60,
+                  stroke: '#555',
+                  strokeWidth: 5,
+                  fill: '#ddd',
+                  text: 'COMPLEX TEXT\n\nAll the world\'s a stage, and all the men and women merely players. They have their exits and their entrances.',
+                  fontSize: 14,
+                  fontFamily: 'Calibri',
+                  textFill: '#555',
+                  width: 380,
+                  padding: 20,
+                  align: 'center',
+                  fontStyle: 'italic',
+                  shadow: {
+                    color: 'black',
+                    blur: 1,
+                    offset: [10, 10],
+                    opacity: 0.2
+                  },
+                  cornerRadius: 10
+                });
+
                 stage = new Kinetic.Stage({
                     container: "container",
-                    width: 320,
+                    width: 640,
                     height: 320
                 });
+                GloStage = stage;
 
                 background = new Kinetic.Rect({
                     x: 0, 
@@ -52,11 +95,21 @@
 
                 layerLines.add(line);
                 stage.add(layer);
-                stage.add(layerLines)
-
+                stage.add(layerLines);
+                stage.add(textLayer); // in front of "draw" layer, i.e. cant draw on a diagnosis. for now.
                 moving = false;
 
+                // Drag start
                 stage.on("mousedown", function(){
+                  dragStart();
+                });
+
+                stage.on("touchstart", function(){
+                  dragStart();
+                });
+
+                function dragStart() {
+                    console.log('dragStart');
                     if (mode !== 'draw') {
                       return;
                     }
@@ -73,7 +126,10 @@
                         // line.getPoints()[1].y = mousePos.y;
 
                         newLinePoints = [];
-                        prevPos = stage.getMousePosition();
+                        // prevPos = stage.getMousePosition();
+                        prevPos = stage.getUserPosition();  // Mouse or touch
+                        // console.log("mousePos = ", prevPos.x, prevPos.y);
+                        
                         newLinePoints.push(prevPos);
                         newLine = new Kinetic.Line({
                           points: newLinePoints,
@@ -91,22 +147,48 @@
                         });
                         
                     }
+                  }
 
-                });
+                // Keep track of current low and high
+                function updateBounds(mousePos) {
+                    var y = mousePos.y;
+                    if (y < lowY || lowY == undefined) { lowY = y; }
+                    if (y > highY || highY == undefined) { highY = y; console.log("hi = " + y)}
+                }
 
-                stage.on("mousemove", function(){
+
+                // Drag in progress
+                stage.on("mousemove", function(){ dragMove(); });
+                stage.on("touchmove", function(){ dragMove(); });
+
+                // function dragMove_touch(e) {
+                //   var x, y, i;
+                //   for (i = 0; i < e.targetTouches.length; i++) {
+                //       console.log()
+                //       x = e.targetTouches[i].clientX - offsetX;
+                //       y = e.targetTouches[i].clientY - offsetY;
+                //       drawCircle(x, y);
+                //   }
+                // }
+
+                function dragMove(){
+                    console.log('dragMove');
                     if (mode !== 'draw') {
                       return;
                     }
 
                     if (moving) {
                         
-                        var mousePos = stage.getMousePosition();
+                        // var mousePos = stage.getMousePosition();
+                        var mousePos = stage.getUserPosition();  // Mouse or touch
+
+                        // console.log("mousePos = ", mousePos.x, mousePos.y);
                         var x = mousePos.x;
                         var y = mousePos.y;
                         newLinePoints.push(mousePos);
-
-                        console.log("moving");
+                        updateBounds(mousePos)
+;
+                        // console.log("moving");
                         
                         prevPos = mousePos;
                         // console.log(newLine);
@@ -114,15 +196,20 @@
                         moving = true;
                         layerLines.drawScene();
                     }
-                });
-
-                stage.on("mouseup", function(){
+                }
+                
+                // Done dragging
+                stage.on("mouseup", function(){dragComplete();});
+                stage.on("touchend", function(){dragComplete();});
+                
+                function dragComplete(){
+                    console.log('drag complete');
                     if (mode !== 'draw') {
                       return;
                     }
 
                     moving = false; 
-                });
+                }
 
                 document.getElementById("saveCanvas").addEventListener("click", function() {
                   /*
@@ -156,6 +243,29 @@
                   img.setAttribute('onclick', 'window.open("' + dataUrl + '");')
                 }
 
+                document.getElementById("addDiagnosis").addEventListener("click", function() {
+                  // Get user input
+                  console.log("add diagnosis")
+                  // var input = window.prompt("What's the diagnosis?","Tuberculosis");
+                  
+                  // inserts a dianosis wherever there's untouched space on canvas
+                  drawTextAtLowPoint("FAKE DIAGNOSIS 123");
+                  // drawTextAtLowPoint(input);
+
+                }, false);
+
+                function drawTextAtLowPoint(text) {
+                  console.log("drawTextAtLowPoint");
+                  
+                  // add the shapes to the layer
+                  simpleText.setAttrs({y: highY});
+                  console.log(simpleText);
+                  console.log(simpleText.y);
+                  textLayer.add(simpleText);
+                  complexText.setAttrs({y: highY + 45});
+                  textLayer.add(complexText);
+                  stage.draw();
+                } 
             };
         </script>
     </head>
@@ -169,6 +279,9 @@
         </button>
         <button id="saveCanvas">
           saveCanvas
+        </button>
+        <button id="addDiagnosis">
+          + Diagnosis
         </button>
         <div id="thumbs">
           <a id='thumbLink1' href='#'>
