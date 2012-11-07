@@ -31,6 +31,11 @@
             var HISTORY_BASE_Y = DRAWABLE_Y_MIN + 196;
             var HISTORY_ITEM_DIM = 64;
 
+            var CONTROL_BASE_X = DRAWABLE_X_MAX + 8;
+            var CONTROL_BASE_Y = DRAWABLE_Y_MIN;
+            var CONTROL_ITEM_SPACING = 8;
+            var CONTROL_ITEM_DIM = 48;
+
             function isInDrawableArea(myX, myY) {
               up = {
                 x : myX,
@@ -206,6 +211,7 @@
 
                 function dragMove(){
                     var up = stage.getUserPosition();
+                    console.log(up.x, up.y);
                     if (! isInDrawableArea(up.x, up.y)) {
                       return;
                     }
@@ -247,7 +253,13 @@
                     moving = false; 
                 }
 
+                // Save canvas to dataUrl. 
+
                 document.getElementById("saveCanvas").addEventListener("click", function() {
+                  onSaveCanvas();
+                }, false);
+
+                function onSaveCanvas() {
                   /*
                    * since the stage toDataURL() method is asynchronous, we need
                    * to provide a callback
@@ -264,7 +276,7 @@
                       imageCount++;
                     }
                   });
-                }, false);
+                }
 
                 // Creating thumbnails..
                 // 'canvasImg'
@@ -305,7 +317,7 @@
                   }
                   imageObj.src = dataUrl;
 
-                  function createHistoryLink(dataUrl) {
+                  function createHistoryLink(img) {
                     var box = new Kinetic.Image({
                       x: DRAWABLE_X_MAX,
                       y: historyYOffset,
@@ -313,7 +325,7 @@
                       height: HISTORY_ITEM_DIM,
                       stroke: "black",
                       strokeWidth: 4,
-                      image: dataUrl
+                      image: img
                       // name: 'thumb'
                     });
                     return box;
@@ -376,29 +388,94 @@
                   loadedImageLayer.show();
                 }
 
-                document.getElementById("addDiagnosis").addEventListener("click", function() {
+
+                ////////////////////////////////////////////
+                // Add Controls... Pencil, eraser, save   //
+                ////////////////////////////////////////////
+
+                // If there is a dataUrl, then use that image to do fun stuff like create thumbz
+                var pencilImageObj = new Image();
+                pencilImageObj.onload = function() {
+                  // var box = createHistoryLink(imageObj);
+                  // function createHistoryLink(img) {
+                  var box = new Kinetic.Image({
+                    x: CONTROL_BASE_X,
+                    y: CONTROL_BASE_Y,
+                    width: CONTROL_ITEM_DIM,
+                    height: CONTROL_ITEM_DIM,
+                    stroke: "black",
+                    strokeWidth: 1,
+                    image: pencilImageObj
+                  });
+                  controlsLayer.add(box);
+                  controlsLayer.draw();
+                  // updateHistoryBar(box, handler);
+                }
+                pencilImageObj.src = 'pencil.png';
+
+                var eraserImgObj = new Image();
+                eraserImgObj.onload = function() {
+                  // var box = createHistoryLink(imageObj);
+                  // function createHistoryLink(img) {
+                  var box = new Kinetic.Image({
+                    x: CONTROL_BASE_X,
+                    y: CONTROL_BASE_Y + CONTROL_ITEM_DIM + CONTROL_ITEM_SPACING,
+                    width: CONTROL_ITEM_DIM,
+                    height: CONTROL_ITEM_DIM,
+                    stroke: "black",
+                    strokeWidth: 1,
+                    image: eraserImgObj
+                  });
+                  controlsLayer.add(box);
+                  controlsLayer.draw();
+                  // updateHistoryBar(box, handler);
+                }
+                eraserImgObj.src = 'eraser.png';
+
+                var keyboardImgObj = new Image();
+                keyboardImgObj.onload = function() {
+                  // var box = createHistoryLink(imageObj);
+                  // function createHistoryLink(img) {
+                  var box = new Kinetic.Image({
+                    x: CONTROL_BASE_X,
+                    y: CONTROL_BASE_Y + CONTROL_ITEM_DIM*2 + CONTROL_ITEM_SPACING*2,
+                    width: CONTROL_ITEM_DIM,
+                    height: CONTROL_ITEM_DIM,
+                    stroke: "black",
+                    strokeWidth: 1,
+                    image: keyboardImgObj
+                  });
+                  controlsLayer.add(box);
+                  box.on('click', function() {
+                    onAddDiagnosis();
+                  });
+                  controlsLayer.draw();
+                  // updateHistoryBar(box, handler);
+                }
+                keyboardImgObj.src = 'keyboard.png';
+
+                function onAddDiagnosis() {
                   // Get user input
                   console.log("add diagnosis")
                   // var input = window.prompt("What's the diagnosis?","Tuberculosis");
                   
+                  function drawTextAtLowPoint(text) {
+                    console.log("drawTextAtLowPoint");
+                    
+                    // add the shapes to the layer
+                    simpleText.setAttrs({y: highY});
+                    console.log(simpleText);
+                    console.log(simpleText.y);
+                    textLayer.add(simpleText);
+                    complexText.setAttrs({y: highY + 45});
+                    textLayer.add(complexText);
+                    stage.draw();
+                  } 
+
                   // inserts a dianosis wherever there's untouched space on canvas
                   drawTextAtLowPoint("FAKE DIAGNOSIS 123");
                   // drawTextAtLowPoint(input);
-
-                }, false);
-
-                function drawTextAtLowPoint(text) {
-                  console.log("drawTextAtLowPoint");
-                  
-                  // add the shapes to the layer
-                  simpleText.setAttrs({y: highY});
-                  console.log(simpleText);
-                  console.log(simpleText.y);
-                  textLayer.add(simpleText);
-                  complexText.setAttrs({y: highY + 45});
-                  textLayer.add(complexText);
-                  stage.draw();
-                } 
+                }
             };
         </script>
     </head>
