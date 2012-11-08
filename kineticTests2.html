@@ -19,9 +19,12 @@
         <script>
             imageCount = 0;
 
+            
+
             var DRAWABLE_X_MIN = 0;
             var DRAWABLE_X_MAX = 700; // 708 - strict border
-            var DRAWABLE_Y_MIN = 240; // 230 - strict border
+            var DIFF = 144; // moving whole thing up a bit ... 1024 - 880 = 144
+            var DRAWABLE_Y_MIN = 240 - DIFF; // 230 - strict border 
             var DRAWABLE_Y_MAX = 1024;
             var DEFAULT_MODE = "draw";  // undefined
             var STAGE_X = 768;  //768
@@ -124,7 +127,8 @@
                 console.log(stage.getWidth(), stage.getHeight());
                 var backgroundImage = new Kinetic.Image({
                   x: 0,
-                  y: 1024-880,
+                  // y: 1024-880,
+                  y: 0,
                   image: imageObj,
                   width: stage.getWidth(),
                   height: 880
