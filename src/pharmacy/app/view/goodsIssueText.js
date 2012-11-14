@@ -23,10 +23,10 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueText', {
                 }
                 ]
             }),
-            fieldLabel: 'Fill Requisition (optional)',
+          fieldLabel: 'Fill Requisition (optional)',
             valueField: 'uuid',
             displayField: 'description',
-            listeners: {
+            listeners: {  
                 'focus': {
                     fn: function (comboField) {
                         comboField.doQuery(comboField.allQuery, true);
@@ -49,9 +49,10 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueText', {
     {
         xtype: 'combobox',
         id: "issueStockLocationPicker",
-        store: Ext.create('RaxaEmr.Pharmacy.store.Locations',{
-            storeId: 'issueStockLocations'
-        }),
+//        store: Ext.create('RaxaEmr.Pharmacy.store.Locations',{
+//            storeId: 'issueStockLocations'
+//        }),
+         store: 'Locations',
         fieldLabel: 'Stock Location',
         queryMode: 'local',
         hideTrigger: true,
@@ -63,9 +64,10 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueText', {
     {
         xtype: 'combobox',
         id: "issuedispenseLocationPicker",
-        store: Ext.create('RaxaEmr.Pharmacy.store.Locations', {
-            storeId: 'issuedispenseLocations'
-        }),
+//        store: Ext.create('RaxaEmr.Pharmacy.store.Locations', {
+//            storeId: 'issuedispenseLocations'
+//        }),
+        store: 'Locations',
         fieldLabel: 'Dispense Location',
         queryMode: 'local',
         hideTrigger: true,

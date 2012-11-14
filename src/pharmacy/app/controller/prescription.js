@@ -1237,6 +1237,14 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     // Submit Drug Request via REST to database
     submitRequisition: function(){
         // Create Drug Inventories (??)
+        console.log("<<<<<<<<<inside submitRequisition>>>>>>>>>>>>>>");
+        console.log(Ext.getCmp('dispenseLocationPicker').value);
+        console.log(Ext.getCmp('stockLocationPicker').value);
+        console.log(Ext.getCmp('dispenseLocationPicker').value === undefined);
+        console.log(Ext.getCmp('dispenseLocationPicker').value === null);
+        console.log(Ext.getCmp('stockLocationPicker').value === undefined);
+        console.log(Ext.getCmp('stockLocationPicker').value === null);
+        if(!((Ext.getCmp('dispenseLocationPicker').value === undefined  || Ext.getCmp('dispenseLocationPicker').value === null ) || (Ext.getCmp('stockLocationPicker').value === undefined  || Ext.getCmp('stockLocationPicker').value === null ))) {
         var drugInventories = [];
         var requisitions = Ext.getStore('RequisitionItems').data;
         for (var i = 0; i < requisitions.items.length; i++) {
@@ -1254,17 +1262,17 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
 
         // Create model for Purchase Order POST, with given drug orders
         var time = Util.getCurrentTime();
-        var dispenseLocationIndex = Ext.getStore("dispenseLocations").find('display', Ext.getCmp("dispenseLocationPicker").value);
-        var stockLocationIndex = Ext.getStore("stockLocations").find('display', Ext.getCmp("stockLocationPicker").value);
-        var dispenseLocationString = Ext.getStore("dispenseLocations").getAt(dispenseLocationIndex).data.display.toString().split(" - ")[0];
+        var dispenseLocationIndex = Ext.getStore("locations").find('display', Ext.getCmp("dispenseLocationPicker").value);
+        var stockLocationIndex = Ext.getStore("locations").find('display', Ext.getCmp("stockLocationPicker").value);
+        var dispenseLocationString = Ext.getStore("locations").getAt(dispenseLocationIndex).data.display.toString().split(" - ")[0];
         
         var purchaseOrder = Ext.create('RaxaEmr.Pharmacy.model.PurchaseOrder', {
             name: "Pharmacy Requisition",
             description: "Requisition from "+dispenseLocationString+ " on "+time.toString().substr(0, 10),
             received: "false",
             provider: Util.getLoggedInProviderUuid(),
-            stockLocation: Ext.getStore("stockLocations").getAt(stockLocationIndex).data.uuid,
-            dispenseLocation: Ext.getStore("dispenseLocations").getAt(dispenseLocationIndex).data.uuid,
+            stockLocation: Ext.getStore("locations").getAt(stockLocationIndex).data.uuid,
+            dispenseLocation: Ext.getStore("locations").getAt(dispenseLocationIndex).data.uuid,
             drugPurchaseOrderDate: time,
             inventories: drugInventories
         });
@@ -1278,7 +1286,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 // Send an alert that requisition has been made
                 var alertParams = {
                     name: "Requisition from "+dispenseLocationString+ " on "+time.toString().substr(0, 10),
-                    toLocation: Ext.getStore("stockLocations").getAt(stockLocationIndex).data.uuid,
+                    toLocation: Ext.getStore("locations").getAt(stockLocationIndex).data.uuid,
                     providerSent: Util.getLoggedInProviderUuid(),
                     alertType: "newRequisition",
                     defaultTask: "newIssue",
@@ -1294,6 +1302,10 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 Ext.Msg.alert("Error", Util.getMessageSyncError());
             }
         });
+        } else {
+            Ext.Msg.alert("Error", 'Please enter your location and stock location');
+        }
+            
     },
     
     // Fills a purchase order when a stock admin wants to make a new issue
@@ -1370,8 +1382,11 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 return "Quantity cannot exceed batch";
             }
         }
-        if(Ext.getCmp('issuedispenseLocationPicker').getValue()===null){
-            return "Please select a dispense location";
+        if( Ext.getCmp('issueStockLocationPicker').getValue() === null || Ext.getCmp('issueStockLocationPicker').getValue() === undefined) {
+            return "Please select a Stock location";
+        }
+        if( Ext.getCmp('issuedispenseLocationPicker').getValue() === null || Ext.getCmp('issuedispenseLocationPicker').getValue() === undefined) {
+            return "Please select a Dispense location";
         }
         return null;
     },
@@ -1379,10 +1394,14 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     // 
     submitIssue: function(){
         // Validate the submitted issue - respond with Alert message if invalid
+        console.log(" << inside submit issue >> ");
+        console.log(Ext.getCmp('issuePurchaseOrderPicker').value);
+        console.log(Ext.getCmp('issueStockLocationPicker').value);
+        console.log(Ext.getCmp('issuedispenseLocationPicker').value);
         var issues = Ext.getStore('newIssue').data;
         var msg = this.validateIssue(issues);
         if(msg!==null){
-            Ext.Msg.alert(msg);
+            Ext.Msg.alert("Error" , msg);
             return;
         }
 
@@ -1498,6 +1517,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         Ext.getStore('stockList').clearFilter();
         //if current location, filter by that
         if(Ext.getCmp('allStockLocationPicker').getValue()){
+            console.log("inside filterAllStocksByLocation");
+            console.log(Ext.getCmp('allStockLocationPicker').getValue());
             Ext.getStore('stockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
         }
     },
