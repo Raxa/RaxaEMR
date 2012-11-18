@@ -1,0 +1,3 @@
+[submodule "KineticJS"]
+	path = KineticJS
+	url = https://github.com/ericdrowell/KineticJS.git
