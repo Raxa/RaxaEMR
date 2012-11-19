@@ -99,7 +99,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
 //                    {
 //                        xtype: 'button',
 //                        text: 'Review Prescription',
-//                        ui: 'raxa-orange-small',
 //                        x: 420,
 //                        y: 580
 //                    },
@@ -108,7 +107,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                         width: 60,
                         text: 'Save',
                         action: 'doneWithNewPatientPrescription',
-                        ui: 'raxa-aqua-small',
                         x: 480,
                         y: 580
                     },
@@ -117,7 +115,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                         width: 60,
                         text: 'Print',
                         action: 'printPrescribedDrugs',
-                        ui: 'raxa-aqua-small',
                         x: 560,
                         y: 580
                     }]
@@ -134,7 +131,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                         width: 60,
                         text: 'Save',
                         action: 'doneWithQueuedPatientPrescription',
-                        ui: 'raxa-aqua-small',
                         x: 330,
                         y: 580
                     },{
@@ -142,7 +138,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                         width: 60,
                         text: 'Print',
                         action: 'printPrescribedDrugs',
-                        ui: 'raxa-aqua-small',
                         x: 460,
                         y: 580
                     }]
@@ -171,7 +166,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                     layout: {
                         type: 'absolute'
                     },
-                    ui: 'raxa-panel',
                     collapsed: false,
                     title: 'Search a Patient',
                     items:[
@@ -214,19 +208,19 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                             border: true,
                             height: 300,
                             title: 'Search Results',
-                            store: Ext.create('RaxaEmr.Pharmacy.store.drugOrderPatient'),
+                            store: Ext.create('RaxaEmr.Pharmacy.store.ListPatients'),
                             columns: [
                             {
                                 xtype: 'gridcolumn',
-                                width: 120,
+                                width: 100,
                                 text: 'Patient Name',
-                                dataIndex : 'display'
+                                dataIndex : 'name'
                             },
                             {
                                 xtype: 'gridcolumn',
-                                width: 40,
-                                dataIndex: 'age',
-                                text: 'Age'
+                                width: 75,
+                                dataIndex: 'identifier',
+                                text: 'ID'
                             }
                             ]
                         }, {
@@ -260,7 +254,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                                 x: 50,
                                 y: 330,
                                 text: 'Back',
-                                ui: 'raxa-orange-small',
                                 action: 'back'
                             }]
                         }]
@@ -331,7 +324,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                                 xtype: 'button',
                                 width: 80,
                                 text: 'Back',
-                                ui: 'raxa-orange-small',
                                 action: 'back'
                             }]
                         }]
@@ -411,7 +403,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                                 xtype: 'button',
                                 width: 80,
                                 text: 'Back',
-                                ui: 'raxa-orange-small',
                                 action: 'backFromSevenDays'
                             }]
                         }]
@@ -441,7 +432,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                     },
                     {
                         xtype: 'gridcolumn',
-                        width: 146,
+                        width: 138,
                         text: 'Patient Name'
                     }]
                 }]

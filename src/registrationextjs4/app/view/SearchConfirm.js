@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2012, Raxa
  *
@@ -20,21 +21,21 @@ Ext.define('Registration.view.SearchConfirm', {
     alias: 'widget.searchconfirm',
     autoScroll: true,
     border: 0,
-    padding: 10,
+    // padding: 10,
     layout: {
         type: 'hbox',
         pack: 'center'
     },
     initComponent: function () {
         this.items = {
-            xtype: 'panel',
-            ui: 'raxa-panel',
-            width: 800,
-            padding: 20,
-            items: [{
+            // xtype: 'panel',
+            // // ui: 'raxa-panel',
+            // width: 800,
+            // // padding: 20,
+            // items: [{
                 xtype: 'container',
                 border: 0,
-                bodyPadding: 10,
+                // bodyPadding: 10,
                 items: [{
                     xtype: 'fieldset',
                     id : 'fieldsetSearchedPatient',
@@ -210,6 +211,28 @@ Ext.define('Registration.view.SearchConfirm', {
                             flex: 1,
                             allowBlank: false
                         }]
+                    // TODO: https://raxaemr.atlassian.net/browse/RAXAJSS-613
+                    // }, {
+                    //     xtype: 'fieldcontainer',
+                    //     fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.Religion'),
+                    //     layout: 'hbox',
+                    //     combineErrors: true,
+                    //     defaultType: 'textfield',
+                    //     labelAlign: 'right',
+                    //     labelPad: 20,
+                    //     labelWidth: 250,
+                    //     anchor: '95%',
+                    //     defaults: {
+                    //         hideLabel: 'true'
+                    //     },
+                    //     items: [{
+                    //         name: 'religion',
+                    //         id: 'religionSearchedPatient',
+                    //         emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.Religion.emptytext'),
+                    //         readOnly: true,
+                    //         flex: 1,
+                    //         allowBlank: false
+                    //     }]
                     }, {
                         xtype: 'textfield',
                         id: 'residentialAreaSearchedPatient',
@@ -289,26 +312,17 @@ Ext.define('Registration.view.SearchConfirm', {
                         labelWidth: 250,
                         hideTrigger: true,
                         anchor: '95%'
-                    }, {
-                        xtype: 'fieldcontainer',
-                        fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.CM'),
-                        combineErrors: true,
-                        defaultType: 'textfield',
+                    },{
+                        xtype: 'textfield',
+                        fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.State'),
+                        id: 'stateSearchedPatient',
+                        emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.State.emptytext'),
+                        readOnly: true,
                         labelAlign: 'right',
                         labelPad: 20,
                         labelWidth: 250,
-                        anchor: '95%',
-                        defaults: {
-                            hideLabel: 'true'
-                        },
-                        items: [{
-                            name: 'phoneNo.',
-                            id: 'phoneSearchedPatient',
-                            emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.CM.emptytext'),
-                            flex: 1,
-                            readOnly: true,
-                            allowBlank: false
-                        }]
+                        hideTrigger: true,
+                        anchor: '95%'
                     }, {
                         xtype: 'fieldcontainer',
                         fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.CN'),
@@ -342,7 +356,7 @@ Ext.define('Registration.view.SearchConfirm', {
                     }, {
                         xtype: 'button',
                         margin: '10 10 0 200',
-                        ui: 'raxa-orange-small',
+                        // ui: 'raxa-orange-small',
                         text: 'Cancel', // Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.Cancel'),
                         handler: function () {
                             var l = Ext.getCmp('mainRegArea').getLayout();
@@ -360,11 +374,11 @@ Ext.define('Registration.view.SearchConfirm', {
                         xtype: 'button',
                         margin: '10 0 0 10',
                         text: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.BMI'),
-                        ui: 'raxa-aqua-small',
+                        // ui: 'raxa-aqua-small',
                         action: 'bmipage'
                     }]
                 }]
-            }]
+            // }]
         };
         this.callParent();
     }

@@ -1,9 +1,9 @@
 Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Ext.ux.ModalGrid',
     alias: 'widget.goodsIssueGrid',
     id: 'goodsIssueGrid',
     height: 250,
-    width: 743,
+    width: 780 - 2, // Total pixels - Border
     store: Ext.create('RaxaEmr.Pharmacy.store.StockList',{
         autoLoad: false,
         storeId: 'newIssue'
@@ -15,15 +15,9 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
     viewConfig: {
         stripeRows: false
     },
-    initComponent: function () {    
+    initComponent: function () {
         var issueEditor = this;
-        this.addEvents(['deleteIssueDrug']);
         this.columns = [
-        {
-            xtype: 'rownumberer',
-            text: 'S.N0',
-            width: 50
-        },
         {
             xtype: 'gridcolumn',
             width: 200,
@@ -32,27 +26,24 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
             editor: {
                 xtype: 'combobox',
                 editable: true,
-                minChars: 3,
+                minChars: 2,
                 typeAhead: true,
                 autoSelect: false,
                 store: 'allDrugs',
+                queryMode: 'local',
+                hideTrigger : true,
                 displayField: 'text',
+                forceSelection: true,
                 listeners: {
                     'focus': {
                         fn: function (comboField) {
                             comboField.expand();
-                        }
-                        , 
+                        },
                         scope: this
                     },
                     'select':{
                         fn: function(comboField, records){
-                            var row = (Ext.getCmp('goodsIssueGrid').getSelectionModel().selection.row);
-                            Ext.getStore('newIssue').getAt(row).set('expiryDate', null);
-                            Ext.getStore('newIssue').getAt(row).set('batch', null);
-                            Ext.getStore('newIssue').getAt(row).set('batchQuantity', null);
-                            Ext.getStore('newIssue').getAt(row).set('roomLocation', null);
-                            Ext.getStore('newIssue').getAt(row).set('batchUuid', null);
+                        // TODO: when drug is changed, clear all corresponding fields, as they'll need to be updated
                         }
                     }
                 }
@@ -67,7 +58,8 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
                 xtype: 'numberfield',
                 allowBlank: true,
                 allowDecimals: false,
-                minValue: 0
+                minValue: 0,
+                hideTrigger: true
             }
         },
         {
@@ -77,6 +69,7 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
             width: 170,
             editor: {
                 xtype: 'combobox',
+                itemId: 'batchNumber',
                 allowBlank: false,
                 editable: true,
                 store: Ext.create('RaxaEmr.Pharmacy.store.StockList',{
@@ -88,15 +81,18 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
                     //on focus, filter batches to all that are available at current location with same drug name
                     'focus': {
                         fn: function (comboField) {
-                            var selectedDrug = Ext.getCmp('goodsIssueGrid').getSelectionModel().lastSelected.data.drugName;
-                            comboField.getStore().clearFilter();
+                            // Get drugName entered by user in the modal
+                            var gig = Ext.getCmp('goodsIssueGrid');
+                            var selectedDrug = gig.modalForm.query('[name="drugName"]')[0].value;
+                            
                             //only allow batches that are available, have the correct drug, are in the current location, and
                             //haven't yet been assigned to another inventory
+                            comboField.getStore().clearFilter();
                             comboField.getStore().filter(function(record){
                                 var isAvailable = (record.get('status')===RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.AVAILABLE);
                                 var isCurrentDrug = (record.get('drugName')===selectedDrug);
                                 var isBatch = (Ext.getStore('newIssue').find("batch",record.get('batch'))===-1);
-                                var locationUuid = Ext.getCmp('issueStockLocationPicker').value;
+                                var locationUuid = Ext.getCmp('allStockLocationPicker').value;
                                 var isAtLocation = (record.get('location').uuid===locationUuid)
                                 return isAvailable && isCurrentDrug && isBatch && isAtLocation;
                             });
@@ -107,22 +103,38 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
                         scope: this
                     },
                     'select':{
+                        // TODO: Ideally this shouldnt run on select, but rather, on submit of the modal form
+                        //  probably need to create a new handler function, equivalent to "unselect" or "change selection" 
+                        //  in the grid, which runs validation(s) on submit of the modal form
                         fn: function(comboField, records){
+                            // Auto-filled values
                             var expiryDate = records[0].data.expiryDate;
+                            var dt = new Date(expiryDate);
+                            expiryDate = Ext.Date.format(dt, 'd-m-Y');    // format so it can go into UI
                             var roomLoc = records[0].data.roomLocation;
-                            var batchUuid = records[0].data.uuid;
-                            var batch = records[0].data.batch;
-                            var row = (Ext.getCmp('goodsIssueGrid').getSelectionModel().selection.row);
-                            Ext.getStore('newIssue').getAt(row).set('expiryDate', expiryDate);
-                            Ext.getStore('newIssue').getAt(row).set('batch', batch);
-                            Ext.getStore('newIssue').getAt(row).set('roomLocation', roomLoc);
-                            Ext.getStore('newIssue').getAt(row).set('batchUuid', batchUuid);
-                            Ext.getCmp('goodsIssueGrid').getView().refresh();
-                            var requiredQuantity = Ext.getStore('newIssue').getAt(row).get('quantity');
+                            
+                            // Update drug details in the modal
+                            var mf = Ext.getCmp('goodsIssueGrid').modalForm;
+                            var form = mf.getComponent("ModalGridFormPanel").form;
+                            form.setValues({
+                                'expiryDate': expiryDate
+                            });
+                            form.setValues({
+                                'roomLocation': roomLoc
+                            });
+
+                            // Check if the batch has sufficient quantity to fill the order.
+                            // If not, add another row for remainining quantity needed
+                            var requiredQuantity = form.getValues().quantity;
                             var quantityInBatch = records[0].data.quantity;
-                            //if current batch doesn't cover entire quantity required, reduce quantity and add new row
+                            
+                            // TODO: Usability not great. responds to whatever is first batch that's chosen, without even submitting
+                            // If current batch doesn't cover entire quantity required, reduce quantity and add new row
                             if(quantityInBatch < requiredQuantity){
-                                Ext.getStore('newIssue').getAt(row).set('quantity', quantityInBatch);
+                                form.setValues({
+                                    'quantity': quantityInBatch,
+                                });
+
                                 Ext.getStore('newIssue').add({
                                     drug: {
                                         text: records[0].data.drug.display,
@@ -141,43 +153,24 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
             text: 'Expiry Date',
             format: 'd/m/y',
             dataIndex: 'expiryDate',
-            width: 180
+            width: 140,
+            editor: {
+                xtype: 'datefield',
+            // TODO: Disable this field but still submit the value
+            // disabled: true
+            }
         },{
             xtype: 'gridcolumn',
             text: 'Shelf',
             dataIndex: 'roomLocation',
-            width: 60
-        },        
-        {
-            xtype: 'actioncolumn',
-            width: 22,
-            items: [{
-                icon: '../resources/img/delete.png',
-                tooltip: 'Delete',
-                handler: function(grid, rowIndex, colIndex) {
-                    issueEditor.fireEvent('deleteIssueDrug', {
-                        rowIndex: rowIndex,
-                        colIndex: colIndex
-                    });
-                }
-            }]
+            width: 60,
+            editor: {
+                xtype: 'textfield',
+            // TODO: Disable this field but still submit the value
+            // disabled: true
+            }
         }];
         this.plugins = [this.cellEditor];
-        this.dockedItems = [{
-            xtype: 'toolbar',
-            dock: 'bottom',
-            items: [
-            '->',
-            {
-                text: 'Add Drug',
-                iconCls: 'icon-add',
-                action: 'addIssueDrug'
-            }]
-        }];
-        Ext.getStore('newIssue').add({
-            drugname: '',
-            quantity: ''
-        })[0];
         this.callParent(arguments);
     }
 });

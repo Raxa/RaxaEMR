@@ -1,160 +1,134 @@
-TOPBARBUTTONLOGOPATH = '../resources/img/miniLogo.png';
-PHARMACYTOPBARHEIGHT = 65;
+PHARMACY_TOPBAR_CONSTANTS = {
+    TAB_WIDTH : 80,
+    BUTTON_HEIGHT : 35,
+    BUTTON_WIDTH : 60,
+    HEIGHT : 40
+};
 
 Ext.define('RaxaEmr.Pharmacy.view.pharmacyTopbar',{
     extend: 'Ext.container.Container',
     alias: 'widget.pharmacyTopBar',
     autoScroll: true,
     width: 960,
+    id: 'pharmacyTopbar',
     layout: {
         type: 'hbox',
         align: 'stretch'
     },
-    renderTo: Ext.getBody(),
-    border: 1,
-    style: { 
-        borderColor: '#000000',
-        borderStyle: 'solid',
-        borderWidth: '1px'
-    },
     defaults: {
-        labelWidth: 80,
-        xtype: 'datefield',
-        flex: 1,
-        style: {
-            padding: '10px'
-        }
-    },
-    clearButtonsUI: function(){
-        Ext.getCmp('patientsButton').setUI('default');
-        Ext.getCmp('inventoryButton').setUI('default');
-//        Ext.getCmp('adminButton').setUI('default');
-//        Ext.getCmp('reportsButton').setUI('default');
-//        Ext.getCmp('recordsButton').setUI('default');
+        flex: 1
     },
     items: [{
         xtype: 'toolbar',
-        height: PHARMACYTOPBARHEIGHT,
+        height: PHARMACY_TOPBAR_CONSTANTS.HEIGHT,
         dock: 'top',
-        items: [{
-            xtype: 'image',
-            height: 35,
-            width: 40,
-            src: '../resources/img/iconWhite.png'
-        },
-
+        id: 'pharmacyTopbar',
+        items: [
         {
             xtype: 'button',
             text: 'Patients',
             id: 'patientsButton',
-            //TODO: determine why we need different path for local vs. external host
-            icon: '../resources/img/miniLogo.png',
-            iconAlign: 'top',
-            scale: 'large',
-            width: 80,
+            height: PHARMACY_TOPBAR_CONSTANTS.BUTTON_HEIGHT,
+            width: PHARMACY_TOPBAR_CONSTANTS.TAB_WIDTH,
             handler: function(){
-                Ext.getCmp('pharmacyTopBar').clearButtonsUI();
-                this.setUI('raxa-orange-large');
-                var l = Ext.getCmp('mainarea').getLayout();
-                l.setActiveItem(0);
-                var l1 = Ext.getCmp('addpatientarea').getLayout();
-                l1.setActiveItem(0);
-                var l2 = Ext.getCmp('addpatientgridarea').getLayout();
-                l2.setActiveItem(0);
+                // TODO: This should just be one call - we should update "main area" layout so it has 2 xtypes only, for
+                //  patient and inventory views
+                Ext.getCmp('mainarea').getLayout().setActiveItem(0);
+                Ext.getCmp('addpatientarea').getLayout().setActiveItem(0);
+                Ext.getCmp('addpatientgridarea').getLayout().setActiveItem(0);
+
+                // Highlight "Patients" tab
+                Ext.getCmp('inventoryButton').toggle(false);
+                Ext.getCmp('patientsButton').toggle(true);
             }
-        }, 
-//        {
-//            xtype: 'button',
-//            text: 'Bill Records',
-//            id: 'recordsButton',
-//            ui: 'default',
-//            icon: TOPBARBUTTONLOGOPATH,
-//            iconAlign: 'top',
-//            scale: 'large',
-//            width: 80
-//        }, 
-        {
+        },{
             xtype: 'button',
             text: 'Inventory',
             id: 'inventoryButton',
-            ui: 'default',
-            icon: TOPBARBUTTONLOGOPATH,
-            iconAlign: 'top',
-            scale: 'large',
-            width: 80,
+            height: PHARMACY_TOPBAR_CONSTANTS.BUTTON_HEIGHT,
+            width: PHARMACY_TOPBAR_CONSTANTS.TAB_WIDTH,
+            pressed: true,  // button appears selected at startup
             handler: function(){
-                Ext.getCmp('pharmacyTopBar').clearButtonsUI();
                 var l = Ext.getCmp('mainarea').getLayout();
-                //this.setIcon('xxxxx');
-                this.setUI('raxa-orange-large');
-                l.setActiveItem(4);
+                l.setActiveItem(RaxaEmr_Pharmacy_Controller_Vars.PHARM_PAGES.ALLSTOCK.value);
+                
+                // Highlight "Inventory" tab
+                Ext.getCmp('inventoryButton').toggle(true);
+                Ext.getCmp('patientsButton').toggle(false);
             }
-        }, 
-//        {
-//            xtype: 'button',
-//            text: 'Reports',
-//            id: 'reportsButton',
-//            icon: TOPBARBUTTONLOGOPATH,
-//            ui: 'default',
-//            iconAlign: 'top',
-//            scale: 'large',
-//            width: 80,
-//            handler: function(){
-//                var l = Ext.getCmp('mainarea').getLayout();
-//                l.setActiveItem(2);
-//            }
-//        }, 
-//        {
-//            xtype: 'button',
-//            text: 'Admin',
-//            id: 'adminButton',
-//            icon: TOPBARBUTTONLOGOPATH,
-//            ui: 'default',
-//            iconAlign: 'top',
-//            scale: 'large',
-//            width: 80,
-//            handler: function(){
-//                var l = Ext.getCmp('mainarea').getLayout();
-//                l.setActiveItem(3);
-//            }
-//        }, 
-        {
+        }, {
             xtype: 'tbfill'
+        },
+        {
+            margin: 5,
+            xtype: 'combobox',
+            id: 'allStockLocationPicker',
+            fieldLabel: 'Your Location',
+            store: 'Locations',
+            displayField: 'display',
+            queryMode: 'local',
+            hideTrigger: true,
+            forceSelection: true,
+            valueField: 'uuid',
+            emptyText: 'All Locations',
+            listeners: {
+                'focus': {
+                    fn: function (comboField) {
+                        comboField.doQuery(comboField.allQuery, true);
+                        comboField.expand();
+                    },
+                    scope: this
+                }
+            }
+        },
+        {
+            xtype: 'button',
+            id: 'alertButton',
+            text: 'Alerts',
+            height: PHARMACY_TOPBAR_CONSTANTS.BUTTON_HEIGHT,
+            width: PHARMACY_TOPBAR_CONSTANTS.BUTTON_WIDTH,
+            handler: function(){
+                Ext.getStore('alerts').load({
+                    scope: this,
+                    callback: function(records, operation, success){
+                        if(success) {
+                        // Do nothing
+                        } else {
+                            Ext.Msg.alert("Error", Util.getMessageLoadError());
+                        }
+                    }
+                });
+                if(Ext.getCmp('alertPanel').isHidden()){
+                    var x = Ext.getCmp('pharmacyTopBar').x + Ext.getCmp('pharmacyTopBar').width - Ext.getCmp('alertPanel').width;
+                    Ext.getCmp('alertPanel').setPosition(x, PHARMACY_TOPBAR_CONSTANTS.HEIGHT);
+                    Ext.getCmp('alertPanel').setHeight(200);
+                    Ext.getCmp('alertPanel').show();
+                }else{
+                    Ext.getCmp('alertPanel').hide();
+                }
+            }
+        }, {
+            xtype: 'tbseparator'
         }, {
             xtype: 'tbtext',
-            text: Ext.Date.format(new Date(), 'F j, Y, g:i a')
+            text: 'You are are logged in as ' + localStorage.getItem('username')
         }, {
             xtype: 'tbseparator'
         }, {
             xtype: 'button',
-            id: 'alertButton',
-            text: 'Alerts',
-            width: 60,
-            height: 30,
-            handler: function(){
-                Ext.getStore('alerts').load();
-                if(Ext.getCmp('alertPanel').isHidden()){
-                    Ext.getCmp('alertPanel').show();
-                    this.setText('Close');
-                    var x = Ext.getCmp('pharmacyTopBar').x + Ext.getCmp('pharmacyTopBar').width - Ext.getCmp('alertPanel').width;
-                    Ext.getCmp('alertPanel').setPosition(x, PHARMACYTOPBARHEIGHT);
-                    Ext.getCmp('alertPanel').setHeight(200);
-                    this.setUI('raxa-orange-small');
-                }else{
-                    Ext.getCmp('alertPanel').hide();
-                    this.setText('Alerts');
-                    this.setUI('default');
-                }
-                
-            }
-        }, {
-            xtype: 'button',
-            width: 60,
+            height: PHARMACY_TOPBAR_CONSTANTS.BUTTON_HEIGHT,
+            width: PHARMACY_TOPBAR_CONSTANTS.BUTTON_WIDTH,
             text: 'Log Out',
             handler: function() {
-                Util.logoutUser();
-                location.reload();
+                Ext.Msg.confirm("Log Out", "Are you sure?", function(btn){
+                    if(btn =='yes'){
+                        Util.logoutUser();
+                        location.reload();
+                    }
+                });
             }
         }]
-    }]
+    }
+    ]
+    
 })

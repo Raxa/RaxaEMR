@@ -1,14 +1,13 @@
 Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Ext.ux.ModalGrid',
     alias: 'widget.goodsReceiptGrid',
     styleHtmlContent: false,
     height: 250,
-    width: 743,
+    width: 780 - 2, // Total pixels - Border
     store: Ext.create('RaxaEmr.Pharmacy.store.StockList',{
         autoLoad: false,
         storeId: 'newReceipt'
     }),
-    //layout: 'absolute',
     selType: 'cellmodel',
     cellEditor: Ext.create('Ext.grid.plugin.CellEditing', {
         clicksToEdit: 1
@@ -16,16 +15,9 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
     viewConfig: {
         stripeRows: false
     },
-    x: 110,
     initComponent: function () {
         var receiptEditor = this;
-        this.addEvents(['deleteReceiptDrug']);
         this.columns= [
-        {
-            xtype: 'gridcolumn',
-            width: 25,
-            text: '#'
-        },
         {
             xtype: 'gridcolumn',
             width: 200,
@@ -34,35 +26,40 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
             editor: {
                 xtype: 'combobox',
                 editable: true,
-                minChars: 3,
+                minChars: 2,
                 typeAhead: true,
                 autoSelect: false,
                 store: 'allDrugs',
                 displayField: 'text',
+                queryMode: 'local',
+                hideTrigger : true,
+                forceSelection: true,
                 listeners: {
                     'focus': {
                         fn: function (comboField) {
                             comboField.expand();
                         },
                         scope: this
-                    }
+                    },
                 }
             }
         },
-        {
-            xtype: 'gridcolumn',
-            width: 80,
-            text: 'Qty Sent',
-            dataIndex: 'originalQuantity',
-            hidden: true,
-            editor: {
-                xtype: 'numberfield',
-                allowBlank: true,
-                decimalPrecision: 0,
-                allowDecimals: false,
-                minValue: 0             
-            }
-        },
+        // {
+        //     xtype: 'gridcolumn',
+        //     width: 80,
+        //     text: 'Qty Sent',
+        //     dataIndex: 'originalQuantity',
+        //     hidden: true,
+        //     editor: {
+        //         xtype: 'numberfield',
+        //         allowBlank: true,
+        //         hidden: true,   // TODO: Is this field still submitting? should it be removed?
+        //         decimalPrecision: 0,
+        //         allowDecimals: false,
+        //         minValue: 0,
+        //         hideTrigger: true
+        //     }
+        // },
         {
             xtype: 'gridcolumn',
             width: 80,
@@ -74,7 +71,8 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
                 allowBlank: true,
                 decimalPrecision: 0,
                 allowDecimals: false,
-                minValue: 0
+                minValue: 0,
+                hideTrigger: true
             }
         },
         {
@@ -92,7 +90,7 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
             editable: true,
             text: 'Batch no',
             dataIndex: 'batch',
-            width: 150,
+            width: 80,
             editor: {
                 xtype: 'textfield',
                 allowBlank: true
@@ -103,42 +101,49 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
             editable: true,
             text: 'Expiry Date',
             dataIndex: 'expiryDate',
-            width: 150,
+            width: 80,
             editor: {
                 xtype: 'datefield',
                 allowBlank: false,
-                format: 'd/m/y',
+                format: 'd/m/y'
             }
-        },{
-            xtype: 'actioncolumn',
-            width: 22,
-            items: [{
-                icon: '../resources/img/delete.png',
-                tooltip: 'Delete',
-                handler: function(grid, rowIndex, colIndex) {
-                    receiptEditor.fireEvent('deleteReceiptDrug', {
-                        rowIndex: rowIndex,
-                        colIndex: colIndex
-                    });
+        },
+        {
+            xtype: 'gridcolumn',
+            editable: true,
+            text: 'Supplier',
+            dataIndex: 'supplier',
+            editor: {
+                xtype: 'combobox',
+                editable: true,
+                minChars: 3,
+                typeAhead: true,
+                autoSelect: false,
+                store: [
+                'Shyam & Sons', 
+                'Jagat Traders', 
+                'Pankaj Medico Traders', 
+                'Melaram & Brothers', 
+                'Gurunanak Medical Stores', 
+                'Saluja Medical Agencies', 
+                'G. Medical Services', 
+                'Nitin Medical Agency', 
+                'Vimal Enterprises', 
+                'Locost', 
+                'CMSI'
+                ],
+                displayField: 'text',
+                listeners: {
+                    'focus': {
+                        fn: function (comboField) {
+                            comboField.expand();
+                        },
+                        scope: this
+                    }
                 }
-            }]
+            }
         }],
         this.plugins = [this.cellEditor];
-        this.dockedItems = [{
-                xtype: 'toolbar',
-                dock: 'bottom',
-                items: [
-                    '->',
-                    {
-                        text: 'Add Drug',
-                        iconCls: 'icon-add',
-                        action: 'addReceiptDrug'
-                    }]
-            }];
-        Ext.getStore('newReceipt').add({
-            drugname: '',
-            quantity: ''
-        })[0];
         this.callParent(arguments);
     }
 });

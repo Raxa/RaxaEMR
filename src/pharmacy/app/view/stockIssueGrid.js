@@ -2,17 +2,12 @@ Ext.define('RaxaEmr.Pharmacy.view.stockIssueGrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.stockIssueGrid',
     height: 250,
-    width: 840,
+    width: 760,
     layout: {
         type: 'absolute'
     },
     x: 400,
     columns: [
-    {
-        xtype: 'rownumberer',
-        text: 'S.No',
-        width: 40
-    },
     {
         xtype: 'gridcolumn',
         text: 'Facility Name',

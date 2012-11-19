@@ -1,10 +1,9 @@
 Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.allStockGrid',
-    id: 'allStockGrid',
-    autoHeight: 250,
-    width: 600,
-    margin: '0 0 0 110',
+    id: 'allStockGrid',   
+    width: 780 - 2, // Total pixels - Border
+    margin: '0 0 0 0',
     store: Ext.create('RaxaEmr.Pharmacy.store.StockList',{
         storeId: 'stockList',
         listeners: {
@@ -18,7 +17,7 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
                                 Ext.getCmp('allStockGrid').updateFields();
                             }
                         }
-                    })
+                    });
                 }
                 else {
                     Ext.getCmp('allStockGrid').updateFields();
@@ -33,16 +32,25 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
                 //on select, go to drug details page
                 Ext.getCmp('mainarea').getLayout().setActiveItem(RaxaEmr_Pharmacy_Controller_Vars.PHARM_PAGES.DRUGDETAILS.value);
                 Ext.getCmp('drugDetails').initForDrug(record.data.drugUuid);
-                selectionModel.deselectAll();                
+                selectionModel.deselectAll();
             },
             scope : this
-        }  
-    }),    
+        }
+    }),
     columns: [
     {
         xtype: 'gridcolumn',
         text: 'Status',
         dataIndex: 'status',
+        width: 60,
+        style: {
+                'background-color':'blue'
+            }
+    },
+    {
+        xtype: 'gridcolumn',
+        text: 'Type',
+        dataIndex: 'dosageForm',
         width: 60
     },
     {
@@ -55,12 +63,12 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         xtype: 'gridcolumn',
         text: 'Qty',
         dataIndex: 'quantity',
-        width: 80
+        width: 60
     },
     {
         xtype: 'gridcolumn',
-        text: 'Months',
-        width: 60,
+        text: 'Days',
+        width: 45,
         dataIndex: 'months',
         useNull: true
     },
@@ -74,20 +82,20 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         xtype: 'gridcolumn',
         text: 'batch',
         dataIndex: 'batch',
-        width: 80
+        width: 60
     },
     {
         xtype: 'gridcolumn',
         text: 'Dispense Location',
         dataIndex: 'locationName',
         width: 120
-    },        
+    },
     {
         xtype: 'gridcolumn',
         text: 'Supplier',
         dataIndex: 'supplier',
         width: 120
-    },        
+    },
     {
         xtype: 'actioncolumn',
         width: 22,
@@ -115,7 +123,7 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         for(var i=0; i<myStore.data.items.length; i++){
             var item = myStore.data.items[i];
             var index = infoStore.find('drugUuid', item.data.drugUuid);
-            if(index!==-1){
+            if(index!==-1 && (item.data.supplier===null || item.data.supplier==="")){
                 item.set("supplier", infoStore.getAt(index).data.description);
             }
             if(item.data.batch!==null && item.data.batch!=="" && item.data.quantity!==0){
@@ -124,12 +132,27 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
             else{
                 item.set("batchQuantity", null);
             }
-            
             if(item.data.expiryDate!==""){
-                item.set("months", Util.monthsFromNow(item.data.expiryDate));
-            }
-            else{
+                var daysLeft = Util.daysFromNow(item.data.expiryDate)
+                if(daysLeft > 0) {
+                item.set("months", daysLeft );
+                } else {
+                item.set("months", "exp" );    
+                }
+            } 
+             else {
                 item.set("months", null);
+            }
+        }
+    },
+   
+   viewConfig: {
+        getRowClass: function(record, rowIndex, rowParams, store) {
+            if(Util.monthsFromNow((record.data.expiryDate)) <=  2 && Util.monthsFromNow((record.data.expiryDate)) >  0) {
+            return 'pharmacyTwoMonths-color-grid .x-grid-cell ';
+            }
+            if(Util.monthsFromNow((record.data.expiryDate)) <=  0 ) {
+            return 'pharmacyExpire-color-grid .x-grid-cell ';
             }
         }
     }
