@@ -42,7 +42,10 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         xtype: 'gridcolumn',
         text: 'Status',
         dataIndex: 'status',
-        width: 60
+        width: 60,
+        style: {
+                'background-color':'blue'
+            }
     },
     {
         xtype: 'gridcolumn',
@@ -64,7 +67,7 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
     },
     {
         xtype: 'gridcolumn',
-        text: 'Months',
+        text: 'Days',
         width: 45,
         dataIndex: 'months',
         useNull: true
@@ -129,12 +132,27 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
             else{
                 item.set("batchQuantity", null);
             }
-            
             if(item.data.expiryDate!==""){
-                item.set("months", Util.monthsFromNow(item.data.expiryDate));
-            }
-            else{
+                var daysLeft = Util.daysFromNow(item.data.expiryDate)
+                if(daysLeft > 0) {
+                item.set("months", daysLeft );
+                } else {
+                item.set("months", "exp" );    
+                }
+            } 
+             else {
                 item.set("months", null);
+            }
+        }
+    },
+   
+   viewConfig: {
+        getRowClass: function(record, rowIndex, rowParams, store) {
+            if(Util.monthsFromNow((record.data.expiryDate)) <=  2 && Util.monthsFromNow((record.data.expiryDate)) >  0) {
+            return 'pharmacyTwoMonths-color-grid .x-grid-cell ';
+            }
+            if(Util.monthsFromNow((record.data.expiryDate)) <=  0 ) {
+            return 'pharmacyExpire-color-grid .x-grid-cell ';
             }
         }
     }
