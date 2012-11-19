@@ -37,11 +37,7 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
             scope : this
         }
     }),
-    features: [{ftype:'grouping'}],
     columns: [
-    {
-        xtype: 'rownumberer'
-    },
     {
         xtype: 'gridcolumn',
         text: 'Status',
@@ -70,12 +66,6 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         xtype: 'gridcolumn',
         text: 'Months',
         width: 45,
-        renderer: function(value, metaData, record, row, col, store, gridView){
-            if(value <= 0){
-                return '-';
-            }
-            return value;
-        },
         dataIndex: 'months',
         useNull: true
     },
@@ -141,11 +131,7 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
             }
             
             if(item.data.expiryDate!==""){
-                var months = Util.monthsFromNow(item.data.expiryDate);
-                item.set("months", months);
-                if(months <= 0){
-                    item.set("status", RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.EXPIRED);
-                }
+                item.set("months", Util.monthsFromNow(item.data.expiryDate));
             }
             else{
                 item.set("months", null);
