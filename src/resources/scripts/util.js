@@ -302,6 +302,7 @@ var BMI_WEIGHT_MIN = 0;
 
 // Enum for Key Maps
 var KEY = {
+    DELETE: 8,
     ENTER: 13
 };
 var keyMap = {
@@ -366,6 +367,10 @@ var Util = {
     DEFAULT_LOCATION: "GAN",
     OPEN_MRS_MIN_AGE : 0,
     OPEN_MRS_MAX_AGE : 120,
+    Taken_Morning : "morning ** true.",
+    Taken_Day : "day ** true.",
+    Taken_Even : "evening ** true.",
+    Taken_Night : "night ** true.",
 
     /*
      * Listener to workaround maxLength bug in HTML5 numberfield with Sencha
@@ -538,10 +543,14 @@ var Util = {
         //Check login and save to localStorage if valid
         //We are using a synchronous XMLHttp Request instead of an Asynchronous AJAX request
         var xmlReq = new XMLHttpRequest();
+        xmlReq.addEventListener("error", transferFailed, false);
         xmlReq.open("GET", HOST + '/ws/rest/v1/session', false);
         xmlReq.setRequestHeader("Accept", "application/json");
         xmlReq.setRequestHeader("Authorization", "Basic " + window.btoa(username + ":" + password));
         xmlReq.send();
+        function transferFailed(){
+            Ext.Msg.alert('Network Error',Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.network'));
+        }
         if (xmlReq.status == "200") {
             var authenticated = Ext.decode(xmlReq.responseText).authenticated;
             if (authenticated) {
@@ -562,7 +571,7 @@ var Util = {
         
     },
 
-      /**
+    /**
        *Return selected module in Raxa and by changing the module text font .
        *@return [ 'LOGIN', 'SCREENER', ....]
        */
@@ -665,12 +674,12 @@ var Util = {
             if(jsonData.results.length > 0) {
                 return(Util.getPatientIdentifier());
             } else {
-                 return generatedId;
+                return generatedId;
             }
         }
     },
     
-  //  getX: function(){return 5},
+    //  getX: function(){return 5},
 
     //Function to help share Models between ExtJS and Sencha Touch 2
     platformizeModelConfig: function (extJsModelConfig) {
@@ -741,7 +750,7 @@ var Util = {
         {
             this.DestroyKeyMapButton(keyName);
         }
-	  keyMap.keyName = Ext.create('Ext.util.KeyMap',Ext.getBody(), [
+        keyMap.keyName = Ext.create('Ext.util.KeyMap',Ext.getBody(), [
         {
             key: keyName,
             shift: false,
@@ -750,8 +759,8 @@ var Util = {
                 var element = Ext.getCmp(ComponentName);
                 element.fireEvent('click',element);
 
-                }
             }
+        }
         ]);
 
     },
