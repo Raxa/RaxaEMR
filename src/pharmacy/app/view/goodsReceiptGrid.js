@@ -19,11 +19,15 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
         var receiptEditor = this;
         this.columns= [
         {
+            xtype: 'rownumberer'
+        },
+        {
             xtype: 'gridcolumn',
             width: 200,
             dataIndex: 'drugName',
             text: 'Name Of drug',
             editor: {
+<<<<<<< HEAD
                 xtype: 'combobox',
                 editable: true,
                 minChars: 2,
@@ -42,6 +46,9 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
                         scope: this
                     }
                 }
+=======
+                xtype: 'drugComboBox'
+>>>>>>> private/master
             }
         },
         // {

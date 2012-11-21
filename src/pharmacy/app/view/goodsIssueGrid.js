@@ -19,6 +19,9 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
         var issueEditor = this;
         this.columns = [
         {
+            xtype: 'rownumberer'
+        },
+        {
             xtype: 'gridcolumn',
             width: 200,
             dataIndex: 'drugName',
@@ -158,42 +161,42 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
             }
         },
         {
-                xtype: 'gridcolumn',
-                id: 'batchuuid',
-                dataIndex: 'batchUuid',
-                editor: {
+            xtype: 'gridcolumn',
+            id: 'batchuuid',
+            dataIndex: 'batchUuid',
+            editor: {
                 xtype: 'textfield',
                 id: 'batchuud',
-                 listeners: {
+                listeners: {
                     'render': function(p) {
                         this.hide()
                     }
                 }
             },
             listeners: {
-                    'render': function(p) {
-                        this.hide()
-                    }
+                'render': function(p) {
+                    this.hide()
                 }
-            },  
-            {
-                xtype: 'gridcolumn',
-                dataIndex: 'batch',
-                editor: {
+            }
+        },  
+        {
+            xtype: 'gridcolumn',
+            dataIndex: 'batch',
+            editor: {
                 xtype: 'textfield',
                 id: 'batch',
-                 listeners: {
+                listeners: {
                     'render': function(p) {
                         this.hide()
                     }
                 }
             },
             listeners: {
-                    'render': function(p) {
-                        this.hide()
-                    }
+                'render': function(p) {
+                    this.hide()
                 }
-            },
+            }
+        },
         {
             xtype: 'datecolumn',
             text: 'Expiry Date',
@@ -217,7 +220,7 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
             // disabled: true
             }
         }
-    ];
+        ];
         this.plugins = [this.cellEditor];
         this.callParent(arguments);
     }

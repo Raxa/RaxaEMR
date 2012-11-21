@@ -57,12 +57,14 @@ var RaxaEmr_Pharmacy_Controller_Vars = {
         ORDERED: 'ordered',
         SENT: 'sent',
         PRESCRIBED: 'prescribed',
-        OUT: 'out'
+        OUT: 'out',
+        EXPIRED: 'expired'
     },
     
     DEFAULT_STOCK_CENTER_LOCATION_TAG: "Default Stock Center",
     DEFAULT_PHARMACY_LOCATION_TAG: "Default Pharmacy",
     DEFAULT_STOCK_LOCATION: "Unknown Location",
+    PHARMACY_TAG: "canHaveDrugs",
     
     DRUG_INVENTORY_MODEL:{
         UUID_INDEX: 6,
@@ -82,7 +84,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     views: ['Viewport', 'prescription', 'pharmacyTopbar', 'addFacility', 'goodsReceiptText', 'listOfDrugs', 'pharmacyDetails',
     'reports', 'addPatient', 'stockIssue', 'stockIssueGrid', 'goodsReceiptGrid', 'goodsReceipt', 'goodsIssueText', 'goodsIssueGrid', 'goodsIssue',
     'allStockPanel', 'allStockGrid', 'allStock', 'addDrug', 'allStock', 'prescribedDrugs', 'patientsGridPanel', 'requisition',
-    'requisitionText', 'requisitionGrid', 'DrugDetails', 'DrugDetailsText', 'DrugDetailsGrid', 'alertGrid', 'InventoryEditor'],
+    'requisitionText', 'requisitionGrid', 'DrugDetails', 'DrugDetailsText', 'DrugDetailsGrid', 'alertGrid', 'InventoryEditor', 'drugComboBox'],
     
     stores: ['orderStore', 'Doctors', 'Identifiers', 'Locations', 'Patients', 'Persons', 'drugOrderPatient', 'drugOrderSearch', 'drugConcept', 'drugEncounter', 'allDrugs', 'Alerts', 'DrugInfos'],
     models: ['Address', 'Doctor', 'Identifier', 'Name', 'Patient', 'Person', 'drugOrderPatient', 'drugOrderSearch', 'drugOrder', 'drugEncounter', 'LocationTag', 'Location', 'PurchaseOrder', 'Alert', 'Provider', 'DrugInfo'],
@@ -259,12 +261,14 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             'goodsReceiptText #receiptPurchaseOrderPicker':{
                 select: this.populateReceiptFromPurchaseOrder
             },
-
+            'goodsReceiptGrid #addNewDrug':{
+                click: this.newDrug
+            },
             "addDrug button[action=submitNewDrug]": {
                 click: this.submitNewDrug
             },
             "addDrug button[action=cancelNewDrug]": {
-                click: this.newDrug
+                click: this.cancelNewDrug
             },
 
             ////////////////////////////
@@ -1100,21 +1104,15 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     
     // Generate pop-up which allows user to add a new drug
     newDrug : function() {
-        if(Ext.getCmp('addDrug').isHidden()){
-            Ext.getCmp('addDrug').show();
-            var x = Ext.getCmp('pharmacyTopBar').x + Ext.getCmp('pharmacyTopBar').width - Ext.getCmp('alertPanel').width;
-            Ext.getCmp('newDrugButton').setText('Close');
-        }else{
-            Ext.getCmp('addDrug').hide();
-            Ext.getCmp('newDrugButton').setText('New Drug');
-            Ext.getCmp('newDrugButton').setUI('default');
-        }
+        Ext.getCmp('addDrug').show();
+    },
+    
+    cancelNewDrug : function() {
+        Ext.getCmp('addDrug').hide();
     },
     
     submitNewDrug: function() {
         Ext.getCmp('addDrug').hide();
-        Ext.getCmp('newDrugButton').setText('New Drug');
-        Ext.getCmp('newDrugButton').setUI('default');
         //getting drug concept from OpenMRS
         // TODO: We shouldn't fetch the drug concept dynamically every time we post a drug
         //  Instead, it should be one of the concepts we fetch in startup.js and util.js during login

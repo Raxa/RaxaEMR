@@ -264,7 +264,7 @@ var resourceUuid = {
         "queryTerm": "old patient identification number",
         "varName": "oldPatientIdentificationNumber",
         "displayName": "Old Patient Identification Number - Old Patient Identification Number"
-    },
+    }
     // TODO: https://raxaemr.atlassian.net/browse/RAXAJSS-613
     // Cant find UUID for religion on JSS Ganiari server. What gives?
 
@@ -302,6 +302,7 @@ var BMI_WEIGHT_MIN = 0;
 
 // Enum for Key Maps
 var KEY = {
+    DELETE: 8,
     ENTER: 13
 };
 var keyMap = {
