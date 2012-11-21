@@ -157,6 +157,12 @@ var resourceUuid = {
         "varName": "notes",
         "displayName": "REGISTRATION NOTES"
     },
+    "patientRecordImage": {
+        "resource": "concept",
+        "queryTerm": "PATIENT RECORD IMAGE",
+        "varName": "patientRecordImage",
+        "displayName": "PATIENT RECORD IMAGE"
+    },
     "regcomplaint": {
         "resource": "concept",
         "queryTerm": "REGISTRATION COMPLAINT",
