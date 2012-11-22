@@ -26,6 +26,7 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         }
         
     }),
+    features: [{ftype:'grouping'}],
     selModel : Ext.create('Ext.selection.CellModel', {
         listeners : {
             select : function(selectionModel, record, row) {
@@ -42,7 +43,10 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         xtype: 'gridcolumn',
         text: 'Status',
         dataIndex: 'status',
-        width: 60
+        width: 60,
+        style: {
+                'background-color':'blue'
+            }
     },
     {
         xtype: 'gridcolumn',
@@ -66,6 +70,12 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         xtype: 'gridcolumn',
         text: 'Months',
         width: 45,
+        renderer: function(value){
+            if(value <= 0){
+                return '-';
+            }
+            return value;
+        },
         dataIndex: 'months',
         useNull: true
     },
@@ -129,12 +139,26 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
             else{
                 item.set("batchQuantity", null);
             }
-            
             if(item.data.expiryDate!==""){
-                item.set("months", Util.monthsFromNow(item.data.expiryDate));
+                var months = Util.monthsFromNow(item.data.expiryDate);
+                item.set("months", months);
+                if(months <= 0){
+                    item.set("status", RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.EXPIRED);
+                }
             }
-            else{
+            else {
                 item.set("months", null);
+            }
+        }
+    },
+   
+   viewConfig: {
+        getRowClass: function(record, rowIndex, rowParams, store) {
+            if(Util.monthsFromNow((record.data.expiryDate)) <=  2 && Util.monthsFromNow((record.data.expiryDate)) >  0) {
+            return 'pharmacyTwoMonths-color-grid .x-grid-cell ';
+            }
+            if(Util.monthsFromNow((record.data.expiryDate)) <=  0 ) {
+            return 'pharmacyExpire-color-grid .x-grid-cell ';
             }
         }
     }

@@ -1,5 +1,5 @@
 Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Ext.ux.ModalGrid',
     alias: 'widget.goodsReceiptGrid',
     styleHtmlContent: false,
     height: 250,
@@ -8,7 +8,6 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
         autoLoad: false,
         storeId: 'newReceipt'
     }),
-    //layout: 'absolute',
     selType: 'cellmodel',
     cellEditor: Ext.create('Ext.grid.plugin.CellEditing', {
         clicksToEdit: 1
@@ -18,12 +17,9 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
     },
     initComponent: function () {
         var receiptEditor = this;
-        this.addEvents(['deleteReceiptDrug']);
         this.columns= [
         {
-            xtype: 'gridcolumn',
-            width: 25,
-            text: '#'
+            xtype: 'rownumberer'
         },
         {
             xtype: 'gridcolumn',
@@ -31,49 +27,25 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
             dataIndex: 'drugName',
             text: 'Name Of drug',
             editor: {
-                xtype: 'combobox',
-                editable: true,
-                minChars: 2,
-                typeAhead: true,
-                autoSelect: false,
-                store: 'allDrugs',
-                displayField: 'text',
-                queryMode: 'local',
-                hideTrigger : true,
-                forceSelection: true,
-                listeners: {
-                    'focus': {
-                        fn: function (comboField) {
-                            comboField.expand();
-                        },
-                        scope: this
-                    },
-                    'select': {
-                        fn: function(comboField, records){
-                            var row = Ext.ComponentQuery.query('goodsReceiptGrid')[0].getSelectionModel().selection.row;
-                            var supplierIndex = (Ext.getStore('drugInfos').find("drugUuid",records[0].data.uuid));
-                            if(supplierIndex!==-1)
-                                Ext.getStore('newReceipt').getAt(row).set('supplier', Ext.getStore('drugInfos').getAt(supplierIndex).data.description);
-                        }
-                    }
-                }
+                xtype: 'drugComboBox'
             }
         },
-        {
-            xtype: 'gridcolumn',
-            width: 80,
-            text: 'Qty Sent',
-            dataIndex: 'originalQuantity',
-            hidden: true,
-            editor: {
-                xtype: 'numberfield',
-                allowBlank: true,
-                decimalPrecision: 0,
-                allowDecimals: false,
-                minValue: 0,
-                hideTrigger: true
-            }
-        },
+        // {
+        //     xtype: 'gridcolumn',
+        //     width: 80,
+        //     text: 'Qty Sent',
+        //     dataIndex: 'originalQuantity',
+        //     hidden: true,
+        //     editor: {
+        //         xtype: 'numberfield',
+        //         allowBlank: true,
+        //         hidden: true,   // TODO: Is this field still submitting? should it be removed?
+        //         decimalPrecision: 0,
+        //         allowDecimals: false,
+        //         minValue: 0,
+        //         hideTrigger: true
+        //     }
+        // },
         {
             xtype: 'gridcolumn',
             width: 80,
@@ -156,36 +128,8 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptGrid', {
                     }
                 }
             }
-        },
-        {
-            xtype: 'actioncolumn',
-            width: 22,
-            items: [{
-                icon: '../resources/img/delete.png',
-                tooltip: 'Delete',
-                handler: function(grid, rowIndex, colIndex) {
-                    receiptEditor.fireEvent('deleteReceiptDrug', {
-                        rowIndex: rowIndex,
-                        colIndex: colIndex
-                    });
-                }
-            }]
         }],
         this.plugins = [this.cellEditor];
-        this.dockedItems = [{
-            xtype: 'toolbar',
-            dock: 'bottom',
-            items: [
-            '->',
-            {
-                text: '(+) Add Drug',
-                action: 'addReceiptDrug'
-            }]
-        }];
-        Ext.getStore('newReceipt').add({
-            drugname: '',
-            quantity: ''
-        })[0];
         this.callParent(arguments);
     }
 });
