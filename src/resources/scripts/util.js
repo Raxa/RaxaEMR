@@ -163,6 +163,12 @@ var resourceUuid = {
         "varName": "patientRecordImage",
         "displayName": "PATIENT RECORD IMAGE"
     },
+    "patientRecordVectorImage": {
+        "resource": "concept",
+        "queryTerm": "PATIENT RECORD VECTOR IMAGE",
+        "varName": "patientRecordVectorImage",
+        "displayName": "PATIENT RECORD VECTOR IMAGE"
+    },
     "regcomplaint": {
         "resource": "concept",
         "queryTerm": "REGISTRATION COMPLAINT",
