@@ -14,7 +14,7 @@ Ext.define('RaxaEmr.view.Login', {
             items: [{
                 html: '<div style="text-align:center;"><img src="resources/img/logo.png" width="143" height="143"/></div>'
             }, {
-                html: '<div class="logoText">Jan Swasthya Sahyog</div>'
+                html: '<div class="logoText">Raxa EMR</div>'
             }]
         }, {
             xtype: 'fieldset',
@@ -41,6 +41,14 @@ Ext.define('RaxaEmr.view.Login', {
             centered: true,
             width: 350,
             style: 'margin-top: 180px;'
+        }, {
+            xtype: 'button',
+            text: Ext.i18n.appBundle.getMsg('RaxaEmr.view.createnewProviderButton.title'),
+            id: 'createnewProviderButton',
+            ui: 'decline-round',
+            centered: true,
+            width: 350,
+            style: 'margin-top: 280px;'
         }]
     }
 });
