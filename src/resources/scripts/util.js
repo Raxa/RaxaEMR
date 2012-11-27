@@ -163,6 +163,12 @@ var resourceUuid = {
         "varName": "patientRecordImage",
         "displayName": "PATIENT RECORD IMAGE"
     },
+    "patientRecordVectorImage": {
+        "resource": "concept",
+        "queryTerm": "PATIENT RECORD VECTOR IMAGE",
+        "varName": "patientRecordVectorImage",
+        "displayName": "PATIENT RECORD VECTOR IMAGE"
+    },
     "regcomplaint": {
         "resource": "concept",
         "queryTerm": "REGISTRATION COMPLAINT",
@@ -270,7 +276,7 @@ var resourceUuid = {
         "queryTerm": "old patient identification number",
         "varName": "oldPatientIdentificationNumber",
         "displayName": "Old Patient Identification Number - Old Patient Identification Number"
-    },
+    }
     // TODO: https://raxaemr.atlassian.net/browse/RAXAJSS-613
     // Cant find UUID for religion on JSS Ganiari server. What gives?
 
