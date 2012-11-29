@@ -14,6 +14,9 @@ Ext.define('Registration.controller.Main', {
             "registrationpart1 button[action=cancel]": {
                 click: this.cancel
             },
+            "registrationpart1 button[action=takePhoto]": {
+                click: this.takePhoto
+            },
             "registrationconfirm button[action=back]": {
                 click: this.backToPage1
             },
@@ -504,6 +507,16 @@ Ext.define('Registration.controller.Main', {
                 });
                 jsonencounter.data.obs.push(jsonencountercomplaint.data);
             }
+            if(localStorage.patientImageTaken=="true") {
+                console.log("pushing obs.. patientImage");
+                var jsonencountercomplaint = Ext.create('Registration.model.obsModel', {
+                    obsDatetime: t,
+                    person: localStorage.newPatientUuid,
+                    concept: localStorage.patientImageUuidconcept,
+                    value: localStorage.patientImage
+                });
+                jsonencounter.data.obs.push(jsonencountercomplaint.data);
+            }
         }
 
         var store = Ext.create('Registration.store.encounterStore');
@@ -561,5 +574,33 @@ Ext.define('Registration.controller.Main', {
         for(var i = 0; i < fields.length; i++) {
             Ext.getCmp(fields[i]).reset();
         }
+        
+        localStorage.setItem('patientImageTaken', false);
+        document.getElementById('ConfirmedPatientImage').src= "../resources/img/camera.png";
     },
+    
+    takePhoto: function() {
+    if(!Ext.getCmp('photo'))
+	{
+		Ext.create('Ext.window.Window', {
+		id: 'photo',
+		title: 'Taking Photo',
+		height: 500,
+		width: 700,
+		modal:true,
+		layout: 'fit',
+		    loader : {
+		    url : "app/patientImageBooth.html",
+		    loadMask : false,
+		    scripts: true,
+		    autoLoad : true,
+		    renderer : 'html'
+		},
+	}).show();
+	}
+	else
+	{
+		Ext.getCmp('photo').show();
+	}
+}
 });
