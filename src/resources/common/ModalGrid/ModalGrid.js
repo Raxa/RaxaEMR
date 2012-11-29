@@ -40,18 +40,14 @@ Ext.define('Ext.ux.ModalGrid', {
         handler: function(event, toolEl, panel) {
             var mf = this.up("ModalGrid").modalForm;
             var grid = this.up("ModalGrid");
-
             var gridModel = grid.store.getProxy().getModel();
             var blankItem = Ext.create(gridModel, {});
             var lastItem = grid.getStore().add(blankItem);    
             rec = grid.getStore().last();
-            
             mf.getComponent("ModalGridFormPanel").form.reset();
             mf.getComponent("ModalGridFormPanel").loadRecord(rec);                    
             mf.show();
-            
-            // mf.isNew = true;
-        },
+        }
     }], 
 
     // showModalForm: function(isNew, record) {
@@ -99,7 +95,8 @@ Ext.define('Ext.ux.ModalGrid', {
                 tooltip: 'Edit',
                 handler: function(grid, rowIndex, colIndex) {
                     mf.isNew = false;
-                    var rec = grid.getStore().getAt(rowIndex);    
+                    var rec = grid.getStore().getAt(rowIndex); 
+                    Ext.getCmp('editPanel').config.inEdit = true;
                     that.modalForm.getComponent("ModalGridFormPanel").form.reset();
                     that.modalForm.getComponent("ModalGridFormPanel").loadRecord(rec);                    
                     that.modalForm.show();
@@ -120,7 +117,7 @@ Ext.define('Ext.ux.ModalGrid', {
         });
         
         this.headerCt.insert(this.columns.length, column);
-    },
+    }
 });
 
 // ModalGridEditor is the Modal Window which is launched when you "add" a new item 
@@ -146,8 +143,19 @@ Ext.define('Ext.ux.ModalGridEditor', {
         var cx = event.getX(), cy = event.getY(),
         box = this.getBox();
         if (cx < box.x || cx > box.x + box.width || cy < box.y || cy > box.y + box.height) {
-            this.hide();
-            this.mun(Ext.getBody(), 'click', this.checkCloseClick, this);
+            if(Ext.getCmp('editPanel').config.inEdit.valueOf()) {
+                this.hide();
+            } else {
+                var me = this.getComponent("ModalGridFormPanel").form;
+                var rec = me.getRecord();
+                if(rec.store != null) {
+                    var lengthOfRecord = rec.store.getCount();
+                    rec.store.removeAt( lengthOfRecord - 1 );
+                }
+                this.hide();
+            }
+            Ext.getCmp('editPanel').config.inEdit = false;
+            this.mun(Ext.getBody(), 'mousedown', this.checkCloseClick, this);
         }
     },
     initComponent:function () {
@@ -181,24 +189,43 @@ Ext.define('Ext.ux.ModalGridEditor', {
             xtype: 'container',
             border: false,
             layout: {
-                type: 'hbox',
+                type: 'hbox'
+            },
+            id : 'editPanel',
+            config : {
+                inEdit:  new Boolean(false)
             },
             items:[
             {
                 xtype: 'button',
                 text: 'Cancel',
-                handler: function () {
-                    console.log("Cancel");
-                    // TODO: If "new", shoudnt add another row to the grid
-                    // TODO: If "edit", shouldnt affect existing row on the grid
-                    this.hide();
+                id: 'cancelGrid',
+                handler: function (grid, rowIndex, colIndex) {
+                    this.mun(Ext.getBody(), 'mousedown', this.checkCloseClick, this);
+                    if(Ext.getCmp('editPanel').config.inEdit.valueOf()) {
+                        this.hide();
+                        Ext.getCmp('editPanel').config.inEdit = false;
+                    } else {
+                        var me = this.getComponent("ModalGridFormPanel").form;
+                        var rec = me.getRecord();
+                        var newValues = me.getValues();
+                        if(rec.store != null) {
+                            var lengthOfRecord = rec.store.getCount();
+                            rec.store.removeAt( lengthOfRecord - 1 );
+                        }
+                        // TODO: If "new", shoudnt add another row to the grid
+                        // TODO: If "edit", shouldnt affect existing row on the grid
+                        this.hide();
+                    }
                 },
-                scope: this
+                scope: this                
             },
             {
                 xtype: 'button',
                 text: 'Save',
+                id: 'saveGrid',
                 handler: function () {
+                    this.mun(Ext.getBody(), 'mousedown', this.checkCloseClick, this);
                     var me = this.getComponent("ModalGridFormPanel").form;
                     var rec = me.getRecord();
                     var newValues = me.getValues();
@@ -209,9 +236,9 @@ Ext.define('Ext.ux.ModalGridEditor', {
                     // http://stackoverflow.com/questions/558981/iterating-through-list-of-keys-for-associative-array-in-json
                     var keys = [];
                     for (var key in newValues) {
-                      if (newValues.hasOwnProperty(key)) {
-                        keys.push(key);
-                      }
+                        if (newValues.hasOwnProperty(key)) {
+                            keys.push(key);
+                        }
                     }
 
                     // Update value for all items
@@ -223,6 +250,7 @@ Ext.define('Ext.ux.ModalGridEditor', {
 
                     console.log("Save");
                     this.hide();
+                    Ext.getCmp('editPanel').config.inEdit = false;
                 },
                 scope: this
             }]

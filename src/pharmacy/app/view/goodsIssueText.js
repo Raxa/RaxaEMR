@@ -20,11 +20,18 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueText', {
                     property: 'received',
                     value: false
                 }
+//                only after loading in local storage
+//                ,{
+//                    property: 'stockLocationUuid',
+//                    value: localStorage.stockLocation
+//                }
                 ]
             }),
             fieldLabel: 'Fill Requisition (optional)',
             valueField: 'uuid',
             displayField: 'description',
+            width : '320px',
+            hideTrigger: true,
             listeners: {  
                 'focus': {
                     fn: function (comboField) {
@@ -53,7 +60,7 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueText', {
         queryMode: 'local',
         hideTrigger: true,
         forceSelection: true,
-        displayField: 'display',
+        displayField: 'name',
         valueField: 'uuid',
         emptyText: 'Location'
     }]
