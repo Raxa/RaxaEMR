@@ -44,7 +44,7 @@ Ext.define('RaxaEmr.controller.Session', {
             },
             userName: {
                 action: 'doLogin'
-            },
+            },            
             signInButton: {
                 tap: 'doLogin'
             }
@@ -115,7 +115,7 @@ Ext.define('RaxaEmr.controller.Session', {
             this.launchAfterAJAX();
         }
     },
-
+    
     // doLogin functions populates the views in the background while transferring
     // the view to dashboard
     doLogin: function () {
@@ -232,6 +232,7 @@ Ext.define('RaxaEmr.controller.Session', {
     showDashboard: function () {
         this.addModulesToDashboard();
         window.location.hash = 'Dashboard';
+        Ext.getCmp('topbarSelectfield').setHidden(false);
         Ext.getCmp('mainView').setActiveItem(2);
     },
 

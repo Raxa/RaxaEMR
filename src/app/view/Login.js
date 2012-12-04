@@ -18,24 +18,28 @@ Ext.define('RaxaEmr.view.Login', {
             }]
         }, {
             xtype: 'fieldset',
-            title: 'Please Login', // Ext.i18n.appBundle.getMsg('RaxaEmr.view.Login.title'),
+//            title: Ext.i18n.appBundle.getMsg('RaxaEmr.view.Login.title'),
+            title: 'Please login',
             align: 'center',
             centered: true,
             width: 350,
             items: [{
                 xtype: 'textfield',
                 id: 'userName',
-                label: 'Username', // Ext.i18n.appBundle.getMsg('RaxaEmr.view.textfield.label'),
+//                label: Ext.i18n.appBundle.getMsg('RaxaEmr.view.textfield.label'),
+                label: 'Username',
                 clearIcon: true
             }, {
                 xtype: 'passwordfield',
                 id: 'passwordID',
-                label: 'Password', // Ext.i18n.appBundle.getMsg('RaxaEmr.view.passwordfield.label'),
+//                label: Ext.i18n.appBundle.getMsg('RaxaEmr.view.passwordfield.label'),
+                label: 'Password',
                 clearIcon: true
             }]
         }, {
             xtype: 'button',
-            text: 'Sign In', // Ext.i18n.appBundle.getMsg('RaxaEmr.view.button.title'),
+//            text: Ext.i18n.appBundle.getMsg('RaxaEmr.view.button.title'),
+            text: 'Sign In',
             id: 'signInButton',
             ui: 'decline-round',
             centered: true,

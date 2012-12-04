@@ -585,7 +585,7 @@ var Util = {
      */
     getModules: function () {
         //always keep login at first position as its app path is different
-        return ['login', 'screener', 'registration', 'registrationextjs4', 'pharmacy', 'chw', 'outpatient', 'laboratory', 'patientfacing'];
+        return ['login', 'screener', 'registrationextjs4', 'pharmacy', 'chw', 'outpatient', 'laboratory', 'patientfacing', 'admin'];
         
     },
 
@@ -625,6 +625,9 @@ var Util = {
                     break;
                 case  'patientfacing':
                     changedText = 'Patient Facing';
+                    break;
+                case  'admin':
+                    changedText = 'Admin';
                     break;
                 default :
                     changedText = 'You dont have permission to access any Module';
