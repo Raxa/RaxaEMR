@@ -44,7 +44,7 @@ Ext.define('RaxaEmr.controller.Session', {
             },
             userName: {
                 action: 'doLogin'
-            },
+            },            
             signInButton: {
                 tap: 'doLogin'
             }
@@ -88,7 +88,7 @@ Ext.define('RaxaEmr.controller.Session', {
                     }
                     for (j = 0; j < privilegesJson.roles.length; j++) {
                         if(privilegesJson.roles[j].name === 'Provider'){
-                            localStorage.setItem('loggedInUser',privilegesJson.person.uuid);
+                                localStorage.setItem('loggedInUser',privilegesJson.person.uuid);
                         }
                         if(privilegesJson.roles[j].name === 'System Developer'){
                             privilegesArray[i] = {
@@ -104,16 +104,18 @@ Ext.define('RaxaEmr.controller.Session', {
                 },
                 failure: function () {
                     Ext.getCmp('mainView').setMasked(false);
-                    Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.alert'));
+                    Ext.Msg.alert('Connection Error');
+                    // Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.alert'));
                 }
             });
         } else {
             // showing modal alert and stop loading mask
-            Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.usernamealert'));
+            Ext.Msg.alert('Invalid Username');
+            // Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.usernamealert'));
             this.launchAfterAJAX();
         }
     },
-
+    
     // doLogin functions populates the views in the background while transferring
     // the view to dashboard
     doLogin: function () {
@@ -121,13 +123,15 @@ Ext.define('RaxaEmr.controller.Session', {
         localStorage.setItem("username", username);
 
         if (username === "") {
-            Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.blankusername'));
+            Ext.Msg.alert('Please Enter Username');
+            // Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.blankusername'));
             return;
         }
 
         var password = Ext.getCmp('passwordID').getValue();
         if (password === "") {
-            Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.blankpassword'));
+            Ext.Msg.alert('Please Enter Password');
+            // Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.blankpassword'));
             return;
         }
 
@@ -172,10 +176,12 @@ Ext.define('RaxaEmr.controller.Session', {
             failure: function (response) {
                 Ext.getCmp('mainView').setMasked(false);
                 if(response.status === 401) {
-                    Ext.Msg.alert('Invalid',Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.invalidUser'));
+                    Ext.Msg.alert('Invalid','Invalid UserName And Password');
+                    // Ext.Msg.alert('Invalid',Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.invalidUser'));
                 }
                 else {
-                    Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.alert'));
+                    Ext.Msg.alert('Error', 'Connection Error');
+                    // Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.alert'));
                 }
             }
         });
@@ -226,6 +232,7 @@ Ext.define('RaxaEmr.controller.Session', {
     showDashboard: function () {
         this.addModulesToDashboard();
         window.location.hash = 'Dashboard';
+        Ext.getCmp('topbarSelectfield').setHidden(false);
         Ext.getCmp('mainView').setActiveItem(2);
     },
 

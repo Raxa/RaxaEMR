@@ -241,8 +241,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             // Drug Details
             'drugDetails button[action=backFromDrugDetails]': {
                 click: function(){
-                    Ext.getStore('stockList').clearFilter();
                     Ext.getCmp('mainarea').getLayout().setActiveItem(RaxaEmr_Pharmacy_Controller_Vars.PHARM_PAGES.ALLSTOCK.value);
+                    Ext.getCmp('allStockGrid').getView().refresh();
+                    Ext.getStore('StockList').clearFilter();
                 }
             },
 
@@ -848,7 +849,6 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     },
 
     makeNewPrescriptionForSearchPatient: function() {
-        console.log("makeNewPrescriptionForSearchPatient");
         // https://raxaemr.atlassian.net/browse/RAXAJSS-411
         // TODO: clean up by removing magic numbers
         Ext.getCmp('addpatientarea').getLayout().setActiveItem(0);
@@ -1090,7 +1090,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             scope: this,
             success: function(){
                 purchaseOrderStore.getProxy().url = HOST + '/ws/rest/v1/raxacore/drugpurchaseorder';
-                Ext.getStore('stockList').load();
+                Ext.getStore('StockList').load();
                 Ext.getCmp('allStockGrid').getView().refresh();
                 Ext.getStore('batches').load();
                 Ext.getStore('newReceipt').removeAll();
@@ -1173,7 +1173,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             headers: Util.getBasicAuthHeaders(),
             success: function (response) {
                 Ext.getStore('allDrugs').load();
-                Ext.getStore('drugInfos').load();
+                Ext.getStore('DrugInfos').load();
                 Ext.Msg.alert('Drug created successfully');
             },
             failure: function (response) {
@@ -1322,7 +1322,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                         time: Util.getCurrentTime()
                     };
                     Util.sendAlert(alertParams);    // TODO: This util function should handle the alert button UI.. whenever unread alerts, UI should note it
-                    Ext.getStore('stockList').load();
+                    Ext.getStore('StockList').load();
                     Ext.getCmp('allStockGrid').getView().refresh();
                     Ext.getStore('fillRequisitions').load();
                     Ext.Msg.alert('Successful');
@@ -1410,7 +1410,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             return "Please enter a drug";
         }
 
-        Ext.getStore('stockList').clearFilter();
+        Ext.getStore('StockList').clearFilter();
         for (var i=0; i<issues.items.length; i++){
             if (issues.items[i].data.drugName==="" || issues.items[i].data.batch==="" || issues.items[i].data.quantity<0 || issues.items[i].data.expiryDate===""){
                 return "Blank fields not allowed";
@@ -1418,11 +1418,11 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             if (Ext.getStore('allDrugs').find('text', issues.items[i].data.drugName)===-1){
                 return "Drug "+issues.items[i].data.drugName+" not found";
             }
-            var batchIndex = Ext.getStore('stockList').find('uuid', issues.items[i].data.batchUuid);
+            var batchIndex = Ext.getStore('StockList').find('uuid', issues.items[i].data.batchUuid);
             if (batchIndex===-1){
                 return "Batch "+issues.items[i].data.batch+" not found";
             }
-            var batch = Ext.getStore('stockList').getAt(batchIndex);
+            var batch = Ext.getStore('StockList').getAt(batchIndex);
             var qtyLeft = batch.get('quantity');
             if(qtyLeft < issues.items[i].data.quantity){
                 return "Quantity cannot exceed batch";
@@ -1520,7 +1520,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 purchaseOrderStore.getProxy().url = HOST + '/ws/rest/v1/raxacore/drugpurchaseorder';
                 RaxaEmr.Pharmacy.model.DrugInventory.getFields()[RaxaEmr_Pharmacy_Controller_Vars.DRUG_INVENTORY_MODEL.BATCH_UUID_INDEX].persist = false;
                 Ext.getCmp('submitIssueButton').enable();
-                Ext.getStore('stockList').load();
+                Ext.getStore('StockList').load();
                 Ext.getCmp('allStockGrid').getView().refresh();
                 Ext.getStore('stockIssues');
                 Ext.Msg.alert('Successful');
@@ -1553,10 +1553,10 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
 
     
     filterAllStocksByLocation: function() {
-        Ext.getStore('stockList').clearFilter();
+        Ext.getStore('StockList').clearFilter();
         //if current location, filter by that
         if(Ext.getCmp('allStockLocationPicker').getValue()){
-            Ext.getStore('stockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
+            Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
             localStorage.setItem('pharmacyLocation', Ext.getCmp('allStockLocationPicker').getValue());
         }
     },
@@ -1567,52 +1567,54 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     
     //Called when 'stock analysis' button is pressed
     showAvailableStock: function(){
-        console.log("inside showAvailableStock");
         this._updateAllStockPanelButtonsUI('availableStockButton');
         // Ext.getCmp('availableStockButton').setUI('raxa-orange-small');
-        Ext.getStore('stockList').clearFilter();
+        Ext.getStore('StockList').clearFilter();
         //if current location, filter by that
         if(Ext.getCmp('allStockLocationPicker').getValue()){
-            Ext.getStore('stockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
+            Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
         }
-        Ext.getStore('stockList').filter('status', 'available');
-        var regExp = /\d+/;
-        Ext.getStore('stockList').filter('months', regExp);
+        Ext.getStore('StockList').filter('status', 'available');
+//        var regExp = /\d+/;
+//        Ext.getStore('StockList').filter('months', regExp);
+        Ext.getCmp('allStockGrid').features[0].collapseAll();
     },
     
     //Called when 'Expiring Stock' button is pressed
     showExpiringStock: function(){
         this._updateAllStockPanelButtonsUI('expiringStockButton');
         // Ext.getCmp('expiringStockButton').setUI('raxa-orange-small');
-        Ext.getStore('stockList').clearFilter();
+        Ext.getStore('StockList').clearFilter();
         //if current location, filter by that
         if(Ext.getCmp('allStockLocationPicker').getValue()){
-            Ext.getStore('stockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
+            Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
         }
-        Ext.getStore('stockList').filterBy(function(record, id){
+        Ext.getStore('StockList').filterBy(function(record, id){
             return(Util.monthsFromNow(record.data.expiryDate)<RaxaEmr_Pharmacy_Controller_Vars.MONTHS_TO_EXPIRE);
         });
-        Ext.getStore('stockList').filter('status', RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.AVAILABLE);
+        Ext.getStore('StockList').filter('status', RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.AVAILABLE);
+        Ext.getCmp('allStockGrid').features[0].expandAll();
     },
     
     showStockOut: function(){
         this._updateAllStockPanelButtonsUI('lowStockButton');
         // Ext.getCmp('lowStockButton').setUI('raxa-orange-small');
-        Ext.getStore('stockList').clearFilter();
+        Ext.getStore('StockList').clearFilter();
         //if current location, filter by that
         if(Ext.getCmp('allStockLocationPicker').getValue()){
-            Ext.getStore('stockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
+            Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
         }
-        Ext.getStore('stockList').filterBy(function(record, id){
+        Ext.getStore('StockList').filterBy(function(record, id){
             return(record.data.quantity<RaxaEmr_Pharmacy_Controller_Vars.STOCK_OUT_LIMIT);
         });
-        Ext.getStore('stockList').filter('status', RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.AVAILABLE);
+        Ext.getStore('StockList').filter('status', RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.AVAILABLE);
+        Ext.getCmp('allStockGrid').features[0].expandAll();
     },
     
     showAllOrders: function(){
         this._updateAllStockPanelButtonsUI('allOrdersButton');
         // Ext.getCmp('allOrdersButton').setUI('raxa-orange-small');
-        Ext.getStore('stockList').clearFilter();
+        Ext.getStore('StockList').clearFilter();
     },
     
     _updateAllStockPanelButtonsUI: function(id){
@@ -1681,7 +1683,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         purchaseOrderStore.sync({
             success: function(){
                 RaxaEmr.Pharmacy.model.DrugInventory.getFields()[RaxaEmr_Pharmacy_Controller_Vars.DRUG_INVENTORY_MODEL.BATCH_UUID_INDEX].persist = false;
-                Ext.getStore('stockList').load();
+                Ext.getStore('StockList').load();
                 Ext.getCmp('allStockGrid').getView().refresh();
                 Ext.getStore('batches').load();
             },
@@ -1733,7 +1735,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     },
     
     deleteAlert: function(evtData) {
-        var store = this.getStore('alerts');
+        var store = this.getStore('Alerts');
         var record = store.getAt(evtData.rowIndex);
         if(record) {
             store.remove(record);
@@ -1797,7 +1799,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 Ext.getCmp('inventoryEditor').hide();
                 Ext.getCmp('updateInventoryButton').enable();
                 Ext.Msg.alert("Edit Successful");
-                Ext.getStore('stockList').load();
+                Ext.getStore('StockList').load();
                 Ext.getCmp('allStockGrid').getView().refresh();
                 Ext.getStore('batches').load();
             },
