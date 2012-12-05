@@ -17,11 +17,11 @@ Ext.define("Screener.view.NewPatient", {
         height: 310,
         showAnimation: {
             type: 'slide',
-            direction: 'down'
+            direction: 'up'
         },
         hideAnimation: {
             type: 'slideOut',
-            direction: 'up'
+            direction: 'down'
         },
         items: [{
             xtype: 'toolbar',
