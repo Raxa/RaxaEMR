@@ -15,40 +15,54 @@ Ext.define("Screener.view.NewPatient", {
         // Set the width and height of the panel
         width: 500,
         height: 310,
-
+        showAnimation: {
+            type: 'slide',
+            direction: 'down'
+        },
+        hideAnimation: {
+            type: 'slideOut',
+            direction: 'up'
+        },
         items: [{
+            xtype: 'toolbar',
+            docked: 'top',
+            title: 'Add New Patient',
+        },{
             xtype: 'textfield',
             id: 'givenName',
             name: 'givenname',
-            label: 'First Name' // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.giv_name')
+            label: 'First Name', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.giv_name')
+            margin: '5 0 5 0'
         }, {
             xtype: 'textfield',
             id: 'familyName',
             name: 'familyname',
-            label: 'Last Name' // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.fam_name')
+            label: 'Last Name', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.fam_name')
+            margin: '5 0 5 0'
         }, 
         {
             xtype  : 'container',
             id: 'ageDateOfBirth',
-            layout : {
-                type  : 'hbox'
-            },
+//            layout : {
+//                type  : 'hbox'
+//            },
             items : [
             {
                 xtype: 'textfield',
                 id: 'patientAge',
                 name: 'patientAge',
-                labelWidth: 70,
+//                labelWidth: 138,
                 label: 'Age', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.age_dob'),
                 allowDecimals: false,
-                placeHolder: 'Age'
-            },
-            {
+//                placeHolder: 'Age',
+                margin: '5 0 5 1'
+            },{
                 xtype: 'textfield',
                 id: 'dob',
                 name: 'dob',
-                labelWidth: 70,
-                placeHolder: 'YYYY-M-D'
+                placeHolder: 'YYYY-M-D',
+//                width: 172,
+                hidden: true
             }
             ]
         },
@@ -59,6 +73,7 @@ Ext.define("Screener.view.NewPatient", {
                 type  : 'hbox',
                 align : 'strech'
             },
+            margin: '5 0 5 1',
             items  : [
             {
                 xtype : 'radiofield',
@@ -89,7 +104,8 @@ Ext.define("Screener.view.NewPatient", {
             xtype: 'button',
             id: 'savePatientButton',
             text: 'Save Patient', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.save_p'),
-            ui: 'action'
+            ui: 'action',
+            margin: '20 120 0 120'
         }],
     onChange: function () {
          Ext.Msg.alert("Please enter the date format");
