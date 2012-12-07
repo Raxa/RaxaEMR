@@ -382,6 +382,8 @@ var TIME_BEFORE_NOW = 0.1;
 // The Util class provids several methods that are shared by the core, apps and modules
 var Util = {
     
+    SAVE_LOAD_MASK_MAX_WAIT_TIME: 15000,
+
     // Enum to capture pages in each app. E.g. Util.PAGES.SCREENER.PAGE_NAME
     PAGES: {},
     
