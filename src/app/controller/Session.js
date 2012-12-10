@@ -93,6 +93,8 @@ Ext.define('RaxaEmr.controller.Session', {
      * privileges in localStorage
      * @param userInfo: contains a link to the full information listing of a user
      */
+
+    // TODO: Store entire user state into the localStorage (or a cookie); verify it in database
     storeUserPrivileges: function (userInfo) {
         Ext.getCmp('mainView').setMasked({
             xtype: 'loadmask',
@@ -121,6 +123,10 @@ Ext.define('RaxaEmr.controller.Session', {
                     for (j = 0; j < privilegesJson.roles.length; j++) {
                         if(privilegesJson.roles[j].name === 'Provider'){
                                 localStorage.setItem('loggedInUser',privilegesJson.person.uuid);
+                                localStorage.setItem('session', JSON.stringify({
+                                    person: privilegesJson.person.uuid,
+                                    display: privilegesJson.person.preferredName.display
+                                }));
                         }
                         if(privilegesJson.roles[j].name === 'System Developer'){
                             privilegesArray[i] = {
