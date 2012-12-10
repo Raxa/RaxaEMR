@@ -8,6 +8,11 @@ Ext.define("Screener.view.NewPatient", {
     xtype: 'newPatient',
     id: 'newPatient',
     config: {
+        listeners: {
+            show: function () {
+               Ext.getCmp('givenName').focus();
+            }
+        },
         centered: true,
         modal: true,
         hideOnMaskTap: true,
