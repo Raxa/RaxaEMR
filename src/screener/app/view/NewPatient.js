@@ -6,7 +6,7 @@ Ext.define("Screener.view.NewPatient", {
     requires: ['Ext.field.Text', 'Ext.field.Number'],
     extend: 'Ext.form.Panel',
     xtype: 'newPatient',
-    id: 'newPatient',
+    id: 'newPatient',    
     config: {
         centered: true,
         modal: true,
@@ -27,6 +27,17 @@ Ext.define("Screener.view.NewPatient", {
             xtype: 'toolbar',
             docked: 'top',
             title: 'Add New Patient',
+            items: [{
+                xtype: 'spacer'
+            },{
+                xtype: 'button',
+                iconCls: 'delete',
+                iconMask: true,
+                handler: function() {
+                    Ext.getCmp('newPatient').hide();
+                },
+                ui: 'decline',
+            }]
         },{
             xtype: 'textfield',
             id: 'givenName',
