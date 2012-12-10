@@ -1,5 +1,8 @@
 Ext.define('Topbar.view.LogoutConfirmPanel', {
     extend: 'Ext.Panel',
+    // extend: 'Ext.Container',
+    // TODO: set bg color and border for better consistency with OPD?
+
     alias: 'widget.logoutConfirmPanel',
 
     config: {
