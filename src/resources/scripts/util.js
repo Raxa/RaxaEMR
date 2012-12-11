@@ -532,6 +532,7 @@ var Util = {
         localStorage.removeItem('Username');
         localStorage.removeItem('loggedInUser');
         localStorage.removeItem('loggedInProvider');
+        localStorage.removeItem('session');
         window.location.hash = 'Login';
     },
     
@@ -604,7 +605,13 @@ var Util = {
     getModules: function () {
         //always keep login at first position as its app path is different
         return ['login', 'screener', 'registrationextjs4', 'pharmacy', 'chw', 'outpatient', 'laboratory', 'patientfacing', 'admin'];
-        
+    },
+
+    // Returns session, a JSON. so far this includes:
+    // - person uuid
+    // - person preferredName display
+    getSession: function() {
+         return JSON.parse(localStorage.session);
     },
 
     /**
