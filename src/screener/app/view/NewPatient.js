@@ -74,13 +74,10 @@ Ext.define("Screener.view.NewPatient", {
                 margin: '5 0 5 1',
                 listeners: {
                     blur: function(field) {
-                        //TODO  Set it in global space OR get concept range
-                        var MAX_PATIENT_AGE = 119;
-                        var MIN_PATIENT_AGE = 0;
                         field.setValue(Math.floor(field.getValue()));
-                        if(!(field.getValue()>=MIN_PATIENT_AGE  && field.getValue()<=MAX_PATIENT_AGE))
+                        if(!(field.getValue()>=Util.OPEN_MRS_MIN_AGE  && field.getValue()<Util.OPEN_MRS_MAX_AGE))
                         {
-                            Ext.Msg.alert('Wrong Input','Patient Age should be between '+ MIN_PATIENT_AGE +' and '+ MAX_PATIENT_AGE);
+                            Ext.Msg.alert('Wrong Input','Patient Age should be between '+ Util.OPEN_MRS_MIN_AGE +' and '+ Util.OPEN_MRS_MAX_AGE);
                             field.setValue('');
 
                         }
