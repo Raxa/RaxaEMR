@@ -8,6 +8,11 @@ Ext.define("Screener.view.NewPatient", {
     xtype: 'newPatient',
     id: 'newPatient',    
     config: {
+        listeners: {
+            show: function () {
+               Ext.getCmp('givenName').focus();
+            }
+        },
         centered: true,
         modal: true,
         hideOnMaskTap: true,
@@ -59,14 +64,25 @@ Ext.define("Screener.view.NewPatient", {
 //            },
             items : [
             {
-                xtype: 'textfield',
+                xtype: 'numberfield',
                 id: 'patientAge',
                 name: 'patientAge',
 //                labelWidth: 138,
                 label: 'Age', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.age_dob'),
                 allowDecimals: false,
 //                placeHolder: 'Age',
-                margin: '5 0 5 1'
+                margin: '5 0 5 1',
+                listeners: {
+                    blur: function(field) {
+                        field.setValue(Math.floor(field.getValue()));
+                        if(!(field.getValue()>=Util.OPEN_MRS_MIN_AGE  && field.getValue()<Util.OPEN_MRS_MAX_AGE))
+                        {
+                            Ext.Msg.alert('Wrong Input','Patient Age should be between '+ Util.OPEN_MRS_MIN_AGE +' and '+ Util.OPEN_MRS_MAX_AGE);
+                            field.setValue('');
+
+                        }
+                    }
+                }
             },{
                 xtype: 'textfield',
                 id: 'dob',
