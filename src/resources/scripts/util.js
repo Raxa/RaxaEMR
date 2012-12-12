@@ -532,6 +532,7 @@ var Util = {
         localStorage.removeItem('Username');
         localStorage.removeItem('loggedInUser');
         localStorage.removeItem('loggedInProvider');
+        localStorage.removeItem('session');
         window.location.hash = 'Login';
     },
     
@@ -736,6 +737,13 @@ var Util = {
             Ext.Error.raise('Could not recognize Library');
         }
     },
+    
+    // Returns session, a JSON. so far this includes:
+    // - person uuid
+    // - person preferredName display
+    getSession: function() {
+        return JSON.parse(localStorage.session);
+    },
 
     getAttributeFromREST: function (resource, queryParameter, varName, display) {
         //Ajax Request to get Height / Weight / Bmi Attribiutes from Concept Resource
@@ -765,7 +773,7 @@ var Util = {
                                 console.log(i+ ' concepts have been unpacked from config concept from server');
                             }
                             else {
-                                Ext.Msg.alert('Update version','Your Raxa Version seems to be out of date. For assistance email help@raxa.org');
+                                Ext.Msg.alert('Update version','Your Raxa Version seems to be out of date. For assistance email please contact Raxa help');
                             }
                            }
                         if (resource != 'location') {
