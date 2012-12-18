@@ -60,6 +60,7 @@ Ext.define("Screener.controller.Application", {
     'Screener.view.VitalsView',
     'Screener.view.VitalsForm',
     'Screener.view.Main',
+    'Screener.view.VitalViewListener'
     ],
     models: [
     'Screener.model.Person', 
