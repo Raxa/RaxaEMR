@@ -527,7 +527,8 @@ Ext.define("Screener.controller.Application", {
                 names: [{
                     givenName: formp.givenname,
                     familyName: formp.familyname
-                }] 
+                }],
+                age: formp.patientAge
             };
             if ( formp.patientAge !== "" && formp.patientAge.length > 0  ) {
                 newPatient.age = formp.patientAge ;   
