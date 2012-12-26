@@ -920,12 +920,24 @@ Ext.define("Screener.controller.Application", {
 
             console.log("Creating Obs for uuid types...");
             var v = Ext.getCmp("vitalsForm").getValues();
-            createObs(localStorage.bloodoxygensaturationUuidconcept, v.bloodOxygenSaturationField[0]);
-            createObs(localStorage.diastolicbloodpressureUuidconcept, v.diastolicBloodPressureField[0]);
-            createObs(localStorage.respiratoryRateUuidconcept, v.respiratoryRateField[0]);
-            createObs(localStorage.systolicbloodpressureUuidconcept, v.systolicBloodPressureField[0]);
-            createObs(localStorage.temperatureUuidconcept, v.temperatureField[0]); 
-            createObs(localStorage.pulseUuidconcept, v.pulseField[0]);
+            if(v.bloodOxygenSaturationField !== null) {
+            createObs(localStorage.bloodoxygensaturationUuidconcept, v.bloodOxygenSaturationField);
+            }
+            if(v.diastolicBloodPressureField !== null) {
+            createObs(localStorage.diastolicbloodpressureUuidconcept, v.diastolicBloodPressureField);
+            }
+            if(v.respiratoryRateField !== null) {
+            createObs(localStorage.respiratoryRateUuidconcept, v.respiratoryRateField);
+            }
+            if(v.systolicBloodPressureField !== null) {
+            createObs(localStorage.systolicbloodpressureUuidconcept, v.systolicBloodPressureField);
+            }
+            if(v.temperatureField !== null) {
+            createObs(localStorage.temperatureUuidconcept, v.temperatureField);
+            }
+            if(v.pulseField !== null) {
+            createObs(localStorage.pulseUuidconcept, v.pulseField);
+            }
             observations.sync();
             console.log("... Complete! Created Obs for new uuid types");
         }
