@@ -46,8 +46,6 @@ Ext.define("Screener.controller.Application", {
     'Screener.store.druglist',
     'Screener.store.encounterpost',
     'Screener.store.encounters',
-    'Screener.store.IdentifierType',
-    'Screener.store.Location',
     'Screener.store.NewPatients',   // Cant find this store
     'Screener.store.NewPersons',
     'Screener.store.PatientList',
@@ -210,7 +208,7 @@ Ext.define("Screener.controller.Application", {
         store_assignedPatientList = Ext.create('Screener.store.AssignedPatientList', {
             storeId: 'assPatientStore'
         });
-        this.preparePatientList();
+        this.finalPatientList();
     },
 
     // Updates the number of Patients Waiting in the left Title Bar
@@ -273,71 +271,23 @@ Ext.define("Screener.controller.Application", {
         }
     },
 
-    // Creates an instance of PostList model for posting Registration and Screener List
-    preparePatientList: function () {
-        var d = new Date();
-        var list_regEncounter = Ext.create('Screener.model.PostList', {
-            name: "Registration Encounter",
-            description: "Patients encountered Registration" + "startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d),
-            searchQuery: "?encounterType=" + localStorage.regUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d)
-        });
-        var list_scrEncounter = Ext.create('Screener.model.PostList', {
-            name: "Screener Encounter",
-            description: "Patients encountered Screener on " + "startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d),
-            searchQuery: "?encounterType=" + localStorage.screenerUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d)
-
-        });
-        var list_outEncounter = Ext.create('Screener.model.PostList', {
-            name: "Outpatient Encounter",
-            description: "Patients encountered Outpatient on " + "startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d),
-            searchQuery: "?encounterType=" + localStorage.outUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d)
-
-        });
-        numberOfStoresWritten = 0;
-        this.createList(list_regEncounter, list_scrEncounter, list_outEncounter, numberOfStoresWritten);
-    },
-    // Creates two different List of Patients Registered and Patients Screened within last 24 hours
-    createList: function (list_reg, list_scr, list_out, k) {
-        var store_reg = Ext.create('Screener.store.PostLists');
-        var store_scr = Ext.create('Screener.store.PostLists');
-        var store_out = Ext.create('Screener.store.PostLists');
-        store_reg.add(list_reg);
-        store_scr.add(list_scr);
-        store_out.add(list_out);
-        store_reg.sync();
-        store_scr.sync();
-        store_out.sync();
-
-        this.listenerOnList(store_reg, store_reg, store_scr, store_out);
-        this.listenerOnList(store_scr, store_reg, store_scr, store_out);
-        this.listenerOnList(store_out, store_reg, store_scr, store_out);
-        var a = [store_reg, store_scr, store_out];
-        return a;
-    },
-    // Listens for stores to be written. Once all stores have been written,
-    // creates the complete patient list to be displayed in Screener
-    listenerOnList: function (store, store1, store2, store3) {
-        store.on('write', function () {
-            numberOfStoresWritten++;
-            if (numberOfStoresWritten == NUMBER_OF_STORES_TO_WRITE) {
-                this.finalPatientList(store1, store2, store3);
-            }
-        }, this);
-    },
     // Creates List of Patients registered but not screened in last 24 hours
-    finalPatientList: function (store_regEncounter, store_scrEncounter, store_outEncounter) {
+    finalPatientList: function () {
+        var d = new Date();
         store_patientList.getProxy().setUrl(
             this.getPatientListUrl(
-                store_regEncounter.getData().getAt(0).getData().uuid, 
-                store_scrEncounter.getData().getAt(0).getData().uuid, 
-                localStorage.regUuidencountertype
+                Util.Datetime(d, 24),
+                Util.Datetime(d),
+                localStorage.regUuidencountertype,
+                localStorage.screenerUuidencountertype
                 )
             );
         store_assignedPatientList.getProxy().setUrl(
             this.getPatientListUrl(
-                store_scrEncounter.getData().getAt(0).getData().uuid, 
-                store_outEncounter.getData().getAt(0).getData().uuid, 
-                localStorage.screenerUuidencountertype
+                Util.Datetime(d, 24),
+                Util.Datetime(d),
+                localStorage.screenerUuidencountertype,
+                localStorage.outUuidencountertype
                 )
             );
         store_patientList.load({
@@ -366,8 +316,8 @@ Ext.define("Screener.controller.Application", {
         return store_patientList;
     },
     // returns dynamically changed URL for getting patientList
-    getPatientListUrl: function (inListUuid, notInListUuid, encountertype) {
-        return (HOST + '/ws/rest/v1/raxacore/patientlist' + '?inList=' + inListUuid + '&notInList=' + notInListUuid + '&encounterType=' + encountertype);
+    getPatientListUrl: function (startDate, endDate, encountertype, excludeEncounterType) {
+        return (HOST + '/ws/rest/v1/raxacore/patientlist/optimized' + '?startDate=' + startDate + '&endDate=' + endDate + '&encounterType=' + encountertype + '&excludeEncounterType=' + excludeEncounterType);
     },
 
     //add new drug order form 
