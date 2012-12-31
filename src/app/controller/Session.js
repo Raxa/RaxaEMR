@@ -128,8 +128,8 @@ Ext.define('RaxaEmr.controller.Session', {
                     }
                 }
                 localStorage.setItem('session', JSON.stringify({
-                    person: privilegesJson.person.uuid,
-                    display: privilegesJson.person.preferredName.display
+                    person: userInfoJson.personUuid,
+                    display: userInfoJson.display
                 }));
                 localStorage.setItem("privileges", Ext.encode(privilegesArray));
                 localStorage.setItem('loggedInUser',userInfoJson.personUuid);
