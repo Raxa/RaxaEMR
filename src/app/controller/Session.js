@@ -404,10 +404,12 @@ Ext.define('RaxaEmr.controller.Session', {
     },
 
     showDashboard: function () {
-        this.addModulesToDashboard();
-        window.location.hash = 'Dashboard';
-        Ext.getCmp('topbarSelectfield').setHidden(false);
-        Ext.getCmp('mainView').setActiveItem(2);
+        if (localStorage.getItem('basicAuthHeader')) {
+            this.addModulesToDashboard();
+            window.location.hash = 'Dashboard';
+            Ext.getCmp('topbarSelectfield').setHidden(false);
+            Ext.getCmp('mainView').setActiveItem(2);
+        }
     },
 
     //This function determines the login state
