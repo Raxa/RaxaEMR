@@ -315,8 +315,8 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                         }
                     }
                 }
-                //TODO: patient image
-                ]
+            ]
+            //TODO: patient image
             },
 
             {
