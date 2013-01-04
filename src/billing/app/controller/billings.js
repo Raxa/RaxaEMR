@@ -235,7 +235,7 @@ Ext.define("RaxaEmr.billing.controller.billings", {
         c = Ext.getCmp('pid').getValue();   // extracting the id of the patient
         
         
-        url = 'http://localhost:8081/openmrs-standalone/ws/rest/v1/raxacore/billing' +'?q='+c;// get call tgo retrive all the previous bills of the patient.
+        url = HOST + '/ws/rest/v1/raxacore/billing' +'?q='+c;// get call tgo retrive all the previous bills of the patient.
         console.log(url);
         // store = Ext.create('RaxaEmr.billing.store.billingstore');
         //storing results in the store. 
@@ -293,7 +293,7 @@ Ext.define("RaxaEmr.billing.controller.billings", {
 
                 var l = Ext.getCmp('mainarea').getLayout();
            
-                l.setActiveItem(4);
+                l.setActiveItem(3);
                 //  var global_amount=0;
                 var number = Ext.getStore('RaxaEmr.billing.store.billingstore');
   
@@ -344,7 +344,7 @@ addItem: function(){
         Ext.Msg.alert("Alert", "field misssing");
         var l = Ext.getCmp('mainarea').getLayout();
         //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(7);
+        l.setActiveItem(6);
               
     }
     else if(itemQuantity==0)
@@ -352,14 +352,14 @@ addItem: function(){
         Ext.Msg.alert("Alert", "Quantity can't be 0");
         var l = Ext.getCmp('mainarea').getLayout();
         //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(7);
+        l.setActiveItem(6);
     }
     else if(itemPrice==0)
     {
         Ext.Msg.alert("Alert", "Price can't be 0");
         var l = Ext.getCmp('mainarea').getLayout();
         //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(7);
+        l.setActiveItem(6);
     }
     else
     {
@@ -405,7 +405,7 @@ addItem: function(){
                     } else {
                         var l = Ext.getCmp('mainarea').getLayout();
                         //   console.log('Initialized Users! This happens before the Application launch function is called');
-                        l.setActiveItem(1);
+                        l.setActiveItem(0);
                     }
                 });
                 
@@ -464,7 +464,7 @@ displayForm1: function () {
     //   console.log('Initialized Users! This happens before the Application launch function is called');
      
         
-    l.setActiveItem(6);
+    l.setActiveItem(5);
 //  var l1 = Ext.getCmp('addpatientgridarea').getLayout();
 // l1.setActiveItem(1);
 }
@@ -504,7 +504,7 @@ back1 :function(){
     //  console.log("hye"+x1.getCount());
     var l = Ext.getCmp('mainarea').getLayout();
     //   console.log('Initialized Users! This happens before the Application launch function is called');
-    l.setActiveItem(1); // redirecting to currentBill_main.js
+    l.setActiveItem(0); // redirecting to currentBill_main.js
 },
 /*
  *Called when clicked on Create New Bill button in previousBills.js
@@ -519,7 +519,7 @@ displayForm2: function () {
         var url2;
  // get call to retrieve the details of that particular bill using the billId 
  // bill id extracted using the index of the row on which icon was clicked.
-    url2 = 'http://localhost:8081/openmrs-standalone/ws/rest/v1/raxacore/billing' +'?v='+c;
+    url2 = HOST + '/ws/rest/v1/raxacore/billing' +'?v='+c;
     console.log("the url is " +url2);
     
     var itemStore1 = this.getStore('RaxaEmr.billing.store.itemStore');
@@ -629,7 +629,7 @@ displayForm2: function () {
     //   console.log('Initialized Users! This happens before the Application launch function is called');
      
         
-    l.setActiveItem(1);
+    l.setActiveItem(0);
         } 
         
         
@@ -752,7 +752,7 @@ displayForm: function () {
         
         
     //   console.log('Initialized Users! This happens before the Application launch function is called');
-    l.setActiveItem(7);// redirction to AddItem.js
+    l.setActiveItem(6);// redirction to AddItem.js
 //  var l1 = Ext.getCmp('addpatientgridarea').getLayout();
 // l1.setActiveItem(1);
 },
@@ -787,7 +787,7 @@ editItem : function()
         Ext.Msg.alert("Alert", "field misssing");
         var l = Ext.getCmp('mainarea').getLayout();
         //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(8);
+        l.setActiveItem(7);
               
     }
     else if(itemQuantity==0)
@@ -795,14 +795,14 @@ editItem : function()
         Ext.Msg.alert("Alert", "Quantity can't be 0");
         var l = Ext.getCmp('mainarea').getLayout();
         //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(8);
+        l.setActiveItem(7);
     }
     else if(itemPrice==0)
     {
         Ext.Msg.alert("Alert", "Price can't be 0");
         var l = Ext.getCmp('mainarea').getLayout();
         //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(8);
+        l.setActiveItem(7);
     }
     else
     {
@@ -843,7 +843,7 @@ editItem : function()
                     } else {
                         var l = Ext.getCmp('mainarea').getLayout();
                         //   console.log('Initialized Users! This happens before the Application launch function is called');
-                        l.setActiveItem(1);
+                        l.setActiveItem(0);
                     }
                 });
                 
@@ -918,7 +918,7 @@ back2 :function(){
     //  console.log("hye"+x1.getCount());
     var l = Ext.getCmp('mainarea').getLayout();
     //   console.log('Initialized Users! This happens before the Application launch function is called');
-    l.setActiveItem(1);// redirecting to currentBill_main.js
+    l.setActiveItem(0);// redirecting to currentBill_main.js
 },
 /*
  *called when back button in previousShow is clicked.
@@ -930,7 +930,7 @@ back3 :function()
         
     console.log("back called");
     //   console.log('Initialized Users! This happens before the Application launch function is called');
-    l.setActiveItem(4);
+    l.setActiveItem(3);
 },
     /*
      *called when addItem button in currentBill_main is clicked
@@ -957,7 +957,7 @@ displayForm: function () {
         
         
     //   console.log('Initialized Users! This happens before the Application launch function is called');
-    l.setActiveItem(7);// redirects to AddItem.js
+    l.setActiveItem(6);// redirects to AddItem.js
 //  var l1 = Ext.getCmp('addpatientgridarea').getLayout();
 // l1.setActiveItem(1);
 },
@@ -1006,7 +1006,7 @@ payBill :function(){
     //  console.log("hye"+x1.getCount());
     var l = Ext.getCmp('mainarea').getLayout();
     //   console.log('Initialized Users! This happens before the Application launch function is called');
-    l.setActiveItem(1);// redirected to currentBill.js
+    l.setActiveItem(0);// redirected to currentBill.js
 },
     
     
@@ -1015,7 +1015,7 @@ setLayo :function(){
         
     console.log("Hello");
     //   console.log('Initialized Users! This happens before the Application launch function is called');
-    l.setActiveItem(7);
+    l.setActiveItem(6);
 },
     
 /*
@@ -1051,7 +1051,7 @@ onItemEdit: function (evtData) {
     var l = Ext.getCmp('mainarea').getLayout();
     //   console.log('Initialized Users! This happens before the Application launch function is called');
      
-    l.setActiveItem(8);// redirecting to EditItem.js
+    l.setActiveItem(7);// redirecting to EditItem.js
          
 },
 /*
@@ -1110,7 +1110,7 @@ onShowBill : function (evtData){
     var url1;
  // get call to retrieve the details of that particular bill using the billId 
  // bill id extracted using the index of the row on which icon was clicked.
-    url1 = 'http://localhost:8081/openmrs-standalone/ws/rest/v1/raxacore/billingitem' +'?q='+billId;
+    url1 = HOST + '/ws/rest/v1/raxacore/billingitem' +'?q='+billId;
     console.log(url1);
     
     // storing the bills in the previousshow Store.
@@ -1154,7 +1154,7 @@ onShowBill : function (evtData){
 
             var l = Ext.getCmp('mainarea').getLayout();
            
-            l.setActiveItem(9);// redirects tp previousShow.js to show the details of that particular bill.
+            l.setActiveItem(8);// redirects tp previousShow.js to show the details of that particular bill.
             //  var global_amount=0;
   
   
