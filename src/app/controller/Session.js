@@ -140,7 +140,6 @@ Ext.define('RaxaEmr.controller.Session', {
                 }
                 else{
                     localStorage.setItem('location', location);
-                    Ext.getStore('locationStore').findExact('uuid',location)
                     var presentLocation = Ext.getStore('locationStore').getAt(Ext.getStore('locationStore').findExact('uuid',location));
                     for(var k = 0; k< presentLocation.raw.attributes.length; k++){
                     if(presentLocation.raw.attributes[k].display.indexOf('headerPrescription')>=0 && presentLocation.raw.attributes[k].value ){
