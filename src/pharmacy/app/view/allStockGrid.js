@@ -6,25 +6,26 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
     margin: '0 0 0 0',
     store: 'StockList',
     features: [Ext.create('Ext.grid.feature.Grouping',{
-            startCollapsed: true,
-            groupHeaderTpl: 
-                [
-                '{name} ',
-                '{[this.formatName(values)]}',
-                {
-                    formatName: function(values) {
-                        var total = 0;
-                        var firstSupplier;
-                        var fewestMonths;
+        startCollapsed: true,
+        
+        groupHeaderTpl: 
+        [
+        '{name}',
+        '{[this.formatName(values)]}',
+        {
+            formatName: function(values) {
+                var total = 0;
+                var firstSupplier;
+                var fewestMonths;
                         
-                        for(var i=0; i<values.children.length; i++){
-                            total+=values.children[i].data.quantity;
-                        }
-                        return "total: "+total;
-                    }
+                for(var i=0; i<values.children.length; i++){
+                    total+=values.children[i].data.quantity;
                 }
-            ]
-        })
+                return "total: "+total;
+            }
+        }
+        ]
+    })
     ],
     selModel : Ext.create('Ext.selection.RowModel', {
         listeners : {
@@ -123,13 +124,13 @@ Ext.define('RaxaEmr.Pharmacy.view.allStockGrid', {
         }]
     }],
        
-   viewConfig: {
+    viewConfig: {
         getRowClass: function(record, rowIndex, rowParams, store) {
             if(Util.daysFromNow((record.data.expiryDate)) <=  61 && Util.daysFromNow((record.data.expiryDate)) >  0) {
-            return 'pharmacyTwoMonths-color-grid .x-grid-cell ';
+                return 'pharmacyTwoMonths-color-grid .x-grid-cell ';
             }
             if(Util.daysFromNow((record.data.expiryDate)) <=  0 ) {
-            return 'pharmacyExpire-color-grid .x-grid-cell ';
+                return 'pharmacyExpire-color-grid .x-grid-cell ';
             }
         }
     }
