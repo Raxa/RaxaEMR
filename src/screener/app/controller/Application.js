@@ -52,7 +52,7 @@ Ext.define("Screener.controller.Application", {
     'Screener.store.Patients',
     'Screener.store.PatientSummary',
     'Screener.store.PostLists',
-    'Screener.model.observation',	
+    'Screener.model.observation',   
     'Screener.view.PharmacyForm', 
     'Screener.view.PatientListView',
     'Screener.view.VitalsView',
@@ -494,7 +494,7 @@ Ext.define("Screener.controller.Application", {
             height: '150px'
         });
     },
-	
+    
     // Removes last lab order form
     removeLabOrder: function () {
         if (lab_num > 0) {
