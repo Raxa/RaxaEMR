@@ -149,7 +149,6 @@ Ext.define('RaxaEmr.billing.view.previousBills', {
                                     title: 'Previous Bills',
                                     id : 'gridPrevious',
                                         store: Ext.data.StoreManager.lookup('RaxaEmr.billing.store.billingstore'),
-
                                     columns: [
                                         
                                          
