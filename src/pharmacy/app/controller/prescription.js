@@ -598,6 +598,20 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         var numDrugs = drugs.items.length;
         for (var i1 = 0; i1 < numDrugs; i1++) {
             // value of Url for get call is made here using name of drug
+            if(drugs.items[i1].data.orderUuid !== "") {
+            Ext.Ajax.request({
+            url: HOST + '/ws/rest/v1/order/' + drugs.items[i1].data.orderUuid + '?!purge',  //'/ws/rest/v1/concept?q=height',
+            method: 'DELETE',
+            disableCaching: false,
+            headers: Util.getBasicAuthHeaders(),
+            failure: function (response) {
+                console.log('GET failed with response status: ' + response.status); // + response.status);
+            },
+            success: function (response) {
+                console.log("Drugs successfully deleted : " + response.status);
+            }
+        });
+            } 
             var drugData = drugs.items[i1].data;
             if(drugData.drugName !== "") {
                 var Url = HOST + '/ws/rest/v1/raxacore/drug/';
@@ -778,7 +792,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             takeInDay: takeInDay,
             takeInEvening: takeInEvening,
             takeInNight: takeInNight,
-            date: x.data.date
+            date: x.data.date,
+            orderUuid: x.data.orderUuid
         });
         var orderStore = Ext.getStore('orderStore');
         orderStore.filter(function(r) {
@@ -1683,7 +1698,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     prescriptionFillPatient: function(){
         // Checking to see if the item is '1' which means that new patient panel is active
         // So we are adding a new patient, and we want to save the patient
-        if(Ext.getCmp('addpatientarea').items.indexOf(Ext.getCmp('addpatientarea').getLayout().activeItem)===1){
+        if(Ext.getCmp('addpatientarea').items.indexOf(Ext.getCmp('addpatientarea').getLayout().activeItem)===1) {
             this.savePerson();
         }
         else{
