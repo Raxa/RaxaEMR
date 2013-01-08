@@ -84,7 +84,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     views: ['Viewport', 'prescription', 'pharmacyTopbar', 'addFacility', 'goodsReceiptText', 'listOfDrugs', 'pharmacyDetails',
     'reports', 'addPatient', 'stockIssue', 'stockIssueGrid', 'goodsReceiptGrid', 'goodsReceipt', 'goodsIssueText', 'goodsIssueGrid', 'goodsIssue',
     'allStockPanel', 'allStockGrid', 'allStock', 'addDrug', 'allStock', 'prescribedDrugs', 'patientsGridPanel', 'requisition',
-    'requisitionText', 'requisitionGrid', 'DrugDetails', 'DrugDetailsText', 'DrugDetailsGrid', 'alertGrid', 'InventoryEditor', 'drugComboBox'],
+    'requisitionText', 'requisitionGrid', 'DrugDetails', 'DrugDetailsText', 'DrugDetailsGrid', 'alertGrid', 'InventoryEditor', 'drugComboBox' , 'patientAssignedDrugs'],
     
     stores: ['orderStore', 'Doctors', 'Identifiers', 'Locations', 'Patients', 'Persons', 'drugOrderPatient', 'drugOrderSearch', 'drugConcept', 'drugEncounter', 'allDrugs', 'Alerts', 'DrugInfos'],
     models: ['Address', 'Doctor', 'Identifier', 'Name', 'Patient', 'Person', 'drugOrderPatient', 'drugOrderSearch', 'drugOrder', 'drugEncounter', 'LocationTag', 'Location', 'PurchaseOrder', 'Alert', 'Provider', 'DrugInfo'],
@@ -165,9 +165,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 activate: function () {
                     this._getStartupUuids();
                     // listner on prescription grid to show drugorder on main grid with more details
-                    Ext.getCmp('drugOrderASearchGrid').on('cellClick', function () {
-                        this.DrugOrderSelect(Ext.getCmp('drugOrderASearchGrid').getSelectionModel().getSelection()[0]);
-                    }, this);
+//                    Ext.getCmp('drugOrderASearchGrid').on('cellClick', function () {
+//                        this.DrugOrderSelect(Ext.getCmp('drugOrderASearchGrid').getSelectionModel().getSelection()[0]);
+//                        }, this);
                     //set the proxy for 1 week patient list and make the get call
                     this.getSevenDaysPatients();
                     //set the proxy for todays patient list and make the get call
@@ -257,6 +257,14 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             'goodsIssue button[action=submitIssue]': {
                 click: this.submitIssue
             },
+            
+            'prescription #currentButton':{
+                click: this.currentDatePrescription  
+            },
+            
+            'prescription #historyButton':{
+                click: this.historyPatientPrescription  
+            },
 
             // Receive Drugs (Update Stock)
             'goodsReceipt button[action=submitReceipt]': {
@@ -268,6 +276,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             'goodsReceiptGrid #addNewDrug':{
                 click: this.newDrug
             },
+            
             "addDrug button[action=submitNewDrug]": {
                 click: this.submitNewDrug
             },
@@ -411,8 +420,12 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     // Adds a drug to the current prescription
     addDrug: function() {
         // TODO: What happens if you submit when there's a blank or partial drug??
+        var nowDate = new Date();
+        var nowDate_string = nowDate.toISOString();
+        var date = nowDate_string.split("T");
         var newDrug;
         Ext.getStore('orderStore').add({
+            date: date[0],
             drugname: '',
             dosage: '',
             duration: '',
@@ -431,7 +444,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         var l = Ext.getCmp('addpatientarea').getLayout();
         l.setActiveItem(1);
         var l1 = Ext.getCmp('addpatientgridarea').getLayout();
-        l1.setActiveItem(1);
+        // l1.setActiveItem(0);
         Ext.getCmp('prescribedDrugs').setPosition(190,260);
     },
 
@@ -444,7 +457,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 var l1 = Ext.getCmp('addpatientarea').getLayout();
                 l1.setActiveItem(0);
                 var l2 = Ext.getCmp('addpatientgridarea').getLayout();
-                l2.setActiveItem(0);
+                // l2.setActiveItem(0);
                 Ext.getCmp('drugASearchGrid').getStore().removeAll();
                 Ext.getCmp('prescriptionDate').setValue('');
             } else {
@@ -585,6 +598,20 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         var numDrugs = drugs.items.length;
         for (var i1 = 0; i1 < numDrugs; i1++) {
             // value of Url for get call is made here using name of drug
+            if(drugs.items[i1].data.orderUuid !== "") {
+            Ext.Ajax.request({
+            url: HOST + '/ws/rest/v1/order/' + drugs.items[i1].data.orderUuid + '?!purge',  //'/ws/rest/v1/concept?q=height',
+            method: 'DELETE',
+            disableCaching: false,
+            headers: Util.getBasicAuthHeaders(),
+            failure: function (response) {
+                console.log('GET failed with response status: ' + response.status); // + response.status);
+            },
+            success: function (response) {
+                console.log("Drugs successfully deleted : " + response.status);
+            }
+        });
+            } 
             var drugData = drugs.items[i1].data;
             if(drugData.drugName !== "") {
                 var Url = HOST + '/ws/rest/v1/raxacore/drug/';
@@ -610,7 +637,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                     newInstructions += Util.Taken_Morning;
                 }
                 if(drugData.takeInDay){
-                    newInstructions += Util.Taken_Day;
+                    newInstructions += Util.Taken_Day;  
                 }
                 if(drugData.takeInEvening){
                     newInstructions += Util.Taken_Even;
@@ -666,8 +693,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                                         var l1 = Ext.getCmp('addpatientarea').getLayout();
                                         l1.setActiveItem(0);
                                         var l2 = Ext.getCmp('addpatientgridarea').getLayout();
-                                        l2.setActiveItem(0);
-                                        Ext.getCmp('drugASearchGrid').getStore().removeAll();
+                                        //  l2.setActiveItem(0);
+                                       // Ext.getCmp('drugASearchGrid').getStore().removeAll();
                                         Ext.getCmp('prescriptionDate').setValue('');
                                         Ext.getStore('orderStore').removeAll();
                                         this.sendPrescriptionFill();
@@ -693,22 +720,25 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     
     //fuction to be called when a drug order is selected in prescription grid of advanced search
     //sets the prescription date and store for main prescription grid
-    DrugOrderSelect: function(x){
+    //DrugOrderSelect: function(x) {
+    DrugOrderSelect: function(x , filterStartDate) {
+        var l = Ext.getCmp('mainarea').getLayout();
+        l.setActiveItem(0);
+        var l1 = Ext.getCmp('addpatientarea').getLayout();
+        l1.setActiveItem(0);
+        var l2 = Ext.getCmp('addpatientgridarea').getLayout();
+        l2.setActiveItem(0);
+        this.setOrderStore(x , filterStartDate);
+        Ext.getCmp('prescriptionDate').setValue(x.getData().startDate.toLocaleDateString());
+    },
+
+    setOrderStore : function(x , filterStartDate) {
         var docInstruction;
         var replacedStrng;
         var takeInMorning = false;
         var takeInDay = false;
         var takeInEvening = false;
         var takeInNight = false;
-        var l = Ext.getCmp('mainarea').getLayout();
-        l.setActiveItem(0);
-        var l1 = Ext.getCmp('addpatientarea').getLayout();
-        l1.setActiveItem(0);
-        var l2 = Ext.getCmp('addpatientgridarea').getLayout();
-        l2.setActiveItem(1);
-        Ext.getCmp('prescribedDrugs').setPosition(190,180);
-        Ext.getCmp('prescribedDrugs').getStore().removeAll();
-        //Ext.getCmp('prescribedDrugs').getStore().add(x);
         if(x.data.instructions.indexOf(Util.Taken_Morning) !== -1) {
             if( replacedStrng !== undefined ) {
                 takeInMorning = true;
@@ -761,14 +791,22 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             takeInMorning: takeInMorning,
             takeInDay: takeInDay,
             takeInEvening: takeInEvening,
-            takeInNight: takeInNight
-        })[0];
-        Ext.getCmp('prescriptionDate').setValue(x.getData().startDate.toLocaleDateString());
+            takeInNight: takeInNight,
+            date: x.data.date,
+            orderUuid: x.data.orderUuid
+        });
+        var orderStore = Ext.getStore('orderStore');
+        orderStore.filter(function(r) {
+            var value = r.get('date');
+            return (value === filterStartDate);
+        });
+        Ext.getStore('orderStore').group('date');
     },
-
     // Function to be call when a patient is selected in the patient search results gird of advanced search
     // Sets the fields realted to patient in main screen and then calls for function getDrugOrders()
-    patientSelect: function (x, searchPanel, drugOrderGrid) {
+    patientSelect: function (x, searchPanel, drugOrderGrid, addPatientArea) {
+        Ext.getCmp('currentButton').toggle(false);
+        Ext.getCmp('historyButton').toggle(false);
         Ext.getCmp('prescriptionPatientName').setValue(x.name);
         //below its commented as the identifier are not sent in patient search results
         Ext.getCmp('prescriptionPatientId').setValue(x.identifier)
@@ -783,35 +821,26 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         this.getDrugOrders(x.uuid, searchPanel, drugOrderGrid);
     },
 
-    makeNewPrescriptionForSearchPatient: function() {
-        // https://raxaemr.atlassian.net/browse/RAXAJSS-411
-        // TODO: clean up by removing magic numbers
-        Ext.getCmp('addpatientarea').getLayout().setActiveItem(0);
-        Ext.getCmp('addpatientgridarea').getLayout().setActiveItem(1);
-
-        Ext.getCmp('prescribedDrugs').setPosition(190,180);
-        Ext.getStore('orderStore').removeAll();
-        Ext.getStore('orderStore').add({
-            drugName: '',
-            quantity: ''
-        })[0];
-    },
-
     //function for the get call for drugorder for related patient
     getDrugOrders: function (x, searchPanel, drugOrderGrid) {
+        var that = this;
         Ext.getCmp(searchPanel).getLayout().setActiveItem(0);
+        Ext.getStore('orderStore').removeAll();
         if(!Ext.getCmp("searchLoadMask")){
             var myMask = new Ext.LoadMask(Ext.getCmp(searchPanel), {
                 msg:"Searching",
                 id:"searchLoadMask"
             });
         }
-        console.log(x);
         Ext.getCmp("searchLoadMask").show();
         var Url = HOST + '/ws/rest/v1/order?patient=';
         Url = Url + x + '&&v=full';
         // setting up the proxy here because url is not fixed
-        Ext.getCmp(drugOrderGrid).getStore().setProxy({
+        var drudOrderStore = Ext.getStore('drugOrder')
+        if( drudOrderStore === undefined ) {
+            drudOrderStore = Ext.create('RaxaEmr.Pharmacy.store.drugOrderSearch')
+        }
+        drudOrderStore.setProxy({
             type: 'rest',
             url: Url,
             headers: Util.getBasicAuthHeaders(),
@@ -820,16 +849,21 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 root: 'results'
             }
         });
-        // make the GET call for patients with given uuid
-        Ext.getCmp(drugOrderGrid).getStore().load({
+        drudOrderStore.sort({
+            property: 'startDate', 
+            direction : 'DESC'
+        });
+        drudOrderStore.load({
             scope: this,
+            sortOnLoad: true,
             callback: function(records, operation, success){
                 Ext.getCmp("searchLoadMask").hide();
                 if(success){
-                    this.makeNewPrescriptionForSearchPatient();
-                    if(Ext.getCmp(drugOrderGrid).getStore().count()>0){
-                        // show prescriptions grid(drugOrderASearchGrid) when drug orders are loaded
-                        Ext.getCmp(searchPanel).getLayout().setActiveItem(1);
+                    if(records.length > 0){
+                        var filterStartDate = drudOrderStore.data.items[0].data.date;
+                        for(var i = 0 ; i < drudOrderStore.data.length ; i++) {
+                            that.DrugOrderSelect(drudOrderStore.data.items[i] , filterStartDate)
+                        }
                     }
                     else{
                         Ext.Msg.alert("Results", "No prescriptions found for patient")
@@ -1513,8 +1547,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
         }
         Ext.getStore('StockList').filter('status', 'available');
-//        var regExp = /\d+/;
-//        Ext.getStore('StockList').filter('months', regExp);
+        //        var regExp = /\d+/;
+        //        Ext.getStore('StockList').filter('months', regExp);
         Ext.getCmp('allStockGrid').features[0].collapseAll();
     },
     
@@ -1664,7 +1698,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     prescriptionFillPatient: function(){
         // Checking to see if the item is '1' which means that new patient panel is active
         // So we are adding a new patient, and we want to save the patient
-        if(Ext.getCmp('addpatientarea').items.indexOf(Ext.getCmp('addpatientarea').getLayout().activeItem)===1){
+        if(Ext.getCmp('addpatientarea').items.indexOf(Ext.getCmp('addpatientarea').getLayout().activeItem)===1) {
             this.savePerson();
         }
         else{
@@ -1755,5 +1789,27 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             }
             return false;
         });
+    },
+    
+    currentDatePrescription: function() {
+        var orderStore = Ext.getStore('orderStore');
+        var filterStartDate = orderStore.data.items[0].data.date;
+        orderStore.filter(function(r) {
+            var value = r.get('date');
+            return (value === filterStartDate);
+        });
+        Ext.getCmp('addpatientgridarea').getLayout().setActiveItem(0);
+    },
+    
+    historyPatientPrescription: function() {
+        var drugOrderStore = Ext.getStore('orderStore');
+        drugOrderStore.clearFilter(true);
+        var presDrug = Ext.getCmp('prescribedDrugs')
+        presDrug.getView().refresh()
+        Ext.getCmp('addpatientgridarea').getLayout().setActiveItem(0);
     }
 });
+
+
+
+
