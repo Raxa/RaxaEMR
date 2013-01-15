@@ -866,7 +866,7 @@ var Util = {
             return localStorage.getItem("loggedInProvider");
         }
         else{
-            Ext.Error.raise('Provider is not logged in');
+            // Ext.Error.raise('Provider is not logged in');
             return null;
         }
     },
