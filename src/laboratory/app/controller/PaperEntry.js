@@ -66,19 +66,12 @@ Ext.define('Laboratory.controller.PaperEntry', {
      * TO-DO: Add validation to the entered fields 
      */
     sendLabObs: function () {
-        //function to get the date in required format of the openMRS, since the default extjs4 format is not accepted
-        function ISODateString(d) {
-            function pad(n) {
-                return n < 10 ? '0' + n : n
-            }
-            return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z'
-        }
         var currentDate = new Date();
 
         for (i = 0; i < Ext.getCmp('results').store.totalCount; i++) {
 
             var jsonLabObs = {
-                "obsDatetime": ISODateString(currentDate),
+                "obsDatetime": Util.Datetime(currentDate),
                 "person": selectedPatientUuid,
                 "concept": Ext.getCmp('results').store.data.items[i].data.Uuid,
                 "value": Ext.getCmp('results').store.data.items[i].data.Result,

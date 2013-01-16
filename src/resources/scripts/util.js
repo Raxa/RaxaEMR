@@ -423,7 +423,8 @@ var Util = {
      *@return diffinUTC_GMT
      */
     getUTCGMTdiff: function() {
-        return diffinUTC_GMT;
+        //return diffinUTC_GMT;
+        return 0;
     },
     
     /**
@@ -469,23 +470,26 @@ var Util = {
     },
 
     /**
-     *Returns the value of TimeoutLimit for login timeout 
-     *@return timeoutLimit for timeout in login 
-     */
+     * Returns the time so the server can understand
+     * Shifts time to correct server time
+     **/
     Datetime: function (d, hours) {
-        if (typeof hours == 'undefined') {
+        if (typeof hours == 'undefined') {  
             hours = 0;
         }
-        //subtracting time in case our clock is ahead of OpenMRS clock
-        hours = hours+TIME_BEFORE_NOW;
         var MS_PER_MINUTE = 60000;
-        var k = new Date(d - (60 * hours) * MS_PER_MINUTE);
+        var k = new Date(d - (60 * hours) * MS_PER_MINUTE - localStorage.getItem('serverTimeDiff'));
 
         function pad(n) {
             return n < 10 ? '0' + n : n;
         }
         return k.getFullYear() + '-' + pad(k.getMonth() + 1) + '-' + pad(k.getDate()) + 'T' + pad(k.getHours()) + ':' + pad(k.getMinutes()) + ':' + pad(k.getSeconds()) + 'Z';
     },
+
+    /**
+     *Returns the value of TimeoutLimit for login timeout 
+     *@return timeoutLimit for timeout in login 
+     */
     getTimeoutLimit: function () {
         return timeoutLimit;
     },
