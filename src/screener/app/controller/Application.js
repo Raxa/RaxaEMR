@@ -456,7 +456,7 @@ Ext.define("Screener.controller.Application", {
                                 for (var j = 0; j <= form_num; j++) {
                                     order[j].concept = concept[j].getAt(0).getData().uuid
                                 }
-                                var time = Util.Datetime(startdate, Util.getUTCGMTdiff());
+                                var time = Util.Datetime(startdate);
                                 // model for posting the encounter for given drug orders
                                 var encounter = Ext.create('Screener.model.drugEncounter', {
                                     patient: this.getPatientList().getSelection()[0].getData().uuid,
@@ -837,7 +837,7 @@ Ext.define("Screener.controller.Application", {
 
     sendEncounterData: function (personUuid, encountertype, location, provider) {
         //funciton to get the date in required format of the openMRS, since the default extjs4 format is not accepted
-        var t = Util.Datetime(new Date(), Util.getUTCGMTdiff());
+        var t = Util.Datetime(new Date());
         
         // creates the encounter json object
         // the 3 fields "encounterDatetime, patient, encounterType" are obligatory fields rest are optional
