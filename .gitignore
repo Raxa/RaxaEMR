@@ -11,3 +11,4 @@ pom.xml
 /build/
 /dist/
 *.swp
+.DS_Store
