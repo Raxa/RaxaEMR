@@ -11,9 +11,7 @@ Ext.define('RaxaEmr.billing.view.Viewport', {
     items:[{
             xtype: 'currentBill_main',
             id: 'currentBill_main'
-            
         },
-
         {
             xtype: 'discount'
         },

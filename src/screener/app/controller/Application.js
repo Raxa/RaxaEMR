@@ -277,18 +277,18 @@ Ext.define("Screener.controller.Application", {
         var list_regEncounter = Ext.create('Screener.model.PostList', {
             name: "Registration Encounter",
             description: "Patients encountered Registration" + "startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d),
-            searchQuery: "?encounterType=" + localStorage.regUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d)
+            searchQuery: "?encounterType=" + localStorage.regUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d, -6)
         });
         var list_scrEncounter = Ext.create('Screener.model.PostList', {
             name: "Screener Encounter",
             description: "Patients encountered Screener on " + "startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d),
-            searchQuery: "?encounterType=" + localStorage.screenerUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d)
+            searchQuery: "?encounterType=" + localStorage.screenerUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d, -6)
 
         });
         var list_outEncounter = Ext.create('Screener.model.PostList', {
             name: "Outpatient Encounter",
             description: "Patients encountered Outpatient on " + "startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d),
-            searchQuery: "?encounterType=" + localStorage.outUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d)
+            searchQuery: "?encounterType=" + localStorage.outUuidencountertype + "&startDate=" + Util.Datetime(d, 24) + "&endDate=" + Util.Datetime(d, -6)
 
         });
         numberOfStoresWritten = 0;
@@ -456,7 +456,7 @@ Ext.define("Screener.controller.Application", {
                                 for (var j = 0; j <= form_num; j++) {
                                     order[j].concept = concept[j].getAt(0).getData().uuid
                                 }
-                                var time = Util.Datetime(startdate, Util.getUTCGMTdiff());
+                                var time = Util.Datetime(startdate);
                                 // model for posting the encounter for given drug orders
                                 var encounter = Ext.create('Screener.model.drugEncounter', {
                                     patient: this.getPatientList().getSelection()[0].getData().uuid,
@@ -837,7 +837,7 @@ Ext.define("Screener.controller.Application", {
 
     sendEncounterData: function (personUuid, encountertype, location, provider) {
         //funciton to get the date in required format of the openMRS, since the default extjs4 format is not accepted
-        var t = Util.Datetime(new Date(), Util.getUTCGMTdiff());
+        var t = Util.Datetime(new Date());
         
         // creates the encounter json object
         // the 3 fields "encounterDatetime, patient, encounterType" are obligatory fields rest are optional
