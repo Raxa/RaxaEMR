@@ -52,10 +52,12 @@ Ext.define('RaxaEmr.view.Login', {
             ui: 'decline-round',
             width: 350,
         }, {
+            hidden: true,
             html: "New Users",
                 style: 'font-family: "Helvetica Neue",HelveticaNeue,"Helvetica-Neue",Helvetica,"BBAlpha Sans",sans-serif; font-weight: bold; text-align: left',
             width: 350
         }, {
+            hidden: true,
             xtype: 'container',
             layout: 'hbox',
             width: 350,
@@ -77,6 +79,7 @@ Ext.define('RaxaEmr.view.Login', {
                 }]
             }]
         },{
+            hidden: true,
             xtype: 'container',
             layout: 'hbox',
             width: 350,

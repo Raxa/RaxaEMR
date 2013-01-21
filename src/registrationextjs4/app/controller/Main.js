@@ -280,7 +280,7 @@ Ext.define('Registration.controller.Main', {
     // for now the function is called when the emergency button is pressed since the views were not completed
     /*creates the json object of the encounter needed to be passed to the server and sends it to the server to post the record*/
     sendEncounterData: function() {
-        var t = Util.Datetime(new Date(), Util.getUTCGMTdiff());
+        var t = Util.Datetime(new Date());
         // creates the encounter json object
         var jsonencounter = Ext.create('Registration.model.encounterModel', {
             encounterDatetime: t,
