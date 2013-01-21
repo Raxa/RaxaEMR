@@ -342,8 +342,6 @@ Ext.define('RaxaEmr.controller.Session', {
      * Called when login is successful for the given user, populates AppGrid with the user's modules
      */
     loginSuccess: function () {
-        Startup.getResourceUuid();
-        Startup.repeatUuidLoadingEverySec();
         var numAppsAvailable = this.addModulesToDashboard();
         //if only 1 app available, send to that page
         if (numAppsAvailable === 1) {
@@ -390,6 +388,9 @@ Ext.define('RaxaEmr.controller.Session', {
     //This function determines the login state
     //If already logged in, it redirects to the dashboard
     getLoginState: function () {
+        if(!localStorage.getItem("outUuidencountertype")){
+            Startup.getResourceUuid();
+        }
         var loginState = Ext.getCmp('mainView').getActiveItem()._activeItem;
         if (localStorage.getItem('basicAuthHeader')) {
             this.loginSuccess();

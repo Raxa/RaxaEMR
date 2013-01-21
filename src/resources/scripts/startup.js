@@ -47,33 +47,34 @@ var Startup = {
     
     
     getResourceUuid: function() {
-        console.log("getResourceUuid");
-        var x;
         Ext.Ajax.request({
-            url : HOST+'/ws/rest/v1/concept?q=height',
+            url: './data/configUuids.json',
             method: 'GET',
             disableCaching: false,
             headers: Util.getBasicAuthHeaders(),
             failure: function (response) {
-                console.log('GET failed with response status: '+ response.status); // + response.status);
+                console.log('GET failed with response status: ' + response.status); // + response.status);
             },
             success: function (response) {
-                for(var i=0;i<JSON.parse(response.responseText).results.length;++i){
-                    if(JSON.parse(response.responseText).results[i].display == 'HEIGHT (CM)'){
-                        x = JSON.parse(response.responseText).results[i].uuid
-                    }
-                }
-                if(x != localStorage.heightUuidconcept || localStorage.heightUuidconcept == undefined){
-
-                    for (k in resourceUuid)
+                console.log("getAttributeFromRest ... resource: " + resource + ", queryParameter: " + queryParameter + ", varName:" + varName + " RESPONSE: " + response.responseText);
+                xx = response.responseText;
+                var configConceptDescription = JSON.parse(response.responseText);
+                var uuidsInConfigArray = configConceptDescription.uuids;
+                var versionOfConfig = configConceptDescription.version;
+                if (versionOfConfig === Util.conceptVersion)
+                {
+                    for(var i in uuidsInConfigArray)
                     {
-                        var res = resourceUuid[k];
-                        Util.getAttributeFromREST(res.resource, res.queryTerm, res.varName, res.displayName);
+                        localStorage.setItem(uuidsInConfigArray[i]['name'],uuidsInConfigArray[i]['uuid']);
                     }
+                    console.log(i+ ' concepts have been unpacked from config concept from server');
+                }
+                else {
+                    Ext.Msg.alert('Update version','Your Raxa Version seems to be out of date. For assistance email please contact Raxa help');
                 }
             }
         });
-    },
+     },
     /**
      * for each of the modules defined in Util.getModules(), create a GET
      * request and send to server for the app/app.js file
@@ -138,48 +139,6 @@ var Startup = {
         }
     },
     
-    intervalFn: null,
-    uuidLoadAttempts: 0,
-    uuidLoading: function(){
-        var MAX_LOAD_ATTEMPTS = 30;
-        var that = this;
-        Ext.getCmp('mainView').setMasked({
-            xtype: 'loadmask',
-            message: 'Loading'
-        });
-
-        if( ! Util.checkAllUuidsLoaded() ) {
-            uuidLoadAttempts++;
-            // console.log("Loading UUIDs... # attempts = " + uuidLoadAttempts + " of " + MAX_LOAD_ATTEMPTS);
-        }
-        else {
-            that.removeTimer();
-            Ext.getCmp('mainView').setMasked(false);
-        }
-        
-        if ( uuidLoadAttempts === MAX_LOAD_ATTEMPTS){
-            that.removeTimer();
-            Ext.getCmp('mainView').setMasked(false);
-            Ext.Msg.alert("Timeout","Login timed out. Please wait a moment and try to login again.");
-            Util.logoutUser();
-        }
-    },
-             
-    repeatUuidLoadingEverySec: function()
-    {
-        uuidLoadAttempts=0; // Without this compiler is giving error
-        var that = this;
-        intervalFn = setInterval(function(){
-            that.uuidLoading();
-        },1000);
-    },
-    
-
-    removeTimer: function()
-    {
-        clearInterval(intervalFn);
-    },
-
     /**
      * POST the passed views to the REST services on HOST using AJAX Request
      * @param views: 2-d array for storing view names+URLs
