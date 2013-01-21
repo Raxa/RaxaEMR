@@ -11,3 +11,5 @@ pom.xml
 /dist/
 *.swp
 .DS_Store
+/src/outpatient/archive/
+/src/outpatient/build/
