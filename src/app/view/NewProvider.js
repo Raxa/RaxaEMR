@@ -9,24 +9,19 @@ Ext.define("RaxaEmr.view.NewProvider", {
         hideOnMaskTap: true,
         hidden: true,
         // Set the width and height of the panel
-        width: 500,
-        height: 510,
-        masked: {
-            xtype: 'loadmask',
-            message: 'Creating Provider'
+        width: 1000,
+        height: 480,
+        items: [
+        {
+          xtype: 'label',
+          html: '<h1 style="text-align:center;font-size:30px;">Adding New Provider Account</h1><br><br>'
         },
-        items: [{
+        
+        {
             xtype: 'textfield',
-            itemId: 'givenName',
-            name: 'givenname',
-            dataIndex : 'givenName',
-            label: 'Given Name'
-        }, {
-            xtype: 'textfield',
-            itemId: 'familyName',
-            name: 'familyname',
-            dataIndex : 'familyName',
-            label: 'Family Name'
+            itemId: 'email',
+            name: 'email',
+            label: "Email"
         },
         {
             xtype: 'textfield',
@@ -49,64 +44,23 @@ Ext.define("RaxaEmr.view.NewProvider", {
             label: 'Confirm password'
         },
         {
-            xtype : 'selectfield',
-            name : 'location',
-            label: 'Location',
-            displayField : 'name',
-            valueField : 'uuid',
-            store: 'Locations',
-            itemId: 'selectLocation'
-        },
-        {
-            xtype: 'textfield',
-            itemId: 'email',
-            name: 'email',
-            label: "Email"
-        },{
             xtype: 'textfield',
             itemId: 'phone',
             name: 'phone',
             label: "Phone"
-        },{
-            xtype  : 'container',
-            itemId: 'sexRadioGroup',
-            layout : {
-                type  : 'hbox',
-                align : 'strech'
-            },
-            dataIndex : 'gender',
-            items  : [
-            {
-                xtype : 'radiofield',
-                label : 'Male',
-                value: 'M',
-                name  : 'choice',
-                labelWidth: 70,
-            },
-            {
-                xtype : 'radiofield',
-                label : 'Female',
-                value: 'F',
-                name  : 'choice',
-                labelWidth: 90,
-            },
-            {
-                xtype : 'radiofield',
-                label : 'Other',
-                value: 'O',
-                name  : 'choice',
-                labelWidth: 70,
-            }
-            ]
-        },{
+        },
+        {
+            xtype: 'spacer'    
+        },
+        {
+            xtype: 'spacer'    
+        },
+        {
             xtype: 'button',
             itemId: 'saveProviderButton',
-            text: 'Create Account',
+            text: 'Next',
             ui: 'action'
-        }],
-        onChange: function () {
-            Ext.Msg.alert("Please enter the date format");
-        }
+        }]
     },
     saveForm: function () {
         return this.getValues();
