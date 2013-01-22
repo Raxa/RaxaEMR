@@ -108,7 +108,7 @@ Ext.define('chw.controller.AddPatient', {
 
     sendEncounterData: function (personUuid, encountertype, location, provider) {
         //funciton to get the date in required format of the openMRS, since the default extjs4 format is not accepted
-        var t = Util.Datetime(new Date(), Util.getUTCGMTdiff());
+        var t = Util.Datetime(new Date());
         
         // creates the encounter json object
         // the 3 fields "encounterDatetime, patient, encounterType" are obligatory fields rest are optional
