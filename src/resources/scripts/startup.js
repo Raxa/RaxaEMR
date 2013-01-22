@@ -57,20 +57,12 @@ var Startup = {
             },
             success: function (response) {
                 console.log("getAttributeFromRest ... resource: " + resource + ", queryParameter: " + queryParameter + ", varName:" + varName + " RESPONSE: " + response.responseText);
-                xx = response.responseText;
                 var configConceptDescription = JSON.parse(response.responseText);
                 var uuidsInConfigArray = configConceptDescription.uuids;
-                var versionOfConfig = configConceptDescription.version;
-                if (versionOfConfig === Util.conceptVersion)
+                localStorage.setItem("configVersion", configConceptDescription.version);
+                for(var i in uuidsInConfigArray)
                 {
-                    for(var i in uuidsInConfigArray)
-                    {
-                        localStorage.setItem(uuidsInConfigArray[i]['name'],uuidsInConfigArray[i]['uuid']);
-                    }
-                    console.log(i+ ' concepts have been unpacked from config concept from server');
-                }
-                else {
-                    Ext.Msg.alert('Update version','Your Raxa Version seems to be out of date. For assistance email please contact Raxa help');
+                    localStorage.setItem(uuidsInConfigArray[i]['name'],uuidsInConfigArray[i]['uuid']);
                 }
             }
         });

@@ -27,6 +27,7 @@ Ext.define('RaxaEmr.controller.Session', {
             passwordID: '#passwordID',
             userName: '#userName',
             signInButton: '#signInButton',
+            newAccountButton: '#newAccountButton',
             newProviderAccountButton: '#newProviderAccountButton',
             newPatientAccountButton: '#newPatientAccountButton',
             passwordProvider: '#newProviderId #password',
@@ -55,6 +56,9 @@ Ext.define('RaxaEmr.controller.Session', {
             },            
             signInButton: {
                 tap: 'doLogin'
+            },
+            newAccountButton: {
+                tap: 'showNewAccount'
             },
             newProviderAccountButton: {
                 tap: 'newProviderAccount'
@@ -108,6 +112,10 @@ Ext.define('RaxaEmr.controller.Session', {
             success: function (response) {
                 var userInfoJson = Ext.decode(response.responseText);
                 console.log(userInfoJson)
+                var raxaVersion = userInfoJson.raxaVersion;
+                if(raxaVersion !== localStorage.configVersion){
+                    Ext.Error.raise('Please update your Raxa Openmrs Module');
+                }
                 //only adding necessary fields for localStorage
                 var privilegesArray = [];
                 var i=0;
@@ -404,6 +412,7 @@ Ext.define('RaxaEmr.controller.Session', {
             id: 'mainView',
             fullscreen: true,
             layout: 'card',
+            activeItem: 0,
             items: [{
                 xclass: 'RaxaEmr.view.Login'
             }, {
@@ -421,6 +430,11 @@ Ext.define('RaxaEmr.controller.Session', {
     launchAfterAJAX: function (views) {
         //remove loading mask
         Ext.getCmp('mainView').setMasked(false);
+    },
+    
+    //Shows new account page for new providers or new patients
+    showNewAccount: function() {
+            Ext.getCmp('mainView').setActiveItem(3);
     }
 
 });
