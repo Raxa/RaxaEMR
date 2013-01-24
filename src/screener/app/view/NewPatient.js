@@ -14,7 +14,7 @@ Ext.define("Screener.view.NewPatient", {
         hidden: true,
         // Set the width and height of the panel
         width: 500,
-        height: 310,
+        height: 350,
         floating: true,
         centered: true,
         showAnimation: {
@@ -125,6 +125,11 @@ Ext.define("Screener.view.NewPatient", {
                 flex  : 1
             }
             ]
+        },{
+            xtype: 'textfield',
+            id: 'contactNumber',
+            label: 'Contact Number', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.giv_name')
+            margin: '5 0 5 0'
         },{
             xtype: 'button',
             id: 'savePatientButton',
