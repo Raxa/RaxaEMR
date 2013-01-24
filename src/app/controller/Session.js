@@ -153,12 +153,6 @@ Ext.define('RaxaEmr.controller.Session', {
                     if(presentLocation.raw.attributes[k].display.indexOf('headerAddressPrescription')>=0 && presentLocation.raw.attributes[k].value ){
                         localStorage.setItem('headerAddressPrescription',presentLocation.raw.attributes[k].value);
                         }
-                    //Demo Print
-                    localStorage.setItem('providerDetailsForPrescription','MBBS FCCP<p>Reg No. DMC-46<p>Family Physician');
-                    localStorage.setItem('headerPrescription','MADAN FAMILY CENTER');
-                    localStorage.setItem('headerAddressPrescription','9/11 PANT NAGAR JANGPURA EXTN, NEW DELHI- 14');
-                    localStorage.setItem('providertimings','<p><strong>Timings:</strong> Morning 9 am- 1 pm</p><p>Evening 5 pm - 9pm</p><p><strong>Phone:</strong> 656999150, 2432977</p>')
-
                     }
                 }
                 this.loginSuccess();
