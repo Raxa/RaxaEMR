@@ -1,5 +1,5 @@
 /**
- * A event recogniser which knows when you tap and hold for more than 1 second.
+ * A event recognizer which knows when you tap and hold for more than 1 second.
  *
  * @private
  */

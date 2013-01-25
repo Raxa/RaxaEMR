@@ -35,8 +35,8 @@
  *                                 values = form.getValues();
  *
  *                             Ext.Msg.alert(null,
- *                                 "Tomato: " + ((values.tomato) ? "yes" : "no")
- *                                 + "<br />Salami: " + ((values.salami) ? "yes" : "no")
+ *                                 "Tomato: " + ((values.tomato) ? "yes" : "no") +
+ *                                 "<br />Salami: " + ((values.salami) ? "yes" : "no")
  *                             );
  *                         }
  *                     },
@@ -68,17 +68,25 @@ Ext.define('Ext.field.Checkbox', {
     isCheckbox: true,
 
     /**
+     * @event change
+     * Fires just before the field blurs if the field value has changed.
+     * @param {Ext.field.Checkbox} this This field.
+     * @param {Boolean} newValue The new value.
+     * @param {Boolean} oldValue The original value.
+     */
+
+    /**
      * @event check
      * Fires when the checkbox is checked.
-     * @param {Ext.field.Checkbox} this This checkbox
-     * @param {Ext.EventObject} e This event object
+     * @param {Ext.field.Checkbox} this This checkbox.
+     * @param {Ext.EventObject} e This event object.
      */
 
     /**
      * @event uncheck
      * Fires when the checkbox is unchecked.
-     * @param {Ext.field.Checkbox} this This checkbox
-     * @param {Ext.EventObject} e This event object
+     * @param {Ext.field.Checkbox} this This checkbox.
+     * @param {Ext.EventObject} e This event object.
      */
 
     config: {
@@ -95,7 +103,7 @@ Ext.define('Ext.field.Checkbox', {
         value: '',
 
         /**
-         * @cfg {Boolean} checked <tt>true</tt> if the checkbox should render initially checked
+         * @cfg {Boolean} checked `true` if the checkbox should render initially checked.
          * @accessor
          */
         checked: false,
@@ -165,8 +173,8 @@ Ext.define('Ext.field.Checkbox', {
     },
 
     /**
-     * Returns the field checked value
-     * @return {Mixed} The field value
+     * Returns the field checked value.
+     * @return {Mixed} The field value.
      */
     getChecked: function() {
         // we need to get the latest value from the {@link #input} and then update the value
@@ -176,7 +184,7 @@ Ext.define('Ext.field.Checkbox', {
 
     /**
      * Returns the submit value for the checkbox which can be used when submitting forms.
-     * @return {Boolean/String} value The value of {@link #value} or true, if {@link #checked}.
+     * @return {Boolean/String} value The value of {@link #value} or `true`, if {@link #checked}.
      */
     getSubmitValue: function() {
         return (this.getChecked()) ? this._value || true : null;
@@ -230,40 +238,42 @@ Ext.define('Ext.field.Checkbox', {
             } else {
                 me.fireEvent('uncheck', me, e);
             }
+
+            me.fireEvent('change', me, newChecked, oldChecked);
         }
     },
 
     /**
      * @method
-     * Method called when this {@link Ext.field.Checkbox} has been checked
+     * Method called when this {@link Ext.field.Checkbox} has been checked.
      */
     doChecked: Ext.emptyFn,
 
     /**
      * @method
-     * Method called when this {@link Ext.field.Checkbox} has been unchecked
+     * Method called when this {@link Ext.field.Checkbox} has been unchecked.
      */
     doUnChecked: Ext.emptyFn,
 
     /**
      * Returns the checked state of the checkbox.
-     * @return {Boolean} True if checked, else otherwise
+     * @return {Boolean} `true` if checked, `false` otherwise.
      */
     isChecked: function() {
         return this.getChecked();
     },
 
     /**
-     * Set the checked state of the checkbox to true
-     * @return {Ext.field.Checkbox} This checkbox
+     * Set the checked state of the checkbox to `true`.
+     * @return {Ext.field.Checkbox} This checkbox.
      */
     check: function() {
         return this.setChecked(true);
     },
 
     /**
-     * Set the checked state of the checkbox to false
-     * @return {Ext.field.Checkbox} This checkbox
+     * Set the checked state of the checkbox to `false`.
+     * @return {Ext.field.Checkbox} This checkbox.
      */
     uncheck: function() {
         return this.setChecked(false);
@@ -301,7 +311,7 @@ Ext.define('Ext.field.Checkbox', {
     },
 
     /**
-     * Returns an array of values from the checkboxes in the group that are checked,
+     * Returns an array of values from the checkboxes in the group that are checked.
      * @return {Array}
      */
     getGroupValues: function() {
@@ -317,9 +327,9 @@ Ext.define('Ext.field.Checkbox', {
     },
 
     /**
-     * Set the status of all matched checkboxes in the same group to checked
-     * @param {Array} values An array of values
-     * @return {Ext.field.Checkbox} This checkbox
+     * Set the status of all matched checkboxes in the same group to checked.
+     * @param {Array} values An array of values.
+     * @return {Ext.field.Checkbox} This checkbox.
      */
     setGroupValues: function(values) {
         this.getSameGroupFields().forEach(function(field) {
@@ -330,8 +340,8 @@ Ext.define('Ext.field.Checkbox', {
     },
 
     /**
-     * Resets the status of all matched checkboxes in the same group to checked
-     * @return {Ext.field.Checkbox} This checkbox
+     * Resets the status of all matched checkboxes in the same group to checked.
+     * @return {Ext.field.Checkbox} This checkbox.
      */
     resetGroupValues: function() {
         this.getSameGroupFields().forEach(function(field) {

@@ -1,4 +1,5 @@
 /**
+ * @aside example video
  * Provides a simple Container for HTML5 Video.
  *
  * ## Notes
@@ -20,7 +21,7 @@
  *
  * ## Example
  *
- *     var panel = new Ext.Panel({
+ *     var panel = Ext.create('Ext.Panel', {
  *         fullscreen: true,
  *         items: [
  *             {
@@ -34,7 +35,6 @@
  *             }
  *         ]
  *     });
- *
  */
 Ext.define('Ext.Video', {
     extend: 'Ext.Media',
@@ -161,7 +161,10 @@ Ext.define('Ext.Video', {
         }
     },
 
-    // native video tag display only only, move the media down so we can control the Viewport
+    /**
+     * @private
+     * native video tag display only, move the media down so we can control the Viewport
+     */
     onPause: function() {
         this.callParent(arguments);
         if (!this.isInlineVideo) {
@@ -170,7 +173,10 @@ Ext.define('Ext.Video', {
         }
     },
 
-    // native video tag display only only, move the media down so we can control the Viewport
+    /**
+     * @private
+     * native video tag display only, move the media down so we can control the Viewport
+     */
     onPlay: function() {
         this.callParent(arguments);
         this.media.setTop(0);

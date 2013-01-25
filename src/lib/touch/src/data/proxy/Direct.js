@@ -86,7 +86,7 @@ Ext.define('Ext.data.proxy.Direct', {
         extraParams: null
     },
 
-    // private
+    // @private
     paramOrderRe: /[\s,|]/,
 
     applyParamOrder: function(paramOrder) {
@@ -166,18 +166,18 @@ Ext.define('Ext.data.proxy.Direct', {
         };
     },
 
-    // inherit docs
+    // @inheritdoc
     extractResponseData: function(response) {
         var result = response.getResult();
         return Ext.isDefined(result) ? result : response.getData();
     },
 
-    // inherit docs
+    // @inheritdoc
     setException: function(operation, response) {
         operation.setException(response.getMessage());
     },
 
-    // inherit docs
+    // @inheritdoc
     buildUrl: function() {
         return '';
     }

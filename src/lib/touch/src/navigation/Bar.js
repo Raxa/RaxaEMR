@@ -12,7 +12,7 @@ Ext.define('Ext.navigation.Bar', {
         'Ext.Spacer'
     ],
 
-    // private
+    // @private
     isToolbar: true,
 
     config: {
@@ -131,12 +131,6 @@ Ext.define('Ext.navigation.Bar', {
      * Fires when the back button was tapped.
      * @param {Ext.navigation.Bar} this This bar
      */
-
-    /**
-     * The minmum back button width allowed.
-     * @private
-     */
-    minBackButtonWidth: 80,
 
     constructor: function(config) {
         config = config || {};
@@ -477,7 +471,8 @@ Ext.define('Ext.navigation.Bar', {
         config = Ext.apply(config, {
             element: element,
             easing: 'ease-in-out',
-            duration: me.getAnimation().duration
+            duration: me.getAnimation().duration || 250,
+            preserveEndState: true
         });
 
         animation = new Ext.fx.Animation(config);

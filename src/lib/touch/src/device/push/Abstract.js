@@ -31,7 +31,7 @@ Ext.define('Ext.device.push.Abstract', {
      *         success: function(token) {
      *             console.log('# Push notification registration successful:');
      *             console.log('    token: ' + token);
-     *         },2
+     *         },
      *         failure: function(error) {
      *             console.log('# Push notification registration unsuccessful:');
      *             console.log('     error: ' + error);
@@ -57,22 +57,22 @@ Ext.define('Ext.device.push.Abstract', {
      * Enable alerts and badges:
      *
      *     Ext.device.Push.register({
-     *         type: Ext.device.Push.ALERT|Ext.device.Push.BADGE,
-     *         ...
+     *         type: Ext.device.Push.ALERT|Ext.device.Push.BADGE
+     *         // ...
      *     });
      *
      * Enable alerts, badges and sounds:
      *
      *     Ext.device.Push.register({
-     *         type: Ext.device.Push.ALERT|Ext.device.Push.BADGE|Ext.device.Push.SOUND,
-     *         ...
+     *         type: Ext.device.Push.ALERT|Ext.device.Push.BADGE|Ext.device.Push.SOUND
+     *         // ...
      *     });
      *
      * Enable only sounds:
      *
      *     Ext.device.Push.register({
-     *         type: Ext.device.Push.SOUND,
-     *         ...
+     *         type: Ext.device.Push.SOUND
+     *         // ...
      *     });
      *
      * @param {Function} config.success
@@ -106,7 +106,7 @@ Ext.define('Ext.device.push.Abstract', {
 
         return {
             success: function(token) {
-                me.onSuccess(token, config.sucess, config.scope || me);
+                me.onSuccess(token, config.success, config.scope || me);
             },
             failure: function(error) {
                 me.onFailure(error, config.failure, config.scope || me);

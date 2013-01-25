@@ -65,6 +65,40 @@ Ext.define('Ext.field.Toggle', {
         cls: 'x-toggle-field'
     },
 
+    /**
+     * @event change
+     * Fires when an option selection has changed.
+     *
+     *     Ext.Viewport.add({
+     *         xtype: 'togglefield',
+     *         label: 'Event Example',
+     *         listeners: {
+     *             change: function(field, newValue) {
+     *                 console.log('Value of this toggle has changed:', (newValue) ? 'ON' : 'OFF');
+     *             }
+     *         }
+     *     });
+     * 
+     * @param {Ext.field.Toggle} me
+     * @param {Number} newValue the new value of this thumb
+     * @param {Number} oldValue the old value of this thumb
+     */
+
+    /**
+    * @event dragstart
+    * @hide
+    */
+
+    /**
+    * @event drag
+    * @hide
+    */
+
+    /**
+    * @event dragend
+    * @hide
+    */
+
     proxyConfig: {
         /**
          * @cfg {String} minValueCls See {@link Ext.slider.Toggle#minValueCls}
@@ -87,13 +121,19 @@ Ext.define('Ext.field.Toggle', {
     /**
      * Sets the value of the toggle.
      * @param {Number} value **1** for toggled, **0** for untoggled.
+     * @return {Object} this
      */
     setValue: function(newValue) {
         if (newValue === true) {
             newValue = 1;
         }
 
-        this.getComponent().setValue(newValue);
+        var oldValue = this.getValue();
+        if (oldValue != newValue) {
+            this.getComponent().setValue(newValue);
+
+            this.fireEvent('change', this, newValue, oldValue);
+        }
 
         return this;
     },
@@ -104,10 +144,13 @@ Ext.define('Ext.field.Toggle', {
 
     /**
      * Toggles the value of this toggle field.
-     * @return this
+     * @return {Object} this
      */
     toggle: function() {
-        this.getComponent().toggle();
+        // We call setValue directly so the change event can be fired
+        var value = this.getValue();
+        this.setValue((value == 1) ? 0 : 1);
+
         return this;
     }
 });
