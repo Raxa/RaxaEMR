@@ -75,6 +75,8 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
             xtype: 'actioncolumn',
             text: 'Times',
             width: 80,
+            id: 'timesActionId',
+            hidden:false,
             renderer: function (value, metadata, record) {
                 if (record.get('takeInMorning')) {
                     Ext.getCmp('prescribedDrugs').columns[2].items[0].icon = '../resources/img/sunriseselected.png';
@@ -113,7 +115,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
                     grid.getStore().getAt(rowIndex).data.takeInDay = !grid.getStore().getAt(rowIndex).data.takeInDay;
                     Ext.getCmp('prescribedDrugs').getView().refresh();
                 }
-            },{
+            },{ 
                 icon: '../resources/img/sunset.png',
                 tooltip: 'Evening',
                 handler: function(grid, rowIndex, colIndex) {
@@ -128,6 +130,19 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
                     Ext.getCmp('prescribedDrugs').getView().refresh();
                 }
             }]
+        },
+        {
+            xtype: 'gridcolumn',
+            width: 120,
+            dataIndex: 'frequency',
+            text: 'Frequency',
+            resizable: false,
+            id: 'frequencyTimesId',
+            editor: {
+                xtype: 'textfield',
+                allowDecimals: true,
+                allowBlank: true
+            }
         },
         {
             xtype: 'gridcolumn',

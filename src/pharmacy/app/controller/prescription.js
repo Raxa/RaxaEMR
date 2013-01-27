@@ -165,9 +165,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 activate: function () {
                     this._getStartupUuids();
                     // listner on prescription grid to show drugorder on main grid with more details
-//                    Ext.getCmp('drugOrderASearchGrid').on('cellClick', function () {
-//                        this.DrugOrderSelect(Ext.getCmp('drugOrderASearchGrid').getSelectionModel().getSelection()[0]);
-//                        }, this);
+                    //                    Ext.getCmp('drugOrderASearchGrid').on('cellClick', function () {
+                    //                        this.DrugOrderSelect(Ext.getCmp('drugOrderASearchGrid').getSelectionModel().getSelection()[0]);
+                    //                        }, this);
                     //set the proxy for 1 week patient list and make the get call
                     this.getSevenDaysPatients();
                     //set the proxy for todays patient list and make the get call
@@ -347,7 +347,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     printPrescribedDrugs: function() {
         var Grid=this.readGrid();
         var selectedPatient = {};
-        if(Ext.getCmp('familyName').getValue()!==""){
+        if(Ext.getCmp('familyName').getValue()!=="") {
             selectedPatient = {
                 Name: Ext.getCmp('givenName').getValue()+Ext.getCmp('familyName').getValue(),
                 Doctor: Ext.getCmp('doctor').getValue(),
@@ -389,6 +389,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             drugGrid[i1].unitprice=drugs.items[i1].data.unitprice ;
             drugGrid[i1].itemprice=drugs.items[i1].data.itemprice ;
             drugGrid[i1].instructions = drugs.items[i1].data.instructions;
+            drugGrid[i1].frequency = drugs.items[i1].data.frequency;
             if(drugs.items[i1].data.takeInMorning) {
                 drugGrid[i1].taken = "Morning" 
             }
@@ -599,18 +600,18 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         for (var i1 = 0; i1 < numDrugs; i1++) {
             // value of Url for get call is made here using name of drug
             if(drugs.items[i1].data.orderUuid !== "") {
-            Ext.Ajax.request({
-            url: HOST + '/ws/rest/v1/order/' + drugs.items[i1].data.orderUuid + '?!purge',  //'/ws/rest/v1/concept?q=height',
-            method: 'DELETE',
-            disableCaching: false,
-            headers: Util.getBasicAuthHeaders(),
-            failure: function (response) {
-                console.log('GET failed with response status: ' + response.status); // + response.status);
-            },
-            success: function (response) {
-                console.log("Drugs successfully deleted : " + response.status);
-            }
-        });
+                Ext.Ajax.request({
+                    url: HOST + '/ws/rest/v1/order/' + drugs.items[i1].data.orderUuid + '?!purge',  //'/ws/rest/v1/concept?q=height',
+                    method: 'DELETE',
+                    disableCaching: false,
+                    headers: Util.getBasicAuthHeaders(),
+                    failure: function (response) {
+                        console.log('GET failed with response status: ' + response.status); // + response.status);
+                    },
+                    success: function (response) {
+                        console.log("Drugs successfully deleted : " + response.status);
+                    }
+                });
             } 
             var drugData = drugs.items[i1].data;
             if(drugData.drugName !== "") {
@@ -653,6 +654,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                     autoExpireDate: enddate,
                     dose: newDosage,
                     quantity: drugData.qty,
+                    frequency: drugData.frequency, 
                     // type should be "drugorder" in order to post a drug order
                     type: 'drugorder'
                 });
@@ -694,7 +696,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                                         l1.setActiveItem(0);
                                         var l2 = Ext.getCmp('addpatientgridarea').getLayout();
                                         //  l2.setActiveItem(0);
-                                       // Ext.getCmp('drugASearchGrid').getStore().removeAll();
+                                        // Ext.getCmp('drugASearchGrid').getStore().removeAll();
                                         Ext.getCmp('prescriptionDate').setValue('');
                                         Ext.getStore('orderStore').removeAll();
                                         this.sendPrescriptionFill();
@@ -733,6 +735,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     },
 
     setOrderStore : function(x , filterStartDate) {
+        var frequencyOpdStack = "q.a.d. q.a.m. q.d.s. q.p.m. q.h. q.h.s. q.1 h, q.1° q.d., q1d q.i.d. q4PM q.o.d. qqh q.s. QWK t.d.s. t.i.d. t.i.w."
+        var freqMeans
+        var drugName;
         var docInstruction;
         var replacedStrng;
         var takeInMorning = false;
@@ -744,7 +749,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 takeInMorning = true;
                 replacedStrng = (x.data.instructions.replace(Util.Taken_Morning , ""))
             } else 
-{
+                {
                 takeInMorning = true;
                 replacedStrng = (x.data.instructions.replace(Util.Taken_Morning , ""))
             }
@@ -776,13 +781,26 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 replacedStrng = (x.data.instructions.replace(Util.Taken_Night,''))
             }
         }
-        if( replacedStrng != '' && replacedStrng != undefined) {
+        if(x.data.instructions.indexOf('#OPD#') !== -1) {
+            var freqRouteAdmin = x.data.instructions.split('#OPD#');
+            drugName = x.data.drugname+" ( "+freqRouteAdmin[1]+" ) ";
+            var instMean = this.getDrugAbbreviate(freqRouteAdmin[0]);
+            x.data.instructions = instMean;
+        } else {
+            drugName = x.data.drugname
+        }
+        if(replacedStrng !== undefined) {
             docInstruction = replacedStrng;
         } else {
-            docInstruction = x.data.instructions;
+            docInstruction  = x.data.instructions;
+        }
+        if(frequencyOpdStack.indexOf(x.data.frequency) >= 0) {
+             freqMeans = this.getDrugAbbreviate(x.data.frequency);
+        } else {
+            freqMeans = x.data.frequency;
         }
         Ext.getStore('orderStore').add({
-            drugName: x.data.drugname,
+            drugName: drugName,
             qty: x.data.quantity,
             dosage: x.data.dosage,
             drugUuid: x.data.drugUuid,
@@ -793,7 +811,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             takeInEvening: takeInEvening,
             takeInNight: takeInNight,
             date: x.data.date,
-            orderUuid: x.data.orderUuid
+            orderUuid: x.data.orderUuid,
+            frequency: freqMeans
         });
         var orderStore = Ext.getStore('orderStore');
         orderStore.filter(function(r) {
@@ -805,6 +824,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     // Function to be call when a patient is selected in the patient search results gird of advanced search
     // Sets the fields realted to patient in main screen and then calls for function getDrugOrders()
     patientSelect: function (x, searchPanel, drugOrderGrid, addPatientArea) {
+        
         Ext.getCmp('currentButton').toggle(false);
         Ext.getCmp('historyButton').toggle(false);
         Ext.getCmp('prescriptionPatientName').setValue(x.name);
@@ -821,6 +841,81 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         this.getDrugOrders(x.uuid, searchPanel, drugOrderGrid);
     },
 
+    getDrugAbbreviate : function(abbreviate) {
+        switch(abbreviate)
+        {
+            case 'q.a.d.':
+                return 'every other day';
+                break;
+            case 'q.a.m.':
+            return 'every day before noon';
+                break;
+            case 'q.d.s.':
+                return 'four times a day';
+                break;
+            case 'q.p.m.':
+                return 'every day after noon';
+                break;
+            case 'q.h.':
+                return 'every hour';
+                break;
+            case 'q.h.s.':
+                return 'every night at bedtime';
+                break;
+            case 'q.1 h, q.1°':
+                return 'every 1 hour; (can replace "1" with other numbers)';
+                break;    
+            case 'q.d., q1d':
+                return 'every day';
+                break;
+            case 'q.i.d.':
+                return 'four times a day';
+                break;
+            case 'q4PM':
+                return 'at 4pm';
+                break;
+            case 'q.o.d.':
+                return 'every other day';
+                break;
+            case 'qqh':
+                return 'every four hours';
+                break;  
+            case 'q.s.':
+                return 'a sufficient quantity';
+                break; 
+            case 'QWK':
+                return 'every week';
+                break; 
+            case 't.d.s.':
+                return 'three times a day';
+                break; 
+            case 't.i.d.':
+                return 'three times a day';
+                break; 
+            case 't.i.w.':
+                return 'three times a week';
+                break;   
+            case 'p.c.':
+                return 'after meals';
+                break;
+            case 'ex aq':
+                return 'in water';
+                break;
+            case 'cc':
+                return 'with food, (but also cubic centimetre)';
+                break;
+            case 'cf':
+                return 'with food';
+                break;
+            case 'NBO? (nil by oral)':
+                return 'without food';
+                break;
+        }
+    },
+    
+    
+    
+    
     //function for the get call for drugorder for related patient
     getDrugOrders: function (x, searchPanel, drugOrderGrid) {
         var that = this;
