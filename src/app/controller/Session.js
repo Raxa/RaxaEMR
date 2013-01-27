@@ -253,7 +253,7 @@ Ext.define('RaxaEmr.controller.Session', {
                 disableCaching: false,
                 headers: Util.getNewAccountAuthHeaders(),
                 success: function (response) {
-                    var newUser = {
+                    var newUser ={
                         isOutpatientDoctor: 'true',
                         email: formp.email,
                         userName: formp.userName,
