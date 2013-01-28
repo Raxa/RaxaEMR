@@ -911,13 +911,133 @@ var Util = {
      * The message to send when a resource fails to load from the server
      */
     getMessageLoadError: function() {
-        return "Unable to read from server";
+        return "Internet connection error";
     },
     
     /**
      * Message to send when a resource fails to write to a server
      */
     getMessageSyncError: function() {
-        return "Unable to write to server";
-    }
+        return "Internet connection error";
+    },
+
+    /**
+     * Creates a new drug in OpenMRS based on given parameters
+     * newDrugParam contains:
+     * drugName
+     * manufacturer
+     * supplier
+     * cost
+     * price
+     * dosageForm
+     * minimumDailyDose
+     * maximumDailyDose
+     * units
+     */
+    submitNewDrug: function(newDrugParam, callback) {
+        console.log(newDrugParam);
+        //getting drug concept from OpenMRS
+        //First, we check if the new drug concept exists in RxNorm/Openmrs -- if not, we will have to create
+        //a new concept
+        Ext.Ajax.request({
+            url: HOST + '/ws/rest/v1/concept?q='+newDrugParam.drugName+"&v=full",
+            method: 'GET',
+            disableCaching: false,
+            headers: Util.getBasicAuthHeaders(),
+            success: function (response) {
+                var jsonResponse = Ext.decode(response.responseText);
+                var j=0;
+                var foundDrugConcept = false;
+                while(j<jsonResponse.results.length && !foundDrugConcept){
+                    if (jsonResponse.results[j].conceptClass.description === "Drug"){
+                        foundDrugConcept = true;
+                        newDrugParam.conceptUuid = jsonResponse.results[j].uuid;
+                        this._postNewDrug(newDrugParam, callback);
+                    }
+                    j++;
+                }
+                if(!foundDrugConcept){
+                    //we need to make the concept as we didn't find it
+                    this.postConceptForNewDrug(newDrugParam, callback);
+                }
+            },
+            failure: function() {
+                Ext.Msg.alert("Error", Util.getMessageSyncError());
+                callback();
+            },
+            scope: this
+        });
+    },
+
+    // Helper to assist in REST call, which creates new drugs in OpenMRS db
+    _postNewDrug: function(newDrugParam, callback) {
+        var newDrugInfo = {
+            name: newDrugParam.manufacturer,
+            description: newDrugParam.supplier,
+            cost: newDrugParam.cost,
+            price: newDrugParam.price
+        };
+        var newDrug = {
+            concept: newDrugParam.conceptUuid,
+            name: newDrugParam.drugName,
+            dosageForm: newDrugParam.dosageForm,
+            minimumDailyDose: newDrugParam.minimumDailyDose,
+            maximumDailyDose: newDrugParam.maximumDailyDose,
+            units: newDrugParam.units,
+            drugInfo: newDrugInfo
+        };
+        var newDrugParam = Ext.encode(newDrug);
+        Ext.Ajax.request({
+            url: HOST + '/ws/rest/v1/raxacore/drug',
+            method: 'POST',
+            params: newDrugParam,
+            disableCaching: false,
+            headers: Util.getBasicAuthHeaders(),
+            success: function (response) {
+//                Ext.getStore('allDrugs').load();
+//                Ext.getStore('DrugInfos').load();
+                Ext.Msg.alert('Drug created successfully');
+                callback();
+            },
+            failure: function (response) {
+                Ext.Msg.alert('Error: unable to write to server. Enter all fields.');
+                callback();
+            },
+            scope: this
+        });
+    },
+
+    /**
+     * Creates a new concept in OpenMrs, in case drug is not part of RxNorm/OpenMrs
+     */
+    postConceptForNewDrug: function(newDrugParam, callback){
+        var newConcept = {
+            names: [{
+                name: newDrugParam.drugName, 
+                locale: "en", 
+                conceptNameType: "FULLY_SPECIFIED"
+            }],
+            datatype: localStorage.drugConceptDataTypeUuid,
+            conceptClass: localStorage.drugConceptClassUuid
+        };
+        var newConceptParam = Ext.encode(newConcept);
+        Ext.Ajax.request({
+            url: HOST + '/ws/rest/v1/concept',
+            method: 'POST',
+            params: newConceptParam,
+            disableCaching: false,
+            headers: Util.getBasicAuthHeaders(),
+            success: function (response) {
+                var jsonResponse = Ext.decode(response.responseText);
+                newDrugParam.conceptUuid = jsonResponse.uuid;
+                this._postNewDrug(newDrugParam, callback);
+            },
+            failure: function() {
+                Ext.Msg.alert("Error", Util.getMessageSyncError());
+                callback();
+            },
+            scope: this
+        });
+    },
+
 }
