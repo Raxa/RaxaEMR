@@ -8,15 +8,14 @@ Ext.define("Screener.view.NewPatient", {
     xtype: 'newPatient',
     id: 'newPatient',    
     config: {
-        centered: true,
+        
         modal: true,
         hideOnMaskTap: true,
         hidden: true,
         // Set the width and height of the panel
         width: 500,
         height: 310,
-        floating: true,
-        centered: true,
+        
         showAnimation: {
             type: 'slide',
             direction: 'up'

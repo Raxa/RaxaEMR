@@ -508,7 +508,7 @@ Ext.define("Screener.controller.Application", {
     // Opens form for creating new patient
     addPerson: function () {
         if (!this.newPatient) {
-            this.newPatient = Ext.create('Screener.view.NewPatient');
+            this.newPatient = Ext.create('Screener.view.NewPatient', {centered: true});
             Ext.Viewport.add(this.newPatient);
         }
         // Set new FIFO id so patients come and go in the queue!
