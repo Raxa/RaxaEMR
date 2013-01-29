@@ -14,12 +14,12 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
         stripeRows: false
     },
     features: [Ext.create('Ext.grid.feature.Grouping',{
-                    startCollapsed: true,
-                    groupHeaderTpl: 
-                    [
-                    '{name} ',
-                    ]
-          })],
+        startCollapsed: true,
+        groupHeaderTpl: 
+        [
+        '{name} ',
+        ]
+    })],
     initComponent: function () {    
         var drugEditor = this;
         this.addEvents(['deleteDrug']);
@@ -76,7 +76,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
             text: 'Times',
             width: 80,
             id: 'timesActionId',
-            hidden:false,
             renderer: function (value, metadata, record) {
                 if (record.get('takeInMorning')) {
                     Ext.getCmp('prescribedDrugs').columns[2].items[0].icon = '../resources/img/sunriseselected.png';
@@ -133,15 +132,89 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
         },
         {
             xtype: 'gridcolumn',
-            width: 120,
+            width: 150,
             dataIndex: 'frequency',
             text: 'Frequency',
+            hidden: true,
             resizable: false,
             id: 'frequencyTimesId',
-            editor: {
-                xtype: 'textfield',
-                allowDecimals: true,
-                allowBlank: true
+            editor: 
+            {
+                xtype: 'combobox',
+                allowBlank: false,
+                editable: true,
+                queryMode: 'local',
+                store: new Ext.data.SimpleStore({
+                    fields: ['value', 'title'],
+                    data: [[
+                    '',
+                    ''
+                    ],[
+                    'q.a.d.',
+                    'every other day'
+                    ],[
+                    'q.a.m.',
+                    'every day before noon'
+                    ],[
+                    'q.d.s.',
+                    'four times a day'
+                    ],[
+                    'q.p.m.',
+                    'every day after noon'
+                    ],[
+                    'q.h.',
+                    'every hour'
+                    ],[
+                    'q.h.s.',
+                    'every night at bedtime'
+                    ],[
+                    'q.1 h, q.1°',
+                    'every 1 hour; (can replace "1" with other numbers)'
+                    ],[
+                    'q.d., q1d',
+                    'every day'
+                    ],[
+                    'q.i.d.',
+                    'four times a day'
+                    ],[
+                    'q4PM',
+                    'at 4pm'
+                    ],[
+                    'q.o.d.',
+                    'every other day'
+                    ],
+                    [
+                    'qqh',
+                    'every four hours'
+                    ],[
+                    'q.s.',
+                    'a sufficient quantity'
+                    ],[
+                    'QWK',
+                    'every week'
+                    ],[
+                    't.d.s.',
+                    'three times a day'
+                    ],[
+                    't.i.d.',
+                    'three times a day'
+                    ],[
+                    't.i.w.',
+                    'three times a week'
+                    ],]
+                }),
+                valueField: 'title',
+                displayField: 'value',
+                enableKeyEvents: true,
+                forceSelection: true,
+                listeners: {
+                    'focus': {
+                        fn: function (comboField) {
+                            comboField.expand();
+                        }, 
+                        scope: this
+                    }
+                }
             }
         },
         {
@@ -218,20 +291,20 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
                     },
                     'select':{
                         fn: function(comboField, records){
-                                var batchUuid = records[0].data.uuid;
-                                var batch = records[0].data.batch;
-                                var row = (Ext.getCmp('prescribedDrugs').getSelectionModel().selection.row);
-                                Ext.getStore('orderStore').getAt(row).set('batchUuid', batchUuid);
-                                var requiredQuantity = Ext.getStore('orderStore').getAt(row).get('qty');
-                                var quantityInBatch = records[0].data.quantity;
-                                //if current batch doesn't cover entire quantity required, reduce quantity and add new row
-                                if(quantityInBatch < requiredQuantity){
-                                    Ext.getStore('orderStore').getAt(row).set('qty', quantityInBatch);
-                                    Ext.msg.Alert('Batch is low');
-                                }
+                            var batchUuid = records[0].data.uuid;
+                            var batch = records[0].data.batch;
+                            var row = (Ext.getCmp('prescribedDrugs').getSelectionModel().selection.row);
+                            Ext.getStore('orderStore').getAt(row).set('batchUuid', batchUuid);
+                            var requiredQuantity = Ext.getStore('orderStore').getAt(row).get('qty');
+                            var quantityInBatch = records[0].data.quantity;
+                            //if current batch doesn't cover entire quantity required, reduce quantity and add new row
+                            if(quantityInBatch < requiredQuantity){
+                                Ext.getStore('orderStore').getAt(row).set('qty', quantityInBatch);
+                                Ext.msg.Alert('Batch is low');
                             }
                         }
                     }
+                }
             }
         },
         {

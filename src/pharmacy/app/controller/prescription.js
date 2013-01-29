@@ -614,7 +614,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 });
             } 
             var drugData = drugs.items[i1].data;
-            if(drugData.drugName !== "") {
+         if(drugData.drugName !== "") {
                 var Url = HOST + '/ws/rest/v1/raxacore/drug/';
                 Url = Url + drugData.drugUuid;
                 concept.push(Ext.create('RaxaEmr.Pharmacy.store.drugConcept'));
@@ -626,7 +626,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                     reader: {
                         type: 'json'
                     }
-                });
+               });
                 var startdate = new Date();
                 // value of end date depending on the duration in days
                 // TODO: Will this work? If you are adding "days" via drugData.duration and initially day was 31 + 5 days .. e.g. how would it handle the 36th of March?
@@ -654,7 +654,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                     autoExpireDate: enddate,
                     dose: newDosage,
                     quantity: drugData.qty,
-                    frequency: drugData.frequency, 
+                    frequency: drugData.frequency,
+                    units: drugData.units,
                     // type should be "drugorder" in order to post a drug order
                     type: 'drugorder'
                 });
@@ -735,8 +736,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     },
 
     setOrderStore : function(x , filterStartDate) {
+        var units;
         var frequencyOpdStack = "q.a.d. q.a.m. q.d.s. q.p.m. q.h. q.h.s. q.1 h, q.1° q.d., q1d q.i.d. q4PM q.o.d. qqh q.s. QWK t.d.s. t.i.d. t.i.w."
-        var freqMeans
+        var freqMeans;
         var drugName;
         var docInstruction;
         var replacedStrng;
@@ -789,20 +791,28 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         } else {
             drugName = x.data.drugname
         }
+        if(x.data.units.indexOf('#OPD#') !== -1) {
+          var unitsDur = x.data.units.split('#OPD#');
+          units = unitsDur[0];
+        } else {
+            units = x.data.dosage;
+        }
         if(replacedStrng !== undefined) {
             docInstruction = replacedStrng;
         } else {
             docInstruction  = x.data.instructions;
         }
-        if(frequencyOpdStack.indexOf(x.data.frequency) >= 0) {
+        if(frequencyOpdStack.indexOf(x.data.frequency) >= 0 || this.getDrugAbbreviate(x.data.frequency) !== undefined) {
              freqMeans = this.getDrugAbbreviate(x.data.frequency);
+             Ext.getCmp('timesActionId').hide();
+             Ext.getCmp('frequencyTimesId').show();
         } else {
             freqMeans = x.data.frequency;
         }
         Ext.getStore('orderStore').add({
             drugName: drugName,
             qty: x.data.quantity,
-            dosage: x.data.dosage,
+            dosage: units,
             drugUuid: x.data.drugUuid,
             duration: Util.daysBetween(x.data.startDate, x.data.endDate),
             instructions: docInstruction,
@@ -845,69 +855,91 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         switch(abbreviate)
         {
             case 'q.a.d.':
+            case 'every other day':   
                 return 'every other day';
                 break;
             case 'q.a.m.':
+            case 'every day before noon':    
             return 'every day before noon';
                 break;
             case 'q.d.s.':
+            case 'four times a day':   
                 return 'four times a day';
                 break;
             case 'q.p.m.':
+            case  'every day after noon':   
                 return 'every day after noon';
                 break;
             case 'q.h.':
+            case  'every hour':   
                 return 'every hour';
                 break;
             case 'q.h.s.':
+            case 'every night at bedtime':    
                 return 'every night at bedtime';
                 break;
             case 'q.1 h, q.1°':
+            case 'every 1 hour; (can replace "1" with other numbers)':    
                 return 'every 1 hour; (can replace "1" with other numbers)';
                 break;    
             case 'q.d., q1d':
+            case  'every day':  
                 return 'every day';
                 break;
             case 'q.i.d.':
+            case 'four times a day':    
                 return 'four times a day';
                 break;
             case 'q4PM':
+            case 'at 4pm':    
                 return 'at 4pm';
                 break;
             case 'q.o.d.':
+            case 'every other day':    
                 return 'every other day';
                 break;
             case 'qqh':
+            case 'every four hours':    
                 return 'every four hours';
                 break;  
             case 'q.s.':
+            case 'a sufficient quantity':    
                 return 'a sufficient quantity';
                 break; 
             case 'QWK':
+            case 'every week':    
                 return 'every week';
                 break; 
             case 't.d.s.':
+            case 'three times a day':    
                 return 'three times a day';
                 break; 
             case 't.i.d.':
+            case 'three times a day':   
                 return 'three times a day';
                 break; 
             case 't.i.w.':
+            case 'three times a week':    
                 return 'three times a week';
                 break;   
             case 'p.c.':
+            case 'after meals':   
                 return 'after meals';
                 break;
             case 'ex aq':
+            case 'in water':    
                 return 'in water';
                 break;
             case 'cc':
+            case 'with food, (but also cubic centimetre)':    
                 return 'with food, (but also cubic centimetre)';
                 break;
             case 'cf':
+            case 'with food':    
                 return 'with food';
                 break;
             case 'NBO? (nil by oral)':
+            case 'without food':   
                 return 'without food';
                 break;
         }
@@ -962,6 +994,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                     }
                     else{
                         Ext.Msg.alert("Results", "No prescriptions found for patient")
+                        Ext.getCmp('timesActionId').show();
+                        Ext.getCmp('frequencyTimesId').hide();
                     }
                 }
                 else{

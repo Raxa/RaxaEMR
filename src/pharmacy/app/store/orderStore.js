@@ -34,5 +34,10 @@ Ext.define('RaxaEmr.Pharmacy.store.orderStore', {
     },
     {
         name : 'date'
-    }]
+    },
+    {
+        name: 'units',
+        type: 'string'
+    },
+]
 });
