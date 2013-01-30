@@ -30,64 +30,64 @@ Ext.define("RaxaEmr.view.NewProviderDetails", {
                 label: 'Last Name'
             },
             {
-            xtype  : 'container',
-            id: 'sexRadioGroup',
-            layout : {
-                type  : 'hbox',
-                align : 'strech'
+                xtype  : 'container',
+                id: 'sexRadioGroup',
+                layout : {
+                    type  : 'hbox',
+                    align : 'strech'
+                },
+                items  : [
+                {
+                    xtype : 'radiofield',
+                    label : 'Male',
+                    value: 'M',
+                    name  : 'choice',
+                    labelWidth: 70,
+                    flex  : 1
+                },
+                {
+                    xtype : 'radiofield',
+                    label : 'Female',
+                    value: 'F',
+                    name  : 'choice',
+                    labelWidth: 90,
+                    flex  : 1
+                },
+                {
+                    xtype : 'radiofield',
+                    label : 'Other', 
+                    value: 'O',
+                    name  : 'choice',
+                    labelWidth: 70,
+                    flex  : 1
+                }
+                ]
             },
-            items  : [
-            {
-                xtype : 'radiofield',
-                label : 'Male',
-                value: 'M',
-                name  : 'choice',
-                labelWidth: 70,
-                flex  : 1
-            },
-            {
-                xtype : 'radiofield',
-                label : 'Female',
-                value: 'F',
-                name  : 'choice',
-                labelWidth: 90,
-                flex  : 1
-            },
-            {
-                xtype : 'radiofield',
-                label : 'Other', 
-                value: 'O',
-                name  : 'choice',
-                labelWidth: 70,
-                flex  : 1
-            }
-            ]
-        },
-//            {
-//                xtype: 'textfield',
-//                id: 'qualification',
-//                name: 'qualification',
-//                label: "Qualification"
-//            },
-//            {
-//                xtype: 'textfield',
-//                id: 'regNumber',
-//                name: 'regNumber',
-//                inputType: 'regNumber',
-//                label: 'Reg Number'
-//            },
-//            {
-//                xtype: 'selectfield',
-//                label: 'Type of physician',
-//                name: 'typeOfPhysician',
-//                options: [{
-//                    text: 'Skin Doctor',
-//                    value: 'skinDoctor'
-//                }, {
-//                    text: 'General Physician',
-//                    value: 'generalPhysician'
-//                }]
-//            },
+            //            {
+            //                xtype: 'textfield',
+            //                id: 'qualification',
+            //                name: 'qualification',
+            //                label: "Qualification"
+            //            },
+            //            {
+            //                xtype: 'textfield',
+            //                id: 'regNumber',
+            //                name: 'regNumber',
+            //                inputType: 'regNumber',
+            //                label: 'Reg Number'
+            //            },
+            //            {
+            //                xtype: 'selectfield',
+            //                label: 'Type of physician',
+            //                name: 'typeOfPhysician',
+            //                options: [{
+            //                    text: 'Skin Doctor',
+            //                    value: 'skinDoctor'
+            //                }, {
+            //                    text: 'General Physician',
+            //                    value: 'generalPhysician'
+            //                }]
+            //            },
             {
                 xtype: 'textfield',
                 id: 'nameOfSetup',
@@ -152,30 +152,32 @@ Ext.define("RaxaEmr.view.NewProviderDetails", {
                 label: 'Longitude'
             },
             {
-              xtype  : 'container',
-              id: 'nextBackButton',
-              layout : {
-                type  : 'hbox',
-                align : 'strech'
-              },  
-              items: [
-                  {
-                xtype: 'button',
-                itemId: 'backProviderDetailsButton',
-                text: 'Back',
-                ui: 'action' 
-                  },
-                  {
-                      xtype: 'spacer',
-                      width: 50
-                  },
-                  {
-                xtype: 'button',
-                itemId: 'saveProviderDetailsButton',
-                text: 'Next',
-                ui: 'action'  
-                  },
-              ]
+                xtype  : 'container',
+                id: 'nextBackButton',
+                layout : {
+                    type  : 'hbox',
+                    pack : 'center'
+                },  
+                items: [
+                {
+                    xtype: 'button',
+                    itemId: 'backProviderDetailsButton',
+                    text: 'Back',
+                    ui: 'action',
+                    width : 150
+                },
+                {
+                    xtype: 'spacer',
+                    width: 50
+                },
+                {
+                    xtype: 'button',
+                    itemId: 'saveProviderDetailsButton',
+                    text: 'Next',
+                    ui: 'action',
+                    width : 150
+                },
+                ]
             },
             ]
         },

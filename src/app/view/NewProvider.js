@@ -13,15 +13,16 @@ Ext.define("RaxaEmr.view.NewProvider", {
         height: 480,
         items: [
         {
-          xtype: 'label',
-          html: '<h1 style="text-align:center;font-size:30px;">Adding New Provider Account</h1><br><br>'
+            xtype: 'label',
+            html: '<h1 style="text-align:center;font-size:30px;">Adding New Provider Account</h1><br><br>'
         },
         
         {
             xtype: 'textfield',
             itemId: 'email',
             name: 'email',
-            label: "Email"
+            label: "Email",
+            flex:1
         },
         {
             xtype: 'textfield',
@@ -50,17 +51,24 @@ Ext.define("RaxaEmr.view.NewProvider", {
             label: "Phone"
         },
         {
-            xtype: 'spacer'    
-        },
-        {
-            xtype: 'spacer'    
-        },
-        {
-            xtype: 'button',
-            itemId: 'saveProviderButton',
-            text: 'Next',
-            ui: 'action'
-        }]
+            xtype  : 'container',
+            id: 'nextButton',
+            layout : {
+                type  : 'hbox',
+                pack : 'center'
+            },
+            flex : 2,
+            items: [
+        
+            {
+                xtype: 'button',
+                itemId: 'saveProviderButton',
+                text: 'Next',
+                ui: 'action',
+                width : 200,
+            }]
+            }
+        ]
     },
     saveForm: function () {
         return this.getValues();
