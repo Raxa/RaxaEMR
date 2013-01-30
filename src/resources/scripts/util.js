@@ -137,7 +137,7 @@ var TIME_BEFORE_NOW = 0.1;
 
 // The Util class provids several methods that are shared by the core, apps and modules
 var Util = {
-    conceptVersion : "2012-01-21",
+    conceptVersion : "0.3-SNAPSHOT",
     // Enum to capture pages in each app. E.g. Util.PAGES.SCREENER.PAGE_NAME
     PAGES: {},
     

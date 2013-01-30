@@ -7,6 +7,8 @@
         { "name": "contactByPhoneUuidpersonattributetype", "uuid": "raxa00000-0000-0000-0000-000000000011" }, 
         { "name": "diastolicbloodpressureUuidconcept", "uuid": "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }, 
         { "name": "districtUuidpersonattributetype", "uuid": "raxa00000-0000-0000-0000-000000000012" }, 
+        { "name": "drugConceptClassUuid", "uuid": "8d490dfc-c2cc-11de-8d13-0010c6dffd0f" }, 
+        { "name": "drugConceptDataTypeUuid", "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f" }, 
         { "name": "educationUuidpersonattributetype", "uuid": "raxa00000-0000-0000-0000-000000000014" }, 
         { "name": "healthCenterUuidpersonattributetype", "uuid": "8d87236c-c2cc-11de-8d13-0010c6dffd0f" }, 
         { "name": "heightUuidconcept", "uuid": "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },

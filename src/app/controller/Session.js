@@ -396,7 +396,7 @@ Ext.define('RaxaEmr.controller.Session', {
     //This function determines the login state
     //If already logged in, it redirects to the dashboard
     getLoginState: function () {
-        if(!localStorage.getItem("outUuidencountertype")){
+        if(localStorage.getItem("configVersion") !== Util.conceptVersion){
             Startup.getResourceUuid();
         }
         var loginState = Ext.getCmp('mainView').getActiveItem()._activeItem;
