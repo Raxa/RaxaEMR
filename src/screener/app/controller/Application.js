@@ -533,6 +533,10 @@ Ext.define("Screener.controller.Application", {
             if( formp.dob !== "" && formp.dob.length > 0 ) {
                 newPatient.birthdate =  formp.dob;
             }
+            if(Ext.getCmp('contactNumber').getValue()!==""){
+                newPatient.attributes = new Array({attributeType: localStorage.primaryContactUuidpersonattributetype,
+                    value: Ext.getCmp('contactNumber').getValue()})
+            }
             var newPatientParam = Ext.encode(newPatient);
             Ext.Ajax.request({
                 scope:this,

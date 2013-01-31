@@ -7,15 +7,15 @@ Ext.define("Screener.view.NewPatient", {
     extend: 'Ext.form.Panel',
     xtype: 'newPatient',
     id: 'newPatient',    
-    config: {
-        
+    config: {      
         modal: true,
         hideOnMaskTap: true,
         hidden: true,
         // Set the width and height of the panel
         width: 500,
-        height: 310,
-        
+        height: 390,
+        floating: true,
+        centered: true,
         showAnimation: {
             type: 'slide',
             direction: 'up'
@@ -124,6 +124,11 @@ Ext.define("Screener.view.NewPatient", {
                 flex  : 1
             }
             ]
+        },{
+            xtype: 'textfield',
+            id: 'contactNumber',
+            label: 'Contact Number',
+            margin: '5 0 5 0'
         },{
             xtype: 'button',
             id: 'savePatientButton',
