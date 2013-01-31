@@ -7,14 +7,13 @@ Ext.define("Screener.view.NewPatient", {
     extend: 'Ext.form.Panel',
     xtype: 'newPatient',
     id: 'newPatient',    
-    config: {
-        centered: true,
+    config: {      
         modal: true,
         hideOnMaskTap: true,
         hidden: true,
         // Set the width and height of the panel
         width: 500,
-        height: 350,
+        height: 390,
         floating: true,
         centered: true,
         showAnimation: {
@@ -128,7 +127,7 @@ Ext.define("Screener.view.NewPatient", {
         },{
             xtype: 'textfield',
             id: 'contactNumber',
-            label: 'Contact Number', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.giv_name')
+            label: 'Contact Number',
             margin: '5 0 5 0'
         },{
             xtype: 'button',
