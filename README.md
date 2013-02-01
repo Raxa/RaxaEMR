@@ -137,15 +137,19 @@ Common files - e.g. models, stores, views - should go in ```/src/common/```. Gro
 ```
 
 This way it's easy to include a plugin in an application by 
-1. Adding a SetPath command to ```app.js```
+
+First, adding a SetPath command to ```app.js```
+
 ```
 Ext.Loader.setPath({
     'RaxaEmr.common.<plugin_name>': '/src/common/<plugin_name≥', 
     ...
 });
 ```
-2. Updating .sencha to include the plugins files
+
+Next, updating ```src/<module>/.sencha/app/sencha.cfg``` to include the plugin
 ```
 app.<plugin_name> = ${app.dir}/../common/<plugin_name>
-app.classpath=${app.dir}/app.js,${app.dir}/app,${app.<plugin_name>},...
+app.classpath=${app.dir}/app.js,${app.dir}/app,${app.<plugin_name>}
+
 ```
