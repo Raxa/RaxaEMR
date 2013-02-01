@@ -1,6 +1,8 @@
 /**
  * @aside guide tabs
  * @aside video tabs-toolbars
+ * @aside example tabs
+ * @aside example tabs-bottom
  *
  * Tab Panels are a great way to allow the user to switch between several pages that are all full screen. Each
  * Component in the Tab Panel gets its own Tab, which shows the Component when tapped on. Tabs can be positioned at
@@ -135,13 +137,6 @@ Ext.define('Ext.tab.Panel', {
             delegate: '> tabbar',
             scope   : this
         });
-
-        //<debug>
-        var layout = this.getLayout();
-        if (layout && !layout.isCard) {
-            Ext.Logger.error('The base layout for a TabPanel must always be a Card Layout');
-        }
-        //</debug>
     },
 
     /**
@@ -202,6 +197,9 @@ Ext.define('Ext.tab.Panel', {
 
     /**
      * Updates this container with the new active item.
+     * @param {Object} tabBar
+     * @param {Object} newTab
+     * @return {Boolean}
      */
     doTabChange: function(tabBar, newTab) {
         var oldActiveItem = this.getActiveItem(),
@@ -214,6 +212,8 @@ Ext.define('Ext.tab.Panel', {
 
     /**
      * Creates a new {@link Ext.tab.Bar} instance using {@link Ext#factory}.
+     * @param {Object} config
+     * @return {Object}
      * @private
      */
     applyTabBar: function(config) {
