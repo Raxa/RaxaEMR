@@ -492,12 +492,12 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             {
                 componentId: 'patientPrimaryContact', 
                 uuid: localStorage.primaryContactUuidpersonattributetype
-                },
+            },
 
-                {
+            {
                 componentId: 'patientSecondaryContact', 
                 uuid: localStorage.secondaryContactUuidpersonattributetype
-                }
+            }
             ];
             var addAttribute = function (componentId, attributeTypeUuid) {
                 jsonperson.data.attributes.push({
@@ -637,7 +637,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 });
             } 
             var drugData = drugs.items[i1].data;
-         if(drugData.drugName !== "") {
+            if(drugData.drugName !== "") {
                 var Url = HOST + '/ws/rest/v1/raxacore/drug/';
                 Url = Url + drugData.drugUuid;
                 concept.push(Ext.create('RaxaEmr.Pharmacy.store.drugConcept'));
@@ -649,7 +649,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                     reader: {
                         type: 'json'
                     }
-               });
+                });
                 var startdate = new Date();
                 // value of end date depending on the duration in days
                 // TODO: Will this work? If you are adding "days" via drugData.duration and initially day was 31 + 5 days .. e.g. how would it handle the 36th of March?
@@ -776,7 +776,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 takeInMorning = true;
                 replacedStrng = (x.data.instructions.replace(Util.Taken_Morning , ""))
             } else 
-                {
+{
                 takeInMorning = true;
                 replacedStrng = (x.data.instructions.replace(Util.Taken_Morning , ""))
             }
@@ -808,18 +808,15 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 replacedStrng = (x.data.instructions.replace(Util.Taken_Night,''))
             }
         }
-        if(x.data.instructions.indexOf('#OPD#') !== -1) {
-            var freqRouteAdmin = x.data.instructions.split('#OPD#');
+        if(x.data.instructions.indexOf('#specificReqFlag#') !== -1) {
+            var freqRouteAdmin = x.data.instructions.split('#specificReqFlag#');
             drugName = x.data.drugname+" ( "+freqRouteAdmin[1]+" ) ";
             var instMean = this.getDrugAbbreviate(freqRouteAdmin[0]);
+            var unitsDur = x.data.units;
+            units = unitsDur;
             x.data.instructions = instMean;
         } else {
-            drugName = x.data.drugname
-        }
-        if(x.data.units.indexOf('#OPD#') !== -1) {
-          var unitsDur = x.data.units.split('#OPD#');
-          units = unitsDur[0];
-        } else {
+            drugName = x.data.drugname;
             units = x.data.dosage;
         }
         if(replacedStrng !== undefined) {
@@ -828,9 +825,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             docInstruction  = x.data.instructions;
         }
         if(frequencyOpdStack.indexOf(x.data.frequency) >= 0 || this.getDrugAbbreviate(x.data.frequency) !== undefined) {
-             freqMeans = this.getDrugAbbreviate(x.data.frequency);
-             Ext.getCmp('timesActionId').hide();
-             Ext.getCmp('frequencyTimesId').show();
+            freqMeans = this.getDrugAbbreviate(x.data.frequency);
+            Ext.getCmp('timesActionId').hide();
+            Ext.getCmp('frequencyTimesId').show();
         } else {
             freqMeans = x.data.frequency;
         }
@@ -880,91 +877,91 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         switch(abbreviate)
         {
             case 'q.a.d.':
-            case 'every other day':   
+            case 'every other day':
                 return 'every other day';
                 break;
             case 'q.a.m.':
-            case 'every day before noon':    
-            return 'every day before noon';
+            case 'every day before noon':
+                return 'every day before noon';
                 break;
             case 'q.d.s.':
-            case 'four times a day':   
+            case 'four times a day':
                 return 'four times a day';
                 break;
             case 'q.p.m.':
-            case  'every day after noon':   
+            case  'every day after noon':
                 return 'every day after noon';
                 break;
             case 'q.h.':
-            case  'every hour':   
+            case  'every hour':
                 return 'every hour';
                 break;
             case 'q.h.s.':
-            case 'every night at bedtime':    
+            case 'every night at bedtime':
                 return 'every night at bedtime';
                 break;
             case 'q.1 h, q.1°':
-            case 'every 1 hour; (can replace "1" with other numbers)':    
+            case 'every 1 hour; (can replace "1" with other numbers)':
                 return 'every 1 hour; (can replace "1" with other numbers)';
                 break;    
             case 'q.d., q1d':
-            case  'every day':  
+            case  'every day':
                 return 'every day';
                 break;
             case 'q.i.d.':
-            case 'four times a day':    
+            case 'four times a day':
                 return 'four times a day';
                 break;
             case 'q4PM':
-            case 'at 4pm':    
+            case 'at 4pm':
                 return 'at 4pm';
                 break;
             case 'q.o.d.':
-            case 'every other day':    
+            case 'every other day':
                 return 'every other day';
                 break;
             case 'qqh':
-            case 'every four hours':    
+            case 'every four hours':
                 return 'every four hours';
                 break;  
             case 'q.s.':
-            case 'a sufficient quantity':    
+            case 'a sufficient quantity':
                 return 'a sufficient quantity';
                 break; 
             case 'QWK':
-            case 'every week':    
+            case 'every week':
                 return 'every week';
                 break; 
             case 't.d.s.':
-            case 'three times a day':    
+            case 'three times a day':
                 return 'three times a day';
                 break; 
             case 't.i.d.':
-            case 'three times a day':   
+            case 'three times a day':
                 return 'three times a day';
                 break; 
             case 't.i.w.':
-            case 'three times a week':    
+            case 'three times a week':
                 return 'three times a week';
                 break;   
             case 'p.c.':
-            case 'after meals':   
+            case 'after meals':
                 return 'after meals';
                 break;
             case 'ex aq':
-            case 'in water':    
+            case 'in water':
                 return 'in water';
                 break;
             case 'cc':
-            case 'with food, (but also cubic centimetre)':    
+            case 'with food, (but also cubic centimetre)':
                 return 'with food, (but also cubic centimetre)';
                 break;
             case 'cf':
-            case 'with food':    
+            case 'with food':
                 return 'with food';
                 break;
             case 'NBO? (nil by oral)':
-            case 'without food':   
+            case 'without food':
                 return 'without food';
                 break;
         }
@@ -1023,11 +1020,11 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                         }
                     }
                     else{
-            if(searchPanel !== undefined) {
-                        Ext.Msg.alert("Results", "No prescriptions found for patient")
-                        Ext.getCmp('timesActionId').show();
-                        Ext.getCmp('frequencyTimesId').hide();
-}
+                        if(searchPanel !== undefined) { 
+                            Ext.Msg.alert("Results", "No prescriptions found for patient")
+                            Ext.getCmp('timesActionId').show();
+                            Ext.getCmp('frequencyTimesId').hide();
+                        }
                        
                     }
                 }
