@@ -15,7 +15,7 @@ Ext.define("Screener.view.NewPatient", {
         width: 500,
         height: 390,
         floating: true,
-        centered: true,
+        //centered: true,
         showAnimation: {
             type: 'slide',
             direction: 'up'
