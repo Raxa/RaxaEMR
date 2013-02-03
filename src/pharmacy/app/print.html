@@ -17,45 +17,48 @@
 
 -->
 <html>
-    <head>
-        <title>JSS Pharmacy Prescription</title>
-    </head>
-    <body>
-        <div style="height: 2px; width: 100%; background: lightblue"></div> 
-        <table align="center" style="width: 500px; align:center;" >
-            <td>
-                <p style="text-align: center; ">
-                    <img src="../../resources/img/jss-icon.png" style="float: center; width: 100px; height: 100px; "
-                         />
-                </p>
-            </td>
-            <td width="75%">
-                <h2 style="text-align: center; ">Jan Swasthya Sahyog <br> Ganiari, Bilaspur </h2>
-            </td>
-        </table>
-        <div style="height: 2px; width: 100%; background: lightblue"></div> 
-        <table border="0" cellpadding="1" cellspacing="1" style="width: 100%; height: auto">
-            <tbody>
-                <tr>
-            <div id='tab1' style='width: 100%'>
-            </div>
-        </tr>  
-        <div style="height: 2px; width: 100%; background: lightblue"></div> 
-        <tr>
-        <div id='tab2' style='width: 100%'>
-        </div>
-    </tr>
-</tbody>
-</table>
-<div style="height: 2px; width: 100%; background: lightblue"></div>
-<script>
-    var total = 0;
-    var selectedPatient = JSON.parse(localStorage.getItem('selectedPatient'));
-    var selectedPatientAttributes = ['Name', 'Age'];
-    var tab = '<table style="width:100%"><tbody>';
-    for (i = 0; i < selectedPatientAttributes.length; i++) {
-        if (selectedPatient[selectedPatientAttributes[i]]) {
-            tab += "<tr style=\"text-align='center'; background-color='#B0B0FF'\"> <td ><strong>" + selectedPatientAttributes[i] + "</td><td>" + selectedPatient[selectedPatientAttributes[i]] + "</td></tr>";
+<head>
+    <title>JSS Pharmacy Prescription</title>
+</head>
+<body>
+    <div style="height: 2px; width: 100%; background: lightblue"></div> 
+    <table align="center" style="width: 500px; align:center;" >
+        <td>
+            <p style="text-align: center; ">
+                <img src="../../resources/img/jss-icon.png" style="float: center; width: 100px; height: 100px; "
+                />
+            </p>
+        </td>
+        <td width="75%">
+            <h2 style="text-align: center; ">Jan Swasthya Sahyog <br> Ganiari, Bilaspur </h2>
+        </td>
+    </table>
+    <div style="height: 2px; width: 100%; background: lightblue"></div> 
+    <table border="0" cellpadding="1" cellspacing="1" style="width: 100%; height: auto">
+        <tbody>
+            <tr>
+                    <div id='tab1' style='width: 100%'>
+                    </div>
+    </tr>  
+                    <div style="height: 2px; width: 100%; background: lightblue"></div> 
+                    <tr>
+                    <div id='tab2' style='width: 100%'>
+                    </div>
+            </tr>
+        </tbody>
+    </table>
+    <div style="height: 2px; width: 100%; background: lightblue"></div>
+    <script>
+        var total = 0;
+        var selectedPatient = JSON.parse(localStorage.getItem('selectedPatient'));
+        var selectedPatientAttributes = ['Name', 'Age', 'PatientId', 'PrescriptionDate'];
+        var tab = '<table style="width:100%"><tbody>';
+        for (i = 0; i < selectedPatientAttributes.length; i++) {
+            if (selectedPatient[selectedPatientAttributes[i]]) {
+
+                tab += "<tr style=\"text-align='center'; background-color='#B0B0FF'\"> <td ><strong>" + selectedPatientAttributes[i] + "</td><td>" + selectedPatient[selectedPatientAttributes[i]] + "</td></tr>";
+
+            }
         }
     }
     tab += '</tbody></table>';

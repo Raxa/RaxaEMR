@@ -7,7 +7,7 @@ nbproject
 WEB-INF
 META-INF
 pom.xml
-/build/
+build/
 /dist/
 *.swp
 .DS_Store

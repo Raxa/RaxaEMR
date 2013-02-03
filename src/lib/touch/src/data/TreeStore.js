@@ -98,7 +98,7 @@ Ext.define('Ext.data.TreeStore', {
 
         if (!root.isModel) {
             Ext.applyIf(root, {
-                id: me.getDefaultRootId(),
+                id: me.getStoreId() + '-' + me.getDefaultRootId(),
                 text: 'Root',
                 allowDrag: false
             });
@@ -241,6 +241,7 @@ Ext.define('Ext.data.TreeStore', {
      * object that is created and then sent to the proxy's {@link Ext.data.proxy.Proxy#read} function.
      * The options can also contain a node, which indicates which node is to be loaded. If not specified, it will
      * default to the root node.
+     * @return {Object}
      */
     load: function(options) {
         options = options || {};
@@ -269,13 +270,17 @@ Ext.define('Ext.data.TreeStore', {
         }
     },
 
-    // inherit docs
+    /**
+     * @inheritdoc
+     */
     removeAll: function() {
-        this.getRootNode().removeAll(true);
+        this.getRoot().removeAll(true);
         this.callParent(arguments);
     },
 
-    // inherit docs
+    /**
+     * @inheritdoc
+     */
     onProxyLoad: function(operation) {
         var me = this,
             records = operation.getRecords(),
@@ -289,9 +294,10 @@ Ext.define('Ext.data.TreeStore', {
         }
         node.endEdit();
 
-        node.fireEvent('load', node, records, successful);
-
         me.loading = false;
+        me.loaded = true;
+
+        node.fireEvent('load', node, records, successful);
         me.fireEvent('load', this, records, successful, operation);
 
         //this is a callback that would have been passed to the 'read' function and is optional
@@ -301,8 +307,8 @@ Ext.define('Ext.data.TreeStore', {
     /**
      * Fills a node with a series of child records.
      * @private
-     * @param {Ext.data.NodeInterface} node The node to fill
-     * @param {Ext.data.Model[]} records The records to add
+     * @param {Ext.data.NodeInterface} node The node to fill.
+     * @param {Ext.data.Model[]} records The records to add.
      */
     fillNode: function(node, records) {
         var ln = records ? records.length : 0,

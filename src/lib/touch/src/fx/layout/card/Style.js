@@ -106,5 +106,11 @@ Ext.define('Ext.fx.layout.card.Style', {
             Ext.Animator.run([outAnimation, inAnimation]);
             controller.pause();
         }
+    },
+
+    destroy:  function () {
+        Ext.destroy(this.getInAnimation(), this.getOutAnimation());
+
+        this.callParent(arguments);
     }
 });
