@@ -15,6 +15,7 @@
  */
 Ext.define('RaxaEmr.controller.Session', {
     extend: 'Ext.app.Controller',
+    requires: ['RaxaEmr.view.Main', 'RaxaEmr.view.NewAccount'],
     config: {
 
 
