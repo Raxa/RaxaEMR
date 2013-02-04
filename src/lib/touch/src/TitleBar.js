@@ -2,7 +2,7 @@
  * {@link Ext.TitleBar}'s are most commonly used as a docked item within an {@link Ext.Container}.
  *
  * The main difference between a {@link Ext.TitleBar} and an {@link Ext.Toolbar} is that
- * the {@link #title} configuration is **always** centered horiztonally in a {@link Ext.TitleBar} between
+ * the {@link #title} configuration is **always** centered horizontally in a {@link Ext.TitleBar} between
  * any items aligned left or right.
  *
  * You can also give items of a {@link Ext.TitleBar} an `align` configuration of `left` or `right`
@@ -70,7 +70,7 @@
  *             {
  *                 align: 'right',
  *                 text: 'Another button'
- *             },
+ *             }
  *         ]
  *     });
  *
@@ -86,11 +86,10 @@ Ext.define('Ext.TitleBar', {
     requires: [
         'Ext.Button',
         'Ext.Title',
-        'Ext.Spacer',
-        'Ext.util.SizeMonitor'
+        'Ext.Spacer'
     ],
 
-    // private
+    // @private
     isToolbar: true,
 
     config: {
@@ -126,6 +125,8 @@ Ext.define('Ext.TitleBar', {
          * @accessor
          */
         defaultType: 'button',
+
+        height: '2.6em',
 
         /**
          * @cfg
@@ -276,9 +277,10 @@ Ext.define('Ext.TitleBar', {
         //set the min/max width of the left button
         var leftBox = this.leftBox,
             leftButton = leftBox.down('button'),
+            singleButton = leftBox.getItems().getCount() == 1,
             leftBoxWidth, maxButtonWidth;
 
-        if (leftButton) {
+        if (leftButton && singleButton) {
             if (leftButton.getWidth() == null) {
                 leftButton.renderElement.setWidth('auto');
             }

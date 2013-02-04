@@ -33,7 +33,7 @@
      */
     "js": [
     {
-        "path": "../lib/touch/sencha-touch.js"
+        "path": "../lib/touchOld/sencha-touch.js"
     },
     {
         "path": "app.js",
@@ -57,7 +57,7 @@
      */
     "css": [
     {
-        "path": "../lib/touch/resources/css/sencha-touch.css",
+        "path": "../lib/touchOld/resources/css/sencha-touch.css",
         "update": "delta"
     },
 

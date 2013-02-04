@@ -148,38 +148,43 @@ Ext.define('Ext.data.Operation', {
 
     /**
      * @property {Boolean} started
-     * Read-only property tracking the start status of this Operation. Use {@link #isStarted}.
+     * Property tracking the start status of this Operation. Use {@link #isStarted}.
      * @private
+     * @readonly
      */
     started: false,
 
     /**
      * @property {Boolean} running
-     * Read-only property tracking the run status of this Operation. Use {@link #isRunning}.
+     * Property tracking the run status of this Operation. Use {@link #isRunning}.
      * @private
+     * @readonly
      */
     running: false,
 
     /**
      * @property {Boolean} complete
-     * Read-only property tracking the completion status of this Operation. Use {@link #isComplete}.
+     * Property tracking the completion status of this Operation. Use {@link #isComplete}.
      * @private
+     * @readonly
      */
     complete: false,
 
     /**
      * @property {Boolean} success
-     * Read-only property tracking whether the Operation was successful or not. This starts as undefined and is set to true
-     * or false by the Proxy that is executing the Operation. It is also set to false by {@link #setException}. Use
+     * Property tracking whether the Operation was successful or not. This starts as undefined and is set to `true`
+     * or `false` by the Proxy that is executing the Operation. It is also set to false by {@link #setException}. Use
      * {@link #wasSuccessful} to query success status.
      * @private
+     * @readonly
      */
     success: undefined,
 
     /**
      * @property {Boolean} exception
-     * Read-only property tracking the exception status of this Operation. Use {@link #hasException} and see {@link #getError}.
+     * Property tracking the exception status of this Operation. Use {@link #hasException} and see {@link #getError}.
      * @private
+     * @readonly
      */
     exception: false,
 
@@ -260,49 +265,49 @@ Ext.define('Ext.data.Operation', {
     },
 
     /**
-     * Returns true if this Operation encountered an exception (see also {@link #getError})
-     * @return {Boolean} True if there was an exception
+     * Returns `true` if this Operation encountered an exception (see also {@link #getError}).
+     * @return {Boolean} `true` if there was an exception.
      */
     hasException: function() {
         return this.exception === true;
     },
 
     /**
-     * Returns the error string or object that was set using {@link #setException}
-     * @return {String/Object} The error object
+     * Returns the error string or object that was set using {@link #setException}.
+     * @return {String/Object} The error object.
      */
     getError: function() {
         return this.error;
     },
-    
+
     /**
-     * Returns true if the Operation has been started. Note that the Operation may have started AND completed, see
+     * Returns `true` if the Operation has been started. Note that the Operation may have started AND completed, see
      * {@link #isRunning} to test if the Operation is currently running.
-     * @return {Boolean} True if the Operation has started
+     * @return {Boolean} `true` if the Operation has started
      */
     isStarted: function() {
         return this.started === true;
     },
 
     /**
-     * Returns true if the Operation has been started but has not yet completed.
-     * @return {Boolean} True if the Operation is currently running
+     * Returns `true` if the Operation has been started but has not yet completed.
+     * @return {Boolean} `true` if the Operation is currently running
      */
     isRunning: function() {
         return this.running === true;
     },
 
     /**
-     * Returns true if the Operation has been completed
-     * @return {Boolean} True if the Operation is complete
+     * Returns `true` if the Operation has been completed
+     * @return {Boolean} `true` if the Operation is complete
      */
     isComplete: function() {
         return this.complete === true;
     },
 
     /**
-     * Returns true if the Operation has completed and was successful
-     * @return {Boolean} True if successful
+     * Returns `true` if the Operation has completed and was successful
+     * @return {Boolean} `true` if successful
      */
     wasSuccessful: function() {
         return this.isComplete() && this.success === true;
@@ -342,6 +347,7 @@ Ext.define('Ext.data.Operation', {
         }
 
         this.setRecords(processedRecords);
+        resultSet.setRecords(processedRecords);
         return true;
     },
 
@@ -444,7 +450,7 @@ Ext.define('Ext.data.Operation', {
         // We call endEdit with silent: true because the commit below already makes
         // sure any store is notified of the record being updated.
         currentRecord.endEdit(true);
-        
+
         currentRecord.commit();
     }
     // <deprecated product=touch since=2.0>

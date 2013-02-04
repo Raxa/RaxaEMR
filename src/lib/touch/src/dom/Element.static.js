@@ -1,3 +1,8 @@
+//@tag dom,core
+//@define Ext.Element-all
+//@define Ext.Element-static
+//@require Ext.Element
+
 /**
  * @class Ext.dom.Element
  */
@@ -15,8 +20,9 @@ Ext.dom.Element.addStatics({
 
     /**
      * Test if size has a unit, otherwise appends the passed unit string, or the default for this Element.
-     * @param size {Object} The size to set
-     * @param units {String} The units to append to a numeric size value
+     * @param {Object} size The size to set.
+     * @param {String} units The units to append to a numeric size value.
+     * @return {String}
      * @private
      * @static
      */
@@ -42,6 +48,7 @@ Ext.dom.Element.addStatics({
 
     /**
      * @static
+     * @return {Boolean}
      * @private
      */
     isAncestor: function(p, c) {
@@ -115,7 +122,7 @@ Ext.dom.Element.addStatics({
                me.addUnits(box.left, units);
     },
 
-    // private
+    // @private
     camelReplaceFn: function(m, a) {
         return a.charAt(1).toUpperCase();
     },
@@ -298,7 +305,7 @@ Ext.dom.Element.addStatics({
 
     /**
      * Retrieves the current orientation of the window. This is calculated by
-     * determing if the height is greater than the width.
+     * determining if the height is greater than the width.
      * @deprecated 2.0.0 Please use {@link Ext.Viewport#getOrientation} instead
      * @static
      * @return {String} Orientation of window: 'portrait' or 'landscape'

@@ -89,17 +89,21 @@ Ext.define('Ext.tab.Bar', {
 
     /**
      * @private
-     * When docked to the top, pack left, when on the bottom pack center
+     * Default pack to center when docked to the bottom, otherwise default pack to left
      */
     doSetDocked: function(newDocked) {
         var layout = this.getLayout(),
-            pack   = newDocked == 'bottom' ? 'center' : 'left';
+            initialConfig = this.getInitialConfig(),
+            pack;
 
-        //layout isn't guaranteed to be instantiated so must test
-        if (layout.isLayout) {
-            layout.setPack(pack);
-        } else {
-            layout.pack = (layout && layout.pack) ? layout.pack : pack;
+        if (!initialConfig.layout || !initialConfig.layout.pack) {
+            pack = (newDocked == 'bottom') ? 'center' : 'left';
+            //layout isn't guaranteed to be instantiated so must test
+            if (layout.isLayout) {
+                layout.setPack(pack);
+            } else {
+                layout.pack = (layout && layout.pack) ? layout.pack : pack;
+            }
         }
     },
 
@@ -112,7 +116,8 @@ Ext.define('Ext.tab.Bar', {
             newTab.setActive(true);
         }
 
-        if (oldTab) {
+        //Check if the parent is present, if not it is destroyed
+        if (oldTab && oldTab.parent) {
             oldTab.setActive(false);
         }
     },

@@ -508,7 +508,7 @@ Ext.define("Screener.controller.Application", {
     // Opens form for creating new patient
     addPerson: function () {
         if (!this.newPatient) {
-            this.newPatient = Ext.create('Screener.view.NewPatient');
+            this.newPatient = Ext.create('Screener.view.NewPatient', {centered: true});
             Ext.Viewport.add(this.newPatient);
         }
         // Set new FIFO id so patients come and go in the queue!
@@ -532,6 +532,10 @@ Ext.define("Screener.controller.Application", {
             }
             if( formp.dob !== "" && formp.dob.length > 0 ) {
                 newPatient.birthdate =  formp.dob;
+            }
+            if(Ext.getCmp('contactNumber').getValue()!==""){
+                newPatient.attributes = new Array({attributeType: localStorage.primaryContactUuidpersonattributetype,
+                    value: Ext.getCmp('contactNumber').getValue()})
             }
             var newPatientParam = Ext.encode(newPatient);
             Ext.Ajax.request({

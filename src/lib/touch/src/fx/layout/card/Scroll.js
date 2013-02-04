@@ -44,6 +44,9 @@ Ext.define('Ext.fx.layout.card.Scroll', {
                 this.stopAnimation();
             }
 
+            newItem.setWidth('100%');
+            newItem.setHeight('100%');
+
             containerElement = this.getLayout().container.innerElement;
             containerWidth = containerElement.getWidth();
             containerHeight = containerElement.getHeight();

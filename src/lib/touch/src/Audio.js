@@ -1,5 +1,5 @@
 /**
- * {@link Ext.Audio} is a simple class which provides a container for the [HTML5 Audio element](http://www.w3schools.com/html5/tag_audio.asp).
+ * {@link Ext.Audio} is a simple class which provides a container for the [HTML5 Audio element](http://developer.mozilla.org/en-US/docs/Using_HTML5_audio_and_video).
  *
  * ## Recommended File Types/Compression:
  * * Uncompressed WAV and AIF audio
@@ -81,7 +81,7 @@
  *             }
  *         ]
  *     });
- *
+ * @aside example audio
  */
 Ext.define('Ext.Audio', {
     extend: 'Ext.Media',
@@ -104,7 +104,6 @@ Ext.define('Ext.Audio', {
          * * AAC-LC
          * * HE-AAC audio
          * @accessor
-         * @markdown
          */
     },
 

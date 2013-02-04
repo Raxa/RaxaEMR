@@ -22,5 +22,9 @@ Ext.define('RaxaEmr.Pharmacy.model.Patient', {
     }, {
         name: 'identifier',
         mapping: 'identifiers.identifier'
+    },{
+        name: 'uuid',
+        type: 'string',
+        persist: false
     }]
 });
