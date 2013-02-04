@@ -15,7 +15,7 @@ Ext.application({
     tabletStartupScreen: 'resources/img/icon.png',
     models: ['Session', 'Location'],
     // List of Models for dynamic loading
-    views: ['Login', 'AppGrid','AppCarousel','smartApp', 'NewProvider', 'NewPatient'],
+    views: ['Login', 'AppGrid','AppCarousel','smartApp', 'NewProvider', 'NewPatient', 'NewAccount', 'Main'],
     // List of Views for dynamic loading
     controllers: ['Session'],
     // List of Controllers for dynamic loading
