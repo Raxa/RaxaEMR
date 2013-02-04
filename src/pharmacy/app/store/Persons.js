@@ -1,6 +1,7 @@
 Ext.define('RaxaEmr.Pharmacy.store.Persons', {
     extend: 'Ext.data.Store',
     model: 'RaxaEmr.Pharmacy.model.Person',
+    id : 'personStore',
     proxy: {
 
         type: 'rest',

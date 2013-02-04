@@ -1,6 +1,6 @@
 Ext.define('RaxaEmr.Pharmacy.view.Viewport', {
     extend: 'Ext.container.Viewport',
-    requires: ['RaxaEmr.Pharmacy.view.pharmacyTopbar','RaxaEmr.Pharmacy.view.Inventory'],
+    requires: ['RaxaEmr.Pharmacy.view.pharmacyTopbar','RaxaEmr.Pharmacy.view.Inventory','RaxaEmr.Pharmacy.view.newPatient'],
     autoScroll: true,
     width: 960,
     autoHeight: 800,
@@ -43,7 +43,15 @@ Ext.define('RaxaEmr.Pharmacy.view.Viewport', {
         x: 100,
         y: 100,
         hidden: true
-    },{
+    },
+    {
+        xtype: 'newPatient',
+        floating: true,
+        x: 390,
+        y: 100,
+        hidden: true
+    },
+    {
         xtype: 'addDrug'
     },{
         autoScroll: true,
@@ -52,16 +60,18 @@ Ext.define('RaxaEmr.Pharmacy.view.Viewport', {
         items:[{
             layout: 'card',
             id: 'mainarea',
-            activeItem: 3,
+            activeItem: 0,
             items:[{
                 xtype: 'prescription'
             },{
                 xtype: 'reports'
             },{
                 xtype: 'drugGroups'
-            },{
+            },
+            {  
                 xtype: 'Inventory'
-            },{
+            },
+            {
                 xtype: 'drugDetails'
             }]
         }]
