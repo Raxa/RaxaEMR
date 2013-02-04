@@ -1,28 +1,14 @@
 Ext.define('RaxaEmr.view.NewAccount', {
     extend: 'Ext.Container',
     config: {
-        fullscreen: true,
         layout: {
             type: 'vbox',
             align: 'center',
             pack: 'center'
         },
-        id: 'halo',
-        items: [{
-            xtype: 'topbar',
-            docked: 'top'
-        },
+        id: 'newAccountView',
+        items: [
         {
-            xtype: 'container',
-            height: 220,
-            id: 'logoPanel',
-            items: [{
-                html: '<img src="resources/img/logoBeta.png" width="143" height="143"/>'
-            }, {
-                html: 'Raxa EMR',
-                style: 'font-family: "Helvetica Neue",HelveticaNeue,"Helvetica-Neue",Helvetica,"BBAlpha Sans",sans-serif;'
-            }]
-        }, {
             html: "New Users",
                 style: 'font-family: "Helvetica Neue",HelveticaNeue,"Helvetica-Neue",Helvetica,"BBAlpha Sans",sans-serif; font-weight: bold; text-align: left',
             width: 350

@@ -362,7 +362,7 @@ Ext.define('RaxaEmr.controller.Session', {
         //otherwise show the AppGrid
         else {
             window.location.hash = 'Dashboard';
-            Ext.getCmp('mainView').setActiveItem(2);
+            Ext.getCmp('mainView').setActiveItem(1);
         }
     },
 
@@ -390,7 +390,7 @@ Ext.define('RaxaEmr.controller.Session', {
         this.addModulesToDashboard();
         window.location.hash = 'Dashboard';
         Ext.getCmp('topbarSelectfield').setHidden(false);
-        Ext.getCmp('mainView').setActiveItem(2);
+        Ext.getCmp('mainView').setActiveItem(1);
     },
 
     //This function determines the login state
@@ -402,25 +402,17 @@ Ext.define('RaxaEmr.controller.Session', {
         var loginState = Ext.getCmp('mainView').getActiveItem()._activeItem;
         if (localStorage.getItem('basicAuthHeader')) {
             this.loginSuccess();
-            Ext.getCmp('mainView').setActiveItem(2);
+            Ext.getCmp('mainView').setActiveItem(1);
         }
     },
 
     //on entry point for application, give control to Util.getViews()
     launch: function () {
-        Ext.create('Ext.Container', {
-            id: 'mainView',
+        var mainScreen = Ext.create('RaxaEmr.view.Main', {
             fullscreen: true,
-            layout: 'card',
-            activeItem: 0,
-            items: [{
-                xclass: 'RaxaEmr.view.Login'
-            }, {
-                xclass: 'RaxaEmr.view.AppGrid'
-            }, {
-                xclass: 'RaxaEmr.view.AppCarousel'
-            }]
         });
+        var topBar = Ext.create('Topbar.view.TopToolbar');
+        mainScreen.add(topBar);
         this.getLoginState();
     },
 
@@ -434,7 +426,7 @@ Ext.define('RaxaEmr.controller.Session', {
     
     //Shows new account page for new providers or new patients
     showNewAccount: function() {
-            Ext.getCmp('mainView').setActiveItem(3);
+            Ext.getCmp('mainView').setActiveItem(2);
     }
 
 });

@@ -8,10 +8,7 @@ Ext.define('RaxaEmr.view.Login', {
             pack: 'center'
         },
         id: 'halo',
-        items: [{
-            xtype: 'topbar',
-            docked: 'top'
-        },
+        items: [
         {
             xtype: 'container',
             height: 220,
@@ -54,7 +51,7 @@ Ext.define('RaxaEmr.view.Login', {
         }, {
             xtype: 'button',
 //            text: Ext.i18n.appBundle.getMsg('RaxaEmr.view.button.title'),
-            text: 'NewAccount',
+            text: 'New Account',
             margin: '-20 0 40 0',
             id: 'newAccountButton',
             ui: 'decline-round',
