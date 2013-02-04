@@ -15,6 +15,7 @@
  */
 Ext.define('RaxaEmr.controller.Session', {
     extend: 'Ext.app.Controller',
+    requires: ['RaxaEmr.view.Main', 'RaxaEmr.view.NewAccount'],
     config: {
 
 
@@ -27,6 +28,7 @@ Ext.define('RaxaEmr.controller.Session', {
             passwordID: '#passwordID',
             userName: '#userName',
             signInButton: '#signInButton',
+            newAccountButton: '#newAccountButton',
             newProviderAccountButton: '#newProviderAccountButton',
             newPatientAccountButton: '#newPatientAccountButton',
             passwordProvider: '#newProviderId #password',
@@ -59,6 +61,9 @@ Ext.define('RaxaEmr.controller.Session', {
             },            
             signInButton: {
                 tap: 'doLogin'
+            },
+            newAccountButton: {
+                tap: 'showNewAccount'
             },
             newProviderAccountButton: {
                 tap: 'newProviderAccount'
@@ -124,6 +129,10 @@ Ext.define('RaxaEmr.controller.Session', {
             success: function (response) {
                 var userInfoJson = Ext.decode(response.responseText);
                 console.log(userInfoJson)
+                var raxaVersion = userInfoJson.raxaVersion;
+                if(raxaVersion !== localStorage.configVersion){
+                    Ext.Error.raise('Please update your Raxa Openmrs Module');
+                }
                 //only adding necessary fields for localStorage
                 var privilegesArray = [];
                 var i=0;
@@ -467,9 +476,8 @@ Ext.define('RaxaEmr.controller.Session', {
      * Called when login is successful for the given user, populates AppGrid with the user's modules
      */
     loginSuccess: function () {
-        Startup.getResourceUuid();
-        Startup.repeatUuidLoadingEverySec();
         var numAppsAvailable = this.addModulesToDashboard();
+        Ext.getCmp('mainView').setMasked(false);
         //if only 1 app available, send to that page
         if (numAppsAvailable === 1) {
             window.location = userModules[0];
@@ -481,7 +489,7 @@ Ext.define('RaxaEmr.controller.Session', {
         //otherwise show the AppGrid
         else {
             window.location.hash = 'Dashboard';
-            Ext.getCmp('mainView').setActiveItem(2);
+            Ext.getCmp('mainView').setActiveItem(1);
         }
     },
 
@@ -509,33 +517,29 @@ Ext.define('RaxaEmr.controller.Session', {
         this.addModulesToDashboard();
         window.location.hash = 'Dashboard';
         Ext.getCmp('topbarSelectfield').setHidden(false);
-        Ext.getCmp('mainView').setActiveItem(2);
+        Ext.getCmp('mainView').setActiveItem(1);
     },
 
     //This function determines the login state
     //If already logged in, it redirects to the dashboard
     getLoginState: function () {
+        if(localStorage.getItem("configVersion") !== Util.conceptVersion){
+            Startup.getResourceUuid();
+        }
         var loginState = Ext.getCmp('mainView').getActiveItem()._activeItem;
         if (localStorage.getItem('basicAuthHeader')) {
             this.loginSuccess();
-            Ext.getCmp('mainView').setActiveItem(2);
+            Ext.getCmp('mainView').setActiveItem(1);
         }
     },
 
     //on entry point for application, give control to Util.getViews()
     launch: function () {
-        Ext.create('Ext.Container', {
-            id: 'mainView',
+        var mainScreen = Ext.create('RaxaEmr.view.Main', {
             fullscreen: true,
-            layout: 'card',
-            items: [{
-                xclass: 'RaxaEmr.view.Login'
-            }, {
-                xclass: 'RaxaEmr.view.AppGrid'
-            }, {
-                xclass: 'RaxaEmr.view.AppCarousel'
-            }]
         });
+        var topBar = Ext.create('Topbar.view.TopToolbar');
+        mainScreen.add(topBar);
         this.getLoginState();
     },
 
@@ -545,6 +549,11 @@ Ext.define('RaxaEmr.controller.Session', {
     launchAfterAJAX: function (views) {
         //remove loading mask
         Ext.getCmp('mainView').setMasked(false);
+    },
+    
+    //Shows new account page for new providers or new patients
+    showNewAccount: function() {
+            Ext.getCmp('mainView').setActiveItem(2);
     }
 
 });
