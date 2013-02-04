@@ -51,7 +51,7 @@
     <script>
         var total = 0;
         var selectedPatient = JSON.parse(localStorage.getItem('selectedPatient'));
-        var selectedPatientAttributes = ['Name', 'Age'];
+        var selectedPatientAttributes = ['Name', 'Age', 'PatientId', 'PrescriptionDate'];
         var tab = '<table style="width:100%"><tbody>';
         for (i = 0; i < selectedPatientAttributes.length; i++) {
             if (selectedPatient[selectedPatientAttributes[i]]) {
@@ -60,22 +60,29 @@
 
             }
         }
-        tab += '</tbody></table>';
-        document.getElementById('tab1').innerHTML = tab;
-        tab = '<table border="0"  style="width:100%" text-align="center"><tbody><tr><td><strong>Drug Prescribed</td><td><strong>Dosage</td><td><strong>Duration</td><td><strong>Quantity</td><td><strong>To Be Taken In</td><td><strong>Instruction</td></tr>';
-        for (var j = 0; j < selectedPatient['Length']; j++) {
-            tab += '<tr>';
-            tab += '<td>' + selectedPatient['DrugGrid'][j].drugName + '</td>';
-            tab += '<td>' + selectedPatient['DrugGrid'][j].dosage + '</td>';
-            tab += '<td>' + selectedPatient['DrugGrid'][j].duration + '</td>';
-            tab += '<td>' + selectedPatient['DrugGrid'][j].qty + '</td>';
+    }
+    tab += '</tbody></table>';
+    document.getElementById('tab1').innerHTML = tab;
+    tab = '<table border="0"  style="width:100%" text-align="center"><tbody><tr><td><strong>Drug Prescribed</td><td><strong>Dosage</td><td><strong>Duration</td><td><strong>Quantity</td><td><strong>To Be Taken In</td><td><strong>Instruction</td></tr>';
+    for (var j = 0; j < selectedPatient['Length']; j++) {
+        tab += '<tr>';
+        tab += '<td>' + selectedPatient['DrugGrid'][j].drugName + '</td>';
+        tab += '<td>' + selectedPatient['DrugGrid'][j].dosage + '</td>';
+        tab += '<td>' + selectedPatient['DrugGrid'][j].duration + '</td>';
+        tab += '<td>' + selectedPatient['DrugGrid'][j].qty + '</td>';
+        if(selectedPatient['DrugGrid'][j].taken !== undefined) { 
             tab += '<td>' + selectedPatient['DrugGrid'][j].taken + '</td>'
-            tab += '<td>' + selectedPatient['DrugGrid'][j].instructions + '</td>'
-            tab += '</tr>';
-            total += selectedPatient['DrugGrid'][j].itemprice;
+        } else {
+            if(selectedPatient['DrugGrid'][j].frequency !== "") {
+            tab += '<td>' + selectedPatient['DrugGrid'][j].frequency + '</td>'
         }
-        tab += '</tbody></table>';
-        document.getElementById('tab2').innerHTML = tab;
-    </script>
+        }
+        tab += '<td>' + selectedPatient['DrugGrid'][j].instructions + '</td>'
+        tab += '</tr>';
+        total += selectedPatient['DrugGrid'][j].itemprice;
+    }
+    tab += '</tbody></table>';
+    document.getElementById('tab2').innerHTML = tab;
+</script>
 </body>
 </html>

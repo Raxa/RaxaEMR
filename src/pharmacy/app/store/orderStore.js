@@ -27,9 +27,17 @@ Ext.define('RaxaEmr.Pharmacy.store.orderStore', {
         defaultValue: false
     },
     {
+        name: 'frequency'
+    },
+    {
         name: 'instructions'
     },
     {
         name : 'date'
-    }]
+    },
+    {
+        name: 'units',
+        type: 'string'
+    },
+]
 });

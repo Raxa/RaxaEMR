@@ -30,20 +30,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                 border: false,
                 activeItem: 0,
                 items: [
-                //                {
-                //                    xtype: 'patientAssignedDrugs',
-                //                    border: false,
-                //                    x: 190,
-                //                    y: 190
-                //                //                    xtype: 'container',
-                //                //                    layout: 'absolute',
-                //                //                    border: false,
-                //                //                    items:[{
-                //                //                        xtype: 'patientAssignedDrugs',
-                //                //                        x: 190,
-                //                //                        y: 190
-                //                //                    }]
-                //                },
                 {
                     xtype: 'container',
                     layout: 'absolute',
@@ -108,21 +94,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                         y: 20,
                         id: 'patientNameASearch'
                     },
-                    //To be added in after search layer is complete
-                    //                    {
-                    //                        xtype: 'textfield',
-                    //                        emptyText: 'Prescription ID',
-                    //                        x: 10,
-                    //                        y: 60,
-                    //                        id: 'prescriptionIdASearch'
-                    //                    },
-                    //                    {
-                    //                        xtype: 'datefield',
-                    //                        emptyText: 'Prescription Date',
-                    //                        x: 10,
-                    //                        y: 100,
-                    //                        id: 'prescriptionDateASearch'
-                    //                    },
                     {
                         xtype: 'panel',
                         border: 0,
@@ -368,6 +339,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                         items: [{
                             xtype: 'displayfield',
                             fieldLabel: 'Doctor\'s Name',
+                            id: 'doctor',
                             readOnly: true,
                             value: '',
                             width: 300,
@@ -439,17 +411,8 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                         ]
                     },            
                     ]
-                },{
-                    xtype: 'container',
-                    layout: 'absolute',
-                    items:[{
-                        xtype: 'addPatient',
-                        height: 195,
-                        width: 770,
-                        x: 190,
-                        y: 60
-                    }]
-                }]
+                },
+            ]
             }]
         }]
     }]

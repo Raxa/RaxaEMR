@@ -42,254 +42,8 @@ var username;
 var password;
 var timeoutLimit = 150000;
 var hospitalName = 'JSS Hospital';
-var resourceUuid = {
-    "raxaEMRconfig": {
-        "resource": "concept",
-        "queryTerm": "raxaEMRconfig",
-        "varName": "raxaEMRconfig",
-        "displayName": "RAXA EMR CONFIG"
-    }
 /*
-    "tablet": {
-        "resource": "concept",
-        "queryTerm": "tablet",
-        "varName": "tablet",
-        "displayName": "TABLET"
-    },
-    "ointment": {
-        "resource": "concept",
-        "queryTerm": "ointment",
-        "varName": "ointment",
-        "displayName": "OINTMENT"
-    },
-    "syrup": {
-        "resource": "concept",
-        "queryTerm": "syrup",
-        "varName": "syrup",
-        "displayName": "SYRUP"
-    },
-    "solutionForInjection": {
-        "resource": "concept",
-        "queryTerm": "solution for injection",
-        "varName": "solutionForInjection",
-        "displayName": "SOLUTION FOR INJECTION"
-    },
-    "capsule": {
-        "resource": "concept",
-        "queryTerm": "capsule",
-        "varName": "capsule",
-        "displayName": "CAPSULE"
-    },
-    "capsule": {
-        "resource": "concept",
-        "queryTerm": "capsule",
-        "varName": "capsule",
-        "displayName": "CAPSULE"
-    },
-    "height": {
-        "resource": "concept",
-        "queryTerm": "height",
-        "varName": "height",
-        "displayName": "HEIGHT (CM)"
-    },
-    "weight": {
-        "resource": "concept",
-        "queryTerm": "weight",
-        "varName": "weight",
-        "displayName": "WEIGHT (KG)"
-    },
-    "bmi": {
-        "resource": "concept",
-        "queryTerm": "bmi",
-        "varName": "bmi",
-        "displayName": "BODY MASS INDEX"
-    },
-    "regfee": {
-        "resource": "concept",
-        "queryTerm": "regfee",
-        "varName": "regfee",
-        "displayName": "REGISTRATION FEE"
-    },
-    "systolicbloodpressure": {
-        "resource": "concept",
-        "queryTerm": "SYSTOLIC BLOOD PRESSURE",
-        "varName": "systolicbloodpressure",
-        "displayName": "SYSTOLIC BLOOD PRESSURE"
-    },
-    "diastolicbloodpressure": {
-        "resource": "concept",
-        "queryTerm": "DIASTOLIC BLOOD PRESSURE",
-        "varName": "diastolicbloodpressure",
-        "displayName": "DIASTOLIC BLOOD PRESSURE"
-    },
-    "pulse": {
-        "resource": "concept",
-        "queryTerm": "pulse",
-        "varName": "pulse",
-        "displayName": "PULSE"
-    },
-    "respiratoryRate": {
-        "resource": "concept",
-        "queryTerm": "RESPIRATORY RATE",
-        "varName": "respiratoryRate",
-        "displayName": "RESPIRATORY RATE"
-    },
-    "temperature": {
-        "resource": "concept",
-        "queryTerm": "TEMPERATURE",
-        "varName": "temperature",
-        "displayName": "TEMPERATURE (C)"
-    },
-    "bloodoxygensaturation": {
-        "resource": "concept",
-        "queryTerm": "BLOOD OXYGEN SATURATION",
-        "varName": "bloodoxygensaturation",
-        "displayName": "BLOOD OXYGEN SATURATION"
-    },
-    "referred": {
-        "resource": "concept",
-        "queryTerm": "REFERRER",
-        "varName": "referred",
-        "displayName": "REFERRING PERSON"
-    },
-    "notes": {
-        "resource": "concept",
-        "queryTerm": "REGISTRATION NOTES",
-        "varName": "notes",
-        "displayName": "REGISTRATION NOTES"
-    },
-    "patientRecordImage": {
-        "resource": "concept",
-        "queryTerm": "PATIENT RECORD IMAGE",
-        "varName": "patientRecordImage",
-        "displayName": "PATIENT RECORD IMAGE"
-    },
-    "patientRecordVectorImage": {
-        "resource": "concept",
-        "queryTerm": "PATIENT RECORD VECTOR IMAGE",
-        "varName": "patientRecordVectorImage",
-        "displayName": "PATIENT RECORD VECTOR IMAGE"
-    },
-    "regcomplaint": {
-        "resource": "concept",
-        "queryTerm": "REGISTRATION COMPLAINT",
-        "varName": "regcomplaint",
-        "displayName": "REGISTRATION COMPLAINT"
-    },
-    "patientImage": {
-        "resource": "concept",
-        "queryTerm": "PATIENT IMAGE",
-        "varName": "patientImage",
-        "displayName": "PATIENT IMAGE"
-    },
-    "basic": {
-        "resource": "form",
-        "queryTerm": "basic",
-        "varName": "basic",
-        "displayName": "Basic Form - This form contains only the common/core elements needed for most forms"
-    },
-    "reg": {
-        "resource": "encountertype",
-        "queryTerm": "reg",
-        "varName": "reg",
-        "displayName": "REGISTRATION - Registration encounter"
-    },
-    "screener": {
-        "resource": "encountertype",
-        "queryTerm": "screener",
-        "varName": "screener",
-        "displayName": "SCREENER - Screener encounter"
-    },
-    "screenervitals": {
-        "resource": "encountertype",
-        "queryTerm": "screenervitals",
-        "varName": "screenervitals",
-        "displayName": "SCREENERVITALS - Screener Vitals encounter"
-    },
-    "out": {
-        "resource": "encountertype",
-        "queryTerm": "out",
-        "varName": "out",
-        "displayName": "OUTPATIENT - Outpatient encounter"
-    },
-    "prescription": {
-        "resource": "encountertype",
-        "queryTerm": "prescription",
-        "varName": "prescription",
-        "displayName": "PRESCRIPTION - Prescription encounter"
-    },
-    "prescriptionfill": {
-        "resource": "encountertype",
-        "queryTerm": "prescriptionfill",
-        "varName": "prescriptionfill",
-        "displayName": "PRESCRIPTIONFILL - Prescriptionfill encounter"
-    },
-    "healthCenter": {
-        "resource": "personattributetype",
-        "queryTerm": "health center",
-        "varName": "healthCenter",
-        "displayName": "Health Center - Specific Location of this person's home health center."
-    },
-    "primaryrelative": {
-        "resource": "personattributetype",
-        "queryTerm": "primary relative",
-        "varName": "primaryRelative",
-        "displayName": "Primary Relative - Primary Relative"
-    },
-    "secondarycontact": {
-        "resource": "personattributetype",
-        "queryTerm": "secondary contact",
-        "varName": "secondaryContact",
-        "displayName": "Secondary Contact - Secondary Contact"
-    },
-    "primarycontact": {
-        "resource": "personattributetype",
-        "queryTerm": "primary contact",
-        "varName": "primaryContact",
-        "displayName": "Primary Contact - Primary Contact"
-    },
-    "contactbyphone": {
-        "resource": "personattributetype",
-        "queryTerm": "contact by phone",
-        "varName": "contactByPhone",
-        "displayName": "Contact By Phone - Whether to contact this patient by phone"
-    },
-    "district": {
-        "resource": "personattributetype",
-        "queryTerm": "district",
-        "varName": "district",
-        "displayName": "District - District"
-    },
-    "tehsil": {
-        "resource": "personattributetype",
-        "queryTerm": "tehsil",
-        "varName": "tehsil",
-        "displayName": "Tehsil - Tehsil"
-    },
-    "occupation": {
-        "resource": "personattributetype",
-        "queryTerm": "occupation",
-        "varName": "occupation",
-        "displayName": "Occupation - Occupation"
-    },
-    "education": {
-        "resource": "personattributetype",
-        "queryTerm": "education",
-        "varName": "education",
-        "displayName": "Education - Education"
-    },
-    "caste": {
-        "resource": "personattributetype",
-        "queryTerm": "caste",
-        "varName": "caste",
-        "displayName": "Caste - Caste"
-    },
-    "oldpatientidentificationnumber": {
-        "resource": "personattributetype",
-        "queryTerm": "old patient identification number",
-        "varName": "oldPatientIdentificationNumber",
-        "displayName": "Old Patient Identification Number - Old Patient Identification Number"
-    }
+var resourceUuid = {
     // TODO: https://raxaemr.atlassian.net/browse/RAXAJSS-613
     // Cant find UUID for religion on JSS Ganiari server. What gives?
 
@@ -299,8 +53,8 @@ var resourceUuid = {
     //     "varName": "religion",
     //     "displayName": "Religion - Religion"
     // },
-    */
 };
+*/
 
 // This is the name of the Patient Identifier Type that is being Auto-Generated by the IDGen Module.
 // Put the Identifier Type Name in between the /.* and the .*/
@@ -383,7 +137,7 @@ var TIME_BEFORE_NOW = 0.1;
 
 // The Util class provids several methods that are shared by the core, apps and modules
 var Util = {
-    conceptVersion : 20121206,
+    conceptVersion : "0.3-SNAPSHOT",
     // Enum to capture pages in each app. E.g. Util.PAGES.SCREENER.PAGE_NAME
     PAGES: {},
     
@@ -539,42 +293,7 @@ var Util = {
         localStorage.removeItem('session');
         window.location.hash = 'Login';
     },
-    
-    uuidLoadedSuccessfully: function(){
-        if( this.checkAllUuidsLoaded()) {
-            return true;
-        } else {
-            window.location = "../";
-        }
-    },
-
-    checkAllUuidsLoaded: function() {
-        var that=this;
-        var expectedUuidCount=0;
-        var uuidsLoadedCount=0;
-        var uuidsNotFound = "";
-        for (var key in resourceUuid) { 
-            expectedUuidCount++;
-            var item = resourceUuid[key].varName + "Uuid" + resourceUuid[key].resource;
-            if(localStorage.getItem(item) != null){ 
-                uuidsLoadedCount++;
-            } else {
-                uuidsNotFound += (item + ", ");
-                this.getAttributeFromREST(resourceUuid[key].resource, resourceUuid[key].queryTerm, resourceUuid[key].varName, resourceUuid[key].displayName);
-            }
-        }
         
-        console.log("UUIDs expected = " + expectedUuidCount + ". UUIDs loaded " + uuidsLoadedCount);
-        
-        if (expectedUuidCount == uuidsLoadedCount) {
-            return true;
-        } else {
-            console.log("Uuid's which failed to load were:" + uuidsNotFound);
-            return false;
-        }
-    },
-    
-
     /**
      * Saves the Basic Authentication header to Localstorage
      * Verifies if username + password is valid on server and saves as Base4 encoded string of user:pass
@@ -747,48 +466,6 @@ var Util = {
     // - person preferredName display
     getSession: function() {
         return JSON.parse(localStorage.session);
-    },
-
-    getAttributeFromREST: function (resource, queryParameter, varName, display) {
-        //Ajax Request to get Height / Weight / Bmi Attribiutes from Concept Resource
-        Ext.Ajax.request({
-            url: HOST + '/ws/rest/v1/' + resource + '?q=' + queryParameter + '&v=full',
-            method: 'GET',
-            disableCaching: false,
-            headers: Util.getBasicAuthHeaders(),
-            failure: function (response) {
-                console.log('GET failed with response status: ' + response.status); // + response.status);
-            },
-            success: function (response) {
-                console.log("getAttributeFromRest ... resource: " + resource + ", queryParameter: " + queryParameter + ", varName:" + varName + " RESPONSE: " + response.responseText);
-                for (var i = 0; i < JSON.parse(response.responseText).results.length; ++i) {
-                    if (JSON.parse(response.responseText).results[i].display == display) {
-                        if(display === 'RAXA EMR CONFIG')   {
-                            var responseJSON = JSON.parse(response.responseText).results[i];
-                            var configConceptDescription = JSON.parse(responseJSON.descriptions[0]['display']);
-                            var uuidsInConfigArray = configConceptDescription.uuids;
-                            var versionOfConfig = configConceptDescription.version;
-                            if (versionOfConfig === Util.conceptVersion)
-                            {
-                                for(var i in uuidsInConfigArray)
-                                 {
-                                    localStorage.setItem(uuidsInConfigArray[i]['name'],uuidsInConfigArray[i]['uuid']);
-                                 }
-                                console.log(i+ ' concepts have been unpacked from config concept from server');
-                            }
-                            else {
-                                Ext.Msg.alert('Update version','Your Raxa Version seems to be out of date. For assistance email please contact Raxa help');
-                            }
-                           }
-                        if (resource != 'location') {
-                                localStorage.setItem(varName + "Uuid" + resource, JSON.parse(response.responseText).results[i])
-                            } else {
-                                localStorage.setItem(varName + "Uuid" + resource, display)
-                            }
-                    }
-                }
-            }
-        });
     },
 
     getPersonUuidFromProviderUuid: function (uuid) {

@@ -64,7 +64,7 @@ Ext.define('Ext.field.Radio', {
     },
 
     getValue: function() {
-        return (this._value) ? true : null;
+        return (this._value) ? this._value : null;
     },
 
     setValue: function(value) {
@@ -128,9 +128,9 @@ Ext.define('Ext.field.Radio', {
     },
 
     /**
-     * Set the matched radio field's status (that has the same value as the given string) to checked
-     * @param {String} value The value of the radio field to check
-     * @return {Ext.field.Radio} The field that is checked
+     * Set the matched radio field's status (that has the same value as the given string) to checked.
+     * @param {String} value The value of the radio field to check.
+     * @return {Ext.field.Radio} The field that is checked.
      */
     setGroupValue: function(value) {
         var fields = this.getSameGroupFields(),
@@ -149,7 +149,7 @@ Ext.define('Ext.field.Radio', {
 
     /**
      * Loops through each of the fields this radiofield is linked to (has the same name) and
-     * calls onChange on those fields so the appropriate event is fired.
+     * calls `onChange` on those fields so the appropriate event is fired.
      * @private
      */
     refreshGroupValues: function() {

@@ -19,8 +19,22 @@ Ext.define('Ext.data.proxy.WebStorage', {
         id: undefined,
 
         // WebStorage proxies dont use readers and writers
+        /**
+         * @cfg
+         * @hide
+         */
         reader: null,
-        writer: null
+        /**
+         * @cfg
+         * @hide
+         */
+        writer: null,
+
+        /**
+         * @cfg {Boolean} enablePagingParams This can be set to true if you want the webstorage proxy to comply
+         * to the paging params set on the store.
+         */
+        enablePagingParams: false
     },
 
     /**
@@ -89,8 +103,12 @@ Ext.define('Ext.data.proxy.WebStorage', {
             model      = this.getModel(),
             idProperty = model.getIdProperty(),
             params     = operation.getParams() || {},
+            sorters = operation.getSorters(),
+            filters = operation.getFilters(),
+            start = operation.getStart(),
+            limit = operation.getLimit(),
             length     = ids.length,
-            i, record;
+            i, record, collection;
 
         //read a single record
         if (params[idProperty] !== undefined) {
@@ -103,6 +121,26 @@ Ext.define('Ext.data.proxy.WebStorage', {
             for (i = 0; i < length; i++) {
                 records.push(this.getRecord(ids[i]));
             }
+
+            collection = Ext.create('Ext.util.Collection');
+
+            // First we comply to filters
+            if (filters && filters.length) {
+                collection.setFilters(filters);
+            }
+            // Then we comply to sorters
+            if (sorters && sorters.length) {
+                collection.setSorters(sorters);
+            }
+
+            collection.addAll(records);
+
+            if (this.getEnablePagingParams() && start !== undefined && limit !== undefined) {
+                records = collection.items.slice(start, start + limit);
+            } else {
+                records = collection.items.slice();
+            }
+
             operation.setSuccessful();
         }
 
@@ -160,6 +198,8 @@ Ext.define('Ext.data.proxy.WebStorage', {
             newIds  = [].concat(ids),
             i;
 
+        operation.setStarted();
+
         for (i = 0; i < length; i++) {
             Ext.Array.remove(newIds, records[i].getId());
             this.removeRecord(records[i], false);
@@ -192,7 +232,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
                 i, field, name, record, rawData, dateFormat;
 
             if (!item) {
-                return;
+                return undefined;
             }
 
             rawData = Ext.decode(item);
@@ -249,6 +289,10 @@ Ext.define('Ext.data.proxy.WebStorage', {
             field = fields[i];
             name  = field.getName();
 
+            if (field.getPersist() === false) {
+                continue;
+            }
+
             if (typeof field.getEncode() == 'function') {
                 data[name] = field.getEncode()(rawData[name], record);
             } else {
@@ -273,7 +317,11 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
         //iPad bug requires that we remove the item before setting it
         obj.removeItem(key);
-        obj.setItem(key, Ext.encode(data));
+        try {
+            obj.setItem(key, Ext.encode(data));
+        } catch(e){
+            this.fireEvent('exception', this, e);
+        }
 
         record.commit();
     },
@@ -318,16 +366,6 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
     /**
      * @private
-     * Returns the unique key used to store the current record counter for this proxy. This is used internally when
-     * realizing models (creating them when they used to be phantoms), in order to give each model instance a unique id.
-     * @return {String} The counter key
-     */
-    getRecordCounterKey: function() {
-        return Ext.String.format("{0}-counter", this.getId());
-    },
-
-    /**
-     * @private
      * Returns the array of record IDs stored in this Proxy
      * @return {Number[]} The record IDs. Each is cast as a Number
      */
@@ -351,15 +389,16 @@ Ext.define('Ext.data.proxy.WebStorage', {
     setIds: function(ids) {
         var obj = this.getStorageObject(),
             str = ids.join(","),
-            id  = this.getId(),
-            key = this.getRecordCounterKey();
+            id  = this.getId();
 
         obj.removeItem(id);
 
-        if (Ext.isEmpty(str)) {
-            obj.removeItem(key);
-        } else {
-            obj.setItem(id, str);
+        if (!Ext.isEmpty(str)) {
+            try {
+                obj.setItem(id, str);
+            } catch(e){
+                this.fireEvent('exception', this, e);
+            }
         }
     },
 
@@ -371,7 +410,11 @@ Ext.define('Ext.data.proxy.WebStorage', {
     initialize: function() {
         this.callParent(arguments);
         var storageObject = this.getStorageObject();
-        storageObject.setItem(this.getId(), storageObject.getItem(this.getId()) || "");
+        try {
+            storageObject.setItem(this.getId(), storageObject.getItem(this.getId()) || "");
+        } catch(e){
+            this.fireEvent('exception', this, e);
+        }
     },
 
     /**
@@ -386,11 +429,10 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
         //remove all the records
         for (i = 0; i < len; i++) {
-            this.removeRecord(ids[i]);
+            this.removeRecord(ids[i], false);
         }
 
         //remove the supporting objects
-        obj.removeItem(this.getRecordCounterKey());
         obj.removeItem(this.getId());
     },
 

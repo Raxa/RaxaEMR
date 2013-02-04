@@ -11,18 +11,18 @@ Ext.define('RaxaEmr.Pharmacy.model.Person', {
     }, {
         name: 'age',
         type: 'number'
-    }, {
-        name: 'birthdate',
-        type: 'date'
-    }, {
+    }, 
+    {
         name: 'uuid',
         type: 'string',
         persist: false
     }, {
         name: 'names',
         model: 'RaxaEmr.Pharmacy.model.Name'
-    }, {
-        name: 'addresses',
-        model: 'RaxaEmr.Pharmacy.model.Address'
-    }]
+    },
+    {
+        name: 'attributes',
+        model: 'RaxaEmr.Pharmacy.model.Name'
+    } 
+]
 });

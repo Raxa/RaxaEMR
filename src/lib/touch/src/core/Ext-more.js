@@ -1,3 +1,7 @@
+//@tag dom,core
+//@define Ext-more
+//@require Ext.EventManager
+
 /**
  * @class Ext
  *
@@ -28,7 +32,7 @@
  *
  * [getting_started]: #!/guide/getting_started
  */
-Ext.setVersion('touch', '2.0.1');
+Ext.setVersion('touch', '2.1.0');
 
 Ext.apply(Ext, {
     /**
@@ -55,10 +59,10 @@ Ext.apply(Ext, {
     },
 
     /**
-     * Generates unique ids. If the element already has an id, it is unchanged
-     * @param {Mixed} el (optional) The element to generate an id for
-     * @param {String} prefix (optional) Id prefix (defaults "ext-gen")
-     * @return {String} The generated Id.
+     * Generates unique ids. If the element already has an `id`, it is unchanged.
+     * @param {Mixed} el (optional) The element to generate an id for.
+     * @param {String} [prefix=ext-gen] (optional) The `id` prefix.
+     * @return {String} The generated `id`.
      */
     id: function(el, prefix) {
         if (el && el.id) {
@@ -84,7 +88,7 @@ Ext.apply(Ext, {
 
     /**
      * Returns the current document body as an {@link Ext.Element}.
-     * @return Ext.Element The document body
+     * @return {Ext.Element} The document body.
      */
     getBody: function() {
         if (!Ext.documentBodyElement) {
@@ -100,7 +104,7 @@ Ext.apply(Ext, {
 
     /**
      * Returns the current document head as an {@link Ext.Element}.
-     * @return Ext.Element The document head
+     * @return {Ext.Element} The document head.
      */
     getHead: function() {
         if (!Ext.documentHeadElement) {
@@ -112,7 +116,7 @@ Ext.apply(Ext, {
 
     /**
      * Returns the current HTML document object as an {@link Ext.Element}.
-     * @return Ext.Element The document
+     * @return {Ext.Element} The document.
      */
     getDoc: function() {
         if (!Ext.documentElement) {
@@ -126,7 +130,7 @@ Ext.apply(Ext, {
      * This is shorthand reference to {@link Ext.ComponentMgr#get}.
      * Looks up an existing {@link Ext.Component Component} by {@link Ext.Component#getId id}
      * @param {String} id The component {@link Ext.Component#getId id}
-     * @return Ext.Component The Component, <tt>undefined</tt> if not found, or <tt>null</tt> if a
+     * @return {Ext.Component} The Component, `undefined` if not found, or `null` if a
      * Class was found.
     */
     getCmp: function(id) {
@@ -134,7 +138,7 @@ Ext.apply(Ext, {
     },
 
     /**
-     * Copies a set of named properties fom the source object to the destination object.
+     * Copies a set of named properties from the source object to the destination object.
      *
      * Example:
      *
@@ -152,7 +156,7 @@ Ext.apply(Ext, {
      * @param {Object} source The source object.
      * @param {String/String[]} names Either an Array of property names, or a comma-delimited list
      * of property names to copy.
-     * @param {Boolean} usePrototypeKeys (Optional) Defaults to false. Pass true to copy keys off of the prototype as well as the instance.
+     * @param {Boolean} [usePrototypeKeys=false] (optional) Pass `true` to copy keys off of the prototype as well as the instance.
      * @return {Object} The modified object.
      */
     copyTo : function(dest, source, names, usePrototypeKeys) {
@@ -173,7 +177,7 @@ Ext.apply(Ext, {
      * intended for arguments of type {@link Ext.Element} and {@link Ext.Component}.
      * Any number of elements and/or components can be passed into this function in a single
      * call as separate arguments.
-     * @param {Mixed...} args An {@link Ext.Element}, {@link Ext.Component}, or an Array of either of these to destroy
+     * @param {Mixed...} args An {@link Ext.Element}, {@link Ext.Component}, or an Array of either of these to destroy.
      */
     destroy: function() {
         var args = arguments,
@@ -194,26 +198,27 @@ Ext.apply(Ext, {
         }
     },
 
-     /**
-      * Return the dom node for the passed String (id), dom node, or Ext.Element.
-      * Here are some examples:
-      * <pre><code>
-// gets dom node based on id
-var elDom = Ext.getDom('elId');
-// gets dom node based on the dom node
-var elDom1 = Ext.getDom(elDom);
-
-// If we don&#39;t know if we are working with an
-// Ext.Element or a dom node use Ext.getDom
-function(el){
- var dom = Ext.getDom(el);
- // do something with the dom node
-}
-       </code></pre>
-     * <b>Note</b>: the dom node to be found actually needs to exist (be rendered, etc)
+    /**
+     * Return the dom node for the passed String (id), dom node, or Ext.Element.
+     * Here are some examples:
+     *
+     *     // gets dom node based on id
+     *     var elDom = Ext.getDom('elId');
+     *
+     *     // gets dom node based on the dom node
+     *     var elDom1 = Ext.getDom(elDom);
+     *
+     *     // If we don't know if we are working with an
+     *     // Ext.Element or a dom node use Ext.getDom
+     *     function(el){
+     *         var dom = Ext.getDom(el);
+     *         // do something with the dom node
+     *     }
+     *
+     * __Note:__ the dom node to be found actually needs to exist (be rendered, etc)
      * when this method is called to be successful.
      * @param {Mixed} el
-     * @return HTMLElement
+     * @return {HTMLElement}
      */
     getDom: function(el) {
         if (!el || !document) {
@@ -224,9 +229,9 @@ function(el){
     },
 
     /**
-     * <p>Removes this element from the document, removes all DOM event listeners, and deletes the cache reference.
+     * Removes this element from the document, removes all DOM event listeners, and deletes the cache reference.
      * All DOM event listeners are removed from this element.
-     * @param {HTMLElement} node The node to remove
+     * @param {HTMLElement} node The node to remove.
      */
     removeNode: function(node) {
         if (node && node.parentNode && node.tagName != 'BODY') {
@@ -276,9 +281,20 @@ function(el){
             componentPaint: {
                 xclass: 'Ext.event.publisher.ComponentPaint'
             },
-            componentSize: {
-                xclass: 'Ext.event.publisher.ComponentSize'
+//            componentSize: {
+//                xclass: 'Ext.event.publisher.ComponentSize'
+//            },
+            elementPaint: {
+                xclass: 'Ext.event.publisher.ElementPaint'
+            },
+            elementSize: {
+                xclass: 'Ext.event.publisher.ElementSize'
             }
+            //<feature charts>
+            ,seriesItemEvents: {
+                xclass: 'Ext.chart.series.ItemPublisher'
+            }
+            //</feature>
         },
 
         //<feature logger>
@@ -311,6 +327,13 @@ function(el){
      * @private
      */
     isSetup: false,
+
+    /**
+     * This indicate the start timestamp of current cycle.
+     * It is only reliable during dom-event-initiated cycles and
+     * {@link Ext.draw.Animator} initiated cycles.
+     */
+    frameStartTime: +new Date(),
 
     /**
      * @private
@@ -405,7 +428,7 @@ function(el){
      *
      * Note that the dimensions of the icon images must be exactly 57x57, 72x72, 114x114 and 144x144 respectively.
      *
-     * It is highly recommended that you provide all these different sizes to accomodate a full range of
+     * It is highly recommended that you provide all these different sizes to accommodate a full range of
      * devices currently available. However if you only have one icon in one size, make it 57x57 in size and
      * specify it as a string value. This same icon will be used on all supported devices.
      *
@@ -425,6 +448,7 @@ function(el){
      *         startupImage: {
      *             '320x460': 'resources/startup/320x460.jpg',
      *             '640x920': 'resources/startup/640x920.png',
+     *             '640x1096': 'resources/startup/640x1096.png',
      *             '768x1004': 'resources/startup/768x1004.png',
      *             '748x1024': 'resources/startup/748x1024.png',
      *             '1536x2008': 'resources/startup/1536x2008.png',
@@ -440,12 +464,13 @@ function(el){
      *
      * - 320x460: Non-retina iPhone, iPod touch, and all Android devices
      * - 640x920: Retina iPhone and iPod touch
+     * - 640x1096: iPhone 5 and iPod touch (fifth generation)
      * - 768x1004: Non-retina iPad (first and second generation) in portrait orientation
      * - 748x1024: Non-retina iPad (first and second generation) in landscape orientation
      * - 1536x2008: Retina iPad (third generation) in portrait orientation
      * - 1496x2048: Retina iPad (third generation) in landscape orientation
      *
-     * Please note that there's no automatic fallback machanism for the startup images. In other words, if you don't specify
+     * Please note that there's no automatic fallback mechanism for the startup images. In other words, if you don't specify
      * a valid image for a certain device, nothing will be displayed while the application is being launched on that device.
      *
      * @param {Boolean} isIconPrecomposed
@@ -453,43 +478,43 @@ function(el){
      * only applies to iOS devices.
      *
      * @param {String} statusBarStyle
-     * The style of status bar to be shown on applications added to the iOS homescreen. Valid options are:
+     * The style of status bar to be shown on applications added to the iOS home screen. Valid options are:
      *
      * * `default`
      * * `black`
      * * `black-translucent`
      *
      * @param {String[]} config.requires
-     * An array of required classes for your application which will be automatically loaded before 'onReady' is invoked.
+     * An array of required classes for your application which will be automatically loaded before `onReady` is invoked.
      * Please refer to {@link Ext.Loader} and {@link Ext.Loader#require} for more information.
      *
      *     Ext.setup({
      *         requires: ['Ext.Button', 'Ext.tab.Panel'],
      *         onReady: function() {
-     *             //...
+     *             // ...
      *         }
      *     });
      *
      * @param {Object} config.eventPublishers
-     * Sencha Touch, by default, includes various {@link Ext.event.recognizer.Recognizer} subclasses to recognise events fired
-     * in your application. The list of default recognisers can be found in the documentation for
+     * Sencha Touch, by default, includes various {@link Ext.event.recognizer.Recognizer} subclasses to recognize events fired
+     * in your application. The list of default recognizers can be found in the documentation for
      * {@link Ext.event.recognizer.Recognizer}.
      *
-     * To change the default recognisers, you can use the following syntax:
+     * To change the default recognizers, you can use the following syntax:
      *
      *     Ext.setup({
      *         eventPublishers: {
      *             touchGesture: {
      *                 recognizers: {
      *                     swipe: {
-     *                         //this will include both vertical and horizontal swipe recognisers
+     *                         // this will include both vertical and horizontal swipe recognizers
      *                         xclass: 'Ext.event.recognizer.Swipe'
      *                     }
      *                 }
      *             }
      *         },
      *         onReady: function() {
-     *             //...
+     *             // ...
      *         }
      *     });
      *
@@ -506,7 +531,7 @@ function(el){
      *             }
      *         },
      *         onReady: function() {
-     *             //...
+     *             // ...
      *         }
      *     });
      */
@@ -623,7 +648,12 @@ function(el){
             statusBarStyle = config.statusBarStyle,
             devicePixelRatio = window.devicePixelRatio || 1;
 
-        addMeta('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no');
+        if (navigator.standalone) {
+            addMeta('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0');
+        }
+        else {
+            addMeta('viewport', 'initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0');
+        }
         addMeta('apple-mobile-web-app-capable', 'yes');
         addMeta('apple-touch-fullscreen', 'yes');
 
@@ -634,7 +664,10 @@ function(el){
 
         if (Ext.isString(icon)) {
             icon = {
-                57: icon
+                57: icon,
+                72: icon,
+                114: icon,
+                144: icon
             };
         }
         else if (!icon) {
@@ -667,23 +700,6 @@ function(el){
         }
         //</deprecated>
 
-        // Non-Retina iPhone, iPod touch, and Android devices
-        if ('57' in icon) {
-            addIcon(icon['57'], null, isIconPrecomposed);
-        }
-        // Non-Retina iPad
-        if ('72' in icon) {
-            addIcon(icon['72'], '72x72', isIconPrecomposed);
-        }
-        // Retina iPhone and iPod touch
-        if ('114' in icon) {
-            addIcon(icon['114'], '114x114', isIconPrecomposed);
-        }
-        // Retina iPad
-        if ('144' in icon) {
-            addIcon(icon['144'], '144x144', isIconPrecomposed);
-        }
-
         if (Ext.os.is.iPad) {
             if (devicePixelRatio >= 2) {
                 // Retina iPad - Landscape
@@ -693,6 +709,11 @@ function(el){
                 // Retina iPad - Portrait
                 if ('1536x2008' in startupImage) {
                     addStartupImage(startupImage['1536x2008'], '(orientation: portrait)');
+                }
+
+                // Retina iPad
+                if ('144' in icon) {
+                    addIcon(icon['144'], '144x144', isIconPrecomposed);
                 }
             }
             else {
@@ -704,15 +725,34 @@ function(el){
                 if ('768x1004' in startupImage) {
                     addStartupImage(startupImage['768x1004'], '(orientation: portrait)');
                 }
+
+                // Non-Retina iPad
+                if ('72' in icon) {
+                    addIcon(icon['72'], '72x72', isIconPrecomposed);
+                }
             }
         }
         else {
             // Retina iPhone, iPod touch with iOS version >= 4.3
             if (devicePixelRatio >= 2 && Ext.os.version.gtEq('4.3')) {
-                addStartupImage(startupImage['640x920']);
+                if (Ext.os.is.iPhone5) {
+                    addStartupImage(startupImage['640x1096']);
+                } else {
+                    addStartupImage(startupImage['640x920']);
+                }
+
+                // Retina iPhone and iPod touch
+                if ('114' in icon) {
+                    addIcon(icon['114'], '114x114', isIconPrecomposed);
+                }
             }
             else {
                 addStartupImage(startupImage['320x460']);
+
+                // Non-Retina iPhone, iPod touch, and Android devices
+                if ('57' in icon) {
+                    addIcon(icon['57'], null, isIconPrecomposed);
+                }
             }
         }
     },
@@ -759,41 +799,82 @@ function(el){
      *     });
      *
      * @param {String/Object} config.icon
-     * A icon configuration for this application. This will only apply to iOS applications which are saved to the homescreen.
+     * Specifies a set of URLs to the application icon for different device form factors. This icon is displayed
+     * when the application is added to the device's Home Screen.
      *
-     * You can either pass a string which will be applied to all different sizes:
-     *
-     *     Ext.setup({
-     *         icon: 'icon.png',
-     *         onReady: function() {
-     *             console.log('Launch...');
-     *         }
-     *     });
-     *
-     * Or an object which has a location for different sizes:
-     *
-     *     Ext.setup({
+     *     Ext.application({
      *         icon: {
-     *             '57': 'icon57.png',
-     *             '77': 'icon77.png',
-     *             '114': 'icon114.png',
-     *             '144': 'icon144.png'
+     *             57: 'resources/icons/Icon.png',
+     *             72: 'resources/icons/Icon~ipad.png',
+     *             114: 'resources/icons/Icon@2x.png',
+     *             144: 'resources/icons/Icon~ipad@2x.png'
      *         },
-     *         onReady: function() {
-     *             console.log('Launch...');
+     *         launch: function() {
+     *             // ...
      *         }
      *     });
      *
-     * @param {String} config.icon.57 The icon to be used on non-retina display devices (iPhone 3GS and below).
-     * @param {String} config.icon.77 The icon to be used on the iPad.
-     * @param {String} config.icon.114 The icon to be used on retina display devices (iPhone 4 and iPod Touch Gen 4).
-     * @param {String} config.icon.144 The icon to be used on retina display devices (iPad Gen 3).
+     * Each key represents the dimension of the icon as a square shape. For example: '57' is the key for a 57 x 57
+     * icon image. Here is the breakdown of each dimension and its device target:
      *
-     * @param {Boolean} glossOnIcon
-     * True to add a gloss effect to the icon.
+     * - 57: Non-retina iPhone, iPod touch, and all Android devices
+     * - 72: Retina iPhone and iPod touch
+     * - 114: Non-retina iPad (first and second generation)
+     * - 144: Retina iPad (third generation)
      *
-     * @param {String} statusBarStyle
-     * The style of status bar to be shown on applications added to the iOS homescreen. Valid options are:
+     * Note that the dimensions of the icon images must be exactly 57x57, 72x72, 114x114 and 144x144 respectively.
+     *
+     * It is highly recommended that you provide all these different sizes to accommodate a full range of
+     * devices currently available. However if you only have one icon in one size, make it 57x57 in size and
+     * specify it as a string value. This same icon will be used on all supported devices.
+     *
+     *     Ext.setup({
+     *         icon: 'resources/icons/Icon.png',
+     *         onReady: function() {
+     *             // ...
+     *         }
+     *     });
+     *
+     * @param {Object} config.startupImage
+     * Specifies a set of URLs to the application startup images for different device form factors. This image is
+     * displayed when the application is being launched from the Home Screen icon. Note that this currently only applies
+     * to iOS devices.
+     *
+     *     Ext.application({
+     *         startupImage: {
+     *             '320x460': 'resources/startup/320x460.jpg',
+     *             '640x920': 'resources/startup/640x920.png',
+     *             '640x1096': 'resources/startup/640x1096.png',
+     *             '768x1004': 'resources/startup/768x1004.png',
+     *             '748x1024': 'resources/startup/748x1024.png',
+     *             '1536x2008': 'resources/startup/1536x2008.png',
+     *             '1496x2048': 'resources/startup/1496x2048.png'
+     *         },
+     *         launch: function() {
+     *             // ...
+     *         }
+     *     });
+     *
+     * Each key represents the dimension of the image. For example: '320x460' is the key for a 320px x 460px image.
+     * Here is the breakdown of each dimension and its device target:
+     *
+     * - 320x460: Non-retina iPhone, iPod touch, and all Android devices
+     * - 640x920: Retina iPhone and iPod touch
+     * - 640x1096: iPhone 5 and iPod touch (fifth generation)
+     * - 768x1004: Non-retina iPad (first and second generation) in portrait orientation
+     * - 748x1024: Non-retina iPad (first and second generation) in landscape orientation
+     * - 1536x2008: Retina iPad (third generation) in portrait orientation
+     * - 1496x2048: Retina iPad (third generation) in landscape orientation
+     *
+     * Please note that there's no automatic fallback mechanism for the startup images. In other words, if you don't specify
+     * a valid image for a certain device, nothing will be displayed while the application is being launched on that device.
+     *
+     * @param {Boolean} config.isIconPrecomposed
+     * True to not having a glossy effect added to the icon by the OS, which will preserve its exact look. This currently
+     * only applies to iOS devices.
+     *
+     * @param {String} config.statusBarStyle
+     * The style of status bar to be shown on applications added to the iOS home screen. Valid options are:
      *
      * * `default`
      * * `black`
@@ -806,29 +887,29 @@ function(el){
      *     Ext.application({
      *         requires: ['Ext.Button', 'Ext.tab.Panel'],
      *         launch: function() {
-     *             //...
+     *             // ...
      *         }
      *     });
      *
      * @param {Object} config.eventPublishers
-     * Sencha Touch, by default, includes various {@link Ext.event.recognizer.Recognizer} subclasses to recognise events fired
-     * in your application. The list of default recognisers can be found in the documentation for {@link Ext.event.recognizer.Recognizer}.
+     * Sencha Touch, by default, includes various {@link Ext.event.recognizer.Recognizer} subclasses to recognize events fired
+     * in your application. The list of default recognizers can be found in the documentation for {@link Ext.event.recognizer.Recognizer}.
      *
-     * To change the default recognisers, you can use the following syntax:
+     * To change the default recognizers, you can use the following syntax:
      *
      *     Ext.application({
      *         eventPublishers: {
      *             touchGesture: {
      *                 recognizers: {
      *                     swipe: {
-     *                         //this will include both vertical and horizontal swipe recognisers
+     *                         // this will include both vertical and horizontal swipe recognizers
      *                         xclass: 'Ext.event.recognizer.Swipe'
      *                     }
      *                 }
      *             }
      *         },
      *         launch: function() {
-     *             //...
+     *             // ...
      *         }
      *     });
      *
@@ -845,7 +926,7 @@ function(el){
      *             }
      *         },
      *         launch: function() {
-     *             //...
+     *             // ...
      *         }
      *     });
      */
@@ -961,7 +1042,7 @@ function(el){
     },
 
     /**
-     * A global factory method to instatiate a class from a config object. For example, these two calls are equivalent:
+     * A global factory method to instantiate a class from a config object. For example, these two calls are equivalent:
      *
      *     Ext.factory({ text: 'My Button' }, 'Ext.Button');
      *     Ext.create('Ext.Button', { text: 'My Button' });
@@ -973,9 +1054,10 @@ function(el){
      *     button = Ext.factory({ text: 'New Button' }, 'Ext.Button', button);     // Button created
      *     button = Ext.factory({ text: 'Updated Button' }, 'Ext.Button', button); // Button updated
      *
-     * @param {Object} config  The config object to instantiate or update an instance with
-     * @param {String} classReference  The class to instantiate from
-     * @param {Object} [instance]  The instance to update
+     * @param {Object} config  The config object to instantiate or update an instance with.
+     * @param {String} classReference  The class to instantiate from.
+     * @param {Object} [instance]  The instance to update.
+     * @param [aliasNamespace]
      * @member Ext
      */
     factory: function(config, classReference, instance, aliasNamespace) {
@@ -1271,9 +1353,9 @@ function(el){
 
     /**
      * Calls function after specified delay, or right away when delay == 0.
-     * @param {Function} callback The callback to execute
-     * @param {Object} scope (optional) The scope to execute in
-     * @param {Array} args (optional) The arguments to pass to the function
+     * @param {Function} callback The callback to execute.
+     * @param {Object} scope (optional) The scope to execute in.
+     * @param {Array} args (optional) The arguments to pass to the function.
      * @param {Number} delay (optional) Pass a number to delay the call by a number of milliseconds.
      * @member Ext
      */
@@ -1337,7 +1419,7 @@ Ext.deprecateMethod(Ext, 'createInterceptor', Ext.Function.createInterceptor, "E
 /**
  * @member Ext
  * @property {Boolean} SSL_SECURE_URL
- * URL to a blank file used by Ext when in secure mode for iframe src and onReady
+ * URL to a blank file used by Ext JS when in secure mode for iframe src and onReady
  * src to prevent the IE insecure content warning.
  * @removed 2.0.0
  */
@@ -1346,7 +1428,7 @@ Ext.deprecateProperty(Ext, 'SSL_SECURE_URL', null, "Ext.SSL_SECURE_URL has been 
 /**
  * @member Ext
  * @property {Boolean} enableGarbageCollector
- * True to automatically uncache orphaned Ext.Elements periodically.
+ * `true` to automatically un-cache orphaned Ext.Elements periodically.
  * @removed 2.0.0
  */
 Ext.deprecateProperty(Ext, 'enableGarbageCollector', null, "Ext.enableGarbageCollector has been removed");

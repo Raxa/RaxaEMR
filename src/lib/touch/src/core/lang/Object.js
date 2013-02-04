@@ -1,9 +1,13 @@
+//@tag foundation,core
+//@define Ext.Object
+//@require Ext.Number
+
 /**
  * @author Jacky Nguyen <jacky@sencha.com>
  * @docauthor Jacky Nguyen <jacky@sencha.com>
  * @class Ext.Object
  *
- * A collection of useful static methods to deal with objects
+ * A collection of useful static methods to deal with objects.
  *
  * @singleton
  */
@@ -19,7 +23,9 @@ var ExtObject = Ext.Object = {
      * Returns a new object with the given object as the prototype chain.
      * @param {Object} object The prototype chain for the new object.
      */
-    chain: function (object) {
+    chain: ('create' in Object) ? function(object){
+        return Object.create(object);
+    } : function (object) {
         TemplateClass.prototype = object;
         var result = new TemplateClass();
         TemplateClass.prototype = null;
@@ -31,15 +37,15 @@ var ExtObject = Ext.Object = {
      * query strings. For example:
      *
      * Non-recursive:
-     * 
+     *
      *     var objects = Ext.Object.toQueryObjects('hobbies', ['reading', 'cooking', 'swimming']);
      *
      *     // objects then equals:
      *     [
      *         { name: 'hobbies', value: 'reading' },
      *         { name: 'hobbies', value: 'cooking' },
-     *         { name: 'hobbies', value: 'swimming' },
-     *     ];
+     *         { name: 'hobbies', value: 'swimming' }
+     *     ]
      *
      * Recursive:
      *
@@ -48,7 +54,7 @@ var ExtObject = Ext.Object = {
      *         month: 8,
      *         year: 1987,
      *         extra: {
-     *             hour: 4
+     *             hour: 4,
      *             minute: 30
      *         }
      *     }, true);
@@ -59,12 +65,12 @@ var ExtObject = Ext.Object = {
      *         { name: 'dateOfBirth[month]', value: 8 },
      *         { name: 'dateOfBirth[year]', value: 1987 },
      *         { name: 'dateOfBirth[extra][hour]', value: 4 },
-     *         { name: 'dateOfBirth[extra][minute]', value: 30 },
-     *     ];
+     *         { name: 'dateOfBirth[extra][minute]', value: 30 }
+     *     ]
      *
      * @param {String} name
      * @param {Object} value
-     * @param {Boolean} [recursive=false] True to recursively encode any sub-objects.
+     * @param {Boolean} [recursive=false] `true` to recursively encode any sub-objects.
      * @return {Object[]} Array of objects with `name` and `value` fields.
      */
     toQueryObjects: function(name, value, recursive) {
@@ -111,7 +117,7 @@ var ExtObject = Ext.Object = {
     },
 
     /**
-     * Takes an object and converts it to an encoded query string
+     * Takes an object and converts it to an encoded query string.
      *
      * Non-recursive:
      *
@@ -138,9 +144,9 @@ var ExtObject = Ext.Object = {
      *     //    &dateOfBirth[day]=1&dateOfBirth[month]=2&dateOfBirth[year]=1911
      *     //    &hobbies[0]=coding&hobbies[1]=eating&hobbies[2]=sleeping&hobbies[3][0]=nested&hobbies[3][1]=stuff
      *
-     * @param {Object} object The object to encode
+     * @param {Object} object The object to encode.
      * @param {Boolean} [recursive=false] Whether or not to interpret the object in recursive format.
-     * (PHP / Ruby on Rails servers and similar). Defaults to false
+     * (PHP / Ruby on Rails servers and similar).
      * @return {String} queryString
      */
     toQueryString: function(object, recursive) {
@@ -196,9 +202,9 @@ var ExtObject = Ext.Object = {
      *         hobbies: ['coding', 'eating', 'sleeping', ['nested', 'stuff']]
      *     }
      *
-     * @param {String} queryString The query string to decode
+     * @param {String} queryString The query string to decode.
      * @param {Boolean} [recursive=false] Whether or not to recursively decode the string. This format is supported by
-     * PHP / Ruby on Rails servers and similar. Defaults to false
+     * PHP / Ruby on Rails servers and similar.
      * @return {Object}
      */
     fromQueryString: function(queryString, recursive) {
@@ -289,8 +295,8 @@ var ExtObject = Ext.Object = {
      * by returning `false` in the callback function. For example:
      *
      *     var person = {
-     *         name: 'Jacky'
-     *         hairColor: 'black'
+     *         name: 'Jacky',
+     *         hairColor: 'black',
      *         loves: ['food', 'sleeping', 'wife']
      *     };
      *
@@ -304,9 +310,9 @@ var ExtObject = Ext.Object = {
      *
      * @param {Object} object The object to iterate
      * @param {Function} fn The callback function.
-     *   @param {String} fn.key
-     *   @param {Mixed} fn.value
-     *   @param {Object} fn.object The object itself
+     * @param {String} fn.key
+     * @param {Mixed} fn.value
+     * @param {Object} fn.object The object itself
      * @param {Object} [scope] The execution scope (`this`) of the callback function
      */
     each: function(object, fn, scope) {
@@ -325,7 +331,7 @@ var ExtObject = Ext.Object = {
      *     var extjs = {
      *         companyName: 'Ext JS',
      *         products: ['Ext JS', 'Ext GWT', 'Ext Designer'],
-     *         isSuperCool: true
+     *         isSuperCool: true,
      *         office: {
      *             size: 2000,
      *             location: 'Palo Alto',
@@ -350,7 +356,7 @@ var ExtObject = Ext.Object = {
      *         products: ['Ext JS', 'Ext GWT', 'Ext Designer', 'Sencha Touch', 'Sencha Animator'],
      *         isSuperCool: true
      *         office: {
-     *             size: 30000,
+     *             size: 40000,
      *             location: 'Redwood City'
      *             isFun: true
      *         }
@@ -422,7 +428,7 @@ var ExtObject = Ext.Object = {
 
     /**
      * Returns the first matching key corresponding to the given value.
-     * If no matching value is found, null is returned.
+     * If no matching value is found, `null` is returned.
      *
      *     var person = {
      *         name: 'Jacky',
@@ -453,7 +459,7 @@ var ExtObject = Ext.Object = {
      *     }); // ['Jacky', 'food']
      *
      * @param {Object} object
-     * @return {Array} An array of values from the object
+     * @return {Array} An array of values from the object.
      */
     getValues: function(object) {
         var values = [],
@@ -477,7 +483,7 @@ var ExtObject = Ext.Object = {
      *     }); // ['name', 'loves']
      *
      * @param {Object} object
-     * @return {String[]} An array of keys from the object
+     * @return {String[]} An array of keys from the object.
      * @method
      */
     getKeys: ('keys' in Object) ? Object.keys : function(object) {
@@ -494,7 +500,7 @@ var ExtObject = Ext.Object = {
     },
 
     /**
-     * Gets the total number of this object's own properties
+     * Gets the total number of this object's own properties.
      *
      *     var size = Ext.Object.getSize({
      *         name: 'Jacky',
@@ -521,8 +527,8 @@ var ExtObject = Ext.Object = {
      * @private
      */
     classify: function(object) {
-        var prototype = object,
-            objectProperties = [],
+        var objectProperties = [],
+            arrayProperties = [],
             propertyClassesMap = {},
             objectClass = function() {
                 var i = 0,
@@ -533,21 +539,35 @@ var ExtObject = Ext.Object = {
                     property = objectProperties[i];
                     this[property] = new propertyClassesMap[property];
                 }
+
+                ln = arrayProperties.length;
+
+                for (i = 0; i < ln; i++) {
+                    property = arrayProperties[i];
+                    this[property] = object[property].slice();
+                }
             },
-            key, value;
+            key, value, constructor;
 
         for (key in object) {
             if (object.hasOwnProperty(key)) {
                 value = object[key];
 
-                if (value && value.constructor === Object) {
-                    objectProperties.push(key);
-                    propertyClassesMap[key] = ExtObject.classify(value);
+                if (value) {
+                    constructor = value.constructor;
+
+                    if (constructor === Object) {
+                        objectProperties.push(key);
+                        propertyClassesMap[key] = ExtObject.classify(value);
+                    }
+                    else if (constructor === Array) {
+                        arrayProperties.push(key);
+                    }
                 }
             }
         }
 
-        objectClass.prototype = prototype;
+        objectClass.prototype = object;
 
         return objectClass;
     },
@@ -564,7 +584,7 @@ var ExtObject = Ext.Object = {
 };
 
 /**
- * A convenient alias method for {@link Ext.Object#merge}
+ * A convenient alias method for {@link Ext.Object#merge}.
  *
  * @member Ext
  * @method merge
@@ -577,11 +597,11 @@ Ext.merge = Ext.Object.merge;
 Ext.mergeIf = Ext.Object.mergeIf;
 
 /**
- * A convenient alias method for {@link Ext.Object#toQueryString}
+ * A convenient alias method for {@link Ext.Object#toQueryString}.
  *
  * @member Ext
  * @method urlEncode
- * @deprecated 4.0.0 Please use {@link Ext.Object#toQueryString Ext.Object.toQueryString} instead
+ * @deprecated 4.0.0 Please use `{@link Ext.Object#toQueryString Ext.Object.toQueryString}` instead
  */
 Ext.urlEncode = function() {
     var args = Ext.Array.from(arguments),
@@ -597,7 +617,7 @@ Ext.urlEncode = function() {
 };
 
 /**
- * A convenient alias method for {@link Ext.Object#fromQueryString}
+ * A convenient alias method for {@link Ext.Object#fromQueryString}.
  *
  * @member Ext
  * @method urlDecode

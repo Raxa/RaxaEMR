@@ -15,6 +15,7 @@
  */
 Ext.define('RaxaEmr.controller.Session', {
     extend: 'Ext.app.Controller',
+    requires: ['RaxaEmr.view.Main', 'RaxaEmr.view.NewAccount'],
     config: {
 
 
@@ -27,11 +28,16 @@ Ext.define('RaxaEmr.controller.Session', {
             passwordID: '#passwordID',
             userName: '#userName',
             signInButton: '#signInButton',
+            newAccountButton: '#newAccountButton',
             newProviderAccountButton: '#newProviderAccountButton',
             newPatientAccountButton: '#newPatientAccountButton',
             passwordProvider: '#newProviderId #password',
             confirmPasswordProvider: '#newProviderId #confirmPassword',
             saveProviderButton:'#newProviderId #saveProviderButton',
+            saveNewProviderButton:'#providerAgreementId #saveNewProviderButton',
+            backNewProviderButton:'#providerAgreementId #backNewProviderButton',
+            saveProviderDetailsButton:'#newProviderDetailsId #saveProviderDetailsButton',
+            backProviderDetailsButton:'#newProviderDetailsId #backProviderDetailsButton',
             passwordPatient: '#newPatientId #password',
             confirmPasswordPatient: '#newPatientId #confirmPassword',
             savePatientButton:'#newPatientId #savePatientButton',
@@ -56,6 +62,9 @@ Ext.define('RaxaEmr.controller.Session', {
             signInButton: {
                 tap: 'doLogin'
             },
+            newAccountButton: {
+                tap: 'showNewAccount'
+            },
             newProviderAccountButton: {
                 tap: 'newProviderAccount'
             },
@@ -64,6 +73,18 @@ Ext.define('RaxaEmr.controller.Session', {
             },
             saveProviderButton: {
                 tap: 'saveProvider'
+            },
+            saveNewProviderButton: {
+                tap: 'saveNewProvider'
+            },
+            backNewProviderButton: {
+                tap: 'backNewProvider'  
+            },
+            saveProviderDetailsButton: {
+                tap: 'saveProviderDetails'
+            },
+            backProviderDetailsButton: {
+                tap: 'backProviderDetails'
             },
             savePatientButton: {
                 tap: 'savePatient'
@@ -91,7 +112,7 @@ Ext.define('RaxaEmr.controller.Session', {
     /**
      *Stores information about the user who is logged in
      */
-// TODO: Store entire user state into the localStorage (or a cookie); verify it in database
+    // TODO: Store entire user state into the localStorage (or a cookie); verify it in database
     storeUserInfo: function () {
         Ext.getCmp('mainView').setMasked({
             xtype: 'loadmask',
@@ -108,6 +129,10 @@ Ext.define('RaxaEmr.controller.Session', {
             success: function (response) {
                 var userInfoJson = Ext.decode(response.responseText);
                 console.log(userInfoJson)
+                var raxaVersion = userInfoJson.raxaVersion;
+                if(raxaVersion !== localStorage.configVersion){
+                    Ext.Error.raise('Please update your Raxa Openmrs Module');
+                }
                 //only adding necessary fields for localStorage
                 var privilegesArray = [];
                 var i=0;
@@ -146,12 +171,12 @@ Ext.define('RaxaEmr.controller.Session', {
                     localStorage.setItem('location', location);
                     var presentLocation = Ext.getStore('locationStore').getAt(Ext.getStore('locationStore').findExact('uuid',location));
                     for(var k = 0; k< presentLocation.raw.attributes.length; k++){
-                    if(presentLocation.raw.attributes[k].display.indexOf('headerPrescription')>=0 && presentLocation.raw.attributes[k].value ){
-                        localStorage.setItem('headerPrescription',presentLocation.raw.attributes[k].value);
+                        if(presentLocation.raw.attributes[k].display.indexOf('headerPrescription')>=0 && presentLocation.raw.attributes[k].value ){
+                            localStorage.setItem('headerPrescription',presentLocation.raw.attributes[k].value);
                         }
 
-                    if(presentLocation.raw.attributes[k].display.indexOf('headerAddressPrescription')>=0 && presentLocation.raw.attributes[k].value ){
-                        localStorage.setItem('headerAddressPrescription',presentLocation.raw.attributes[k].value);
+                        if(presentLocation.raw.attributes[k].display.indexOf('headerAddressPrescription')>=0 && presentLocation.raw.attributes[k].value ){
+                            localStorage.setItem('headerAddressPrescription',presentLocation.raw.attributes[k].value);
                         }
                     }
                 }
@@ -160,7 +185,7 @@ Ext.define('RaxaEmr.controller.Session', {
             failure: function () {
                 Ext.getCmp('mainView').setMasked(false);
                 Ext.Msg.alert('Connection Error');
-                // Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.alert'));
+            // Ext.Msg.alert(Ext.i18n.appBundle.getMsg('RaxaEmr.controller.session.alert'));
             }
         });
     },
@@ -174,8 +199,22 @@ Ext.define('RaxaEmr.controller.Session', {
             this.newProvider = Ext.create('RaxaEmr.view.NewProvider');
             Ext.Viewport.add(this.newProvider);
         }
-        this.newProvider.setMasked(false);
+        // this.newProvider.setMasked(false);
         this.newProvider.show();
+    },
+    
+    saveProviderDetails: function () {
+        Ext.getCmp('newProviderDetailsId').hide();
+        if (!this.ProviderAgreement) {
+            this.ProviderAgreement = Ext.create('RaxaEmr.view.ProviderAgreement');
+            Ext.Viewport.add(this.ProviderAgreement);
+        }
+        this.ProviderAgreement.show();
+    },
+    
+    backProviderDetails: function() {
+        Ext.getCmp('newProviderId').show();
+        Ext.getCmp('newProviderDetailsId').hide();
     },
 
     newPatientAccount: function () {
@@ -188,7 +227,94 @@ Ext.define('RaxaEmr.controller.Session', {
     },
     
     saveProvider: function() {
-        this.saveUser("provider");
+        Ext.getCmp('newProviderId').hide();
+        if (!this.newProviderDetails) {
+            this.newProviderDetails = Ext.create('RaxaEmr.view.NewProviderDetails');
+            Ext.Viewport.add(this.newProviderDetails);
+        }
+        this.newProviderDetails.show();
+    },
+    
+    saveNewProvider: function() {
+        var formComponent = Ext.getCmp('newProviderId');
+        var formCmpDetails = Ext.getCmp('newProviderDetailsId');
+        var formAgDetails = Ext.getCmp('providerAgreementId');
+        var formp  = formComponent.saveForm();
+        var formDetails = formCmpDetails.saveForm();
+        var formAggrementDetails = formAgDetails.saveForm();
+        if(formp.email && formp.userName && formp.password && formp.phone && formDetails.firstname && formDetails.lastname && formDetails.nameOfSetup && formDetails.country && formDetails.address && formDetails.city && formDetails.state && formDetails.choice) {
+            if(formAggrementDetails.AgreeServices){
+            var locAddress = {
+                name : formDetails.nameOfSetup,
+                address1 : formDetails.address,
+                cityVillage : formDetails.city,
+                stateProvince : formDetails.state,
+                country : formDetails.country,
+                latitude : formDetails.latitude,
+                longitude : formDetails.longitude     
+            }
+            var locAddressParam = Ext.encode(locAddress);
+            Ext.Ajax.request({
+                scope:this,
+                url: HOST + '/ws/rest/v1/location',
+                method: 'POST',
+                params: locAddressParam,
+                disableCaching: false,
+                headers: Util.getNewAccountAuthHeaders(),
+                success: function (response) {
+                    var newUser ={
+                        isOutpatientDoctor: 'true',
+                        email: formp.email,
+                        userName: formp.userName,
+                        password: formp.password,
+                        phone: formp.phone,
+                        firstName: formDetails.firstname,
+                        lastName: formDetails.lastname,
+                        type: 'provider',
+                        gender : formDetails.choice,
+                        location: JSON.parse(response.responseText).uuid
+                
+                    }
+                    var newUserParam = Ext.encode(newUser);
+                    Ext.Ajax.request({
+                        scope:this,
+                        url: HOST + '/ws/rest/v1/raxacore/user',
+                        method: 'POST',
+                        params: newUserParam,
+                        disableCaching: false,
+                        headers: Util.getNewAccountAuthHeaders(),
+                        success: function (response) {
+                            formComponent.setMasked(false);
+                            Ext.Msg.alert("Successful", "Please login to continue.");
+                            Ext.getCmp('userName').setValue(formp.userName);
+                            Ext.getCmp('providerAgreementId').hide();
+                            Ext.getCmp('newProviderId').reset();
+                            Ext.getCmp('newProviderDetailsId').reset();
+                            Ext.getCmp('providerAgreementId').reset();
+                        },
+                        failure: function (response) {
+                            formComponent.setMasked(false);
+                            Ext.Msg.alert("","Error");
+                        }
+                    });
+                },
+                failure: function (response) {
+                    console.log("inside failure");
+                    Ext.Msg.alert("","Error");
+                }
+            });
+        }
+        else {
+            Ext.Msg.alert("","Please Agree The Terms Of Services");
+        }
+        } else {
+            Ext.Msg.alert("","Please Enter All Fields");
+        }
+    },
+    
+    backNewProvider: function() {
+        Ext.getCmp('newProviderDetailsId').show();
+        Ext.getCmp('providerAgreementId').hide();
     },
     
     savePatient: function() {
@@ -196,73 +322,77 @@ Ext.define('RaxaEmr.controller.Session', {
     },
 
     saveUser: function(type) {
-        if(type === "provider"){
-            var formComponent = Ext.getCmp('newProviderId');
-            var formp  = formComponent.saveForm();
-        }
-        else{
-            var formComponent = Ext.getCmp('newPatientId');
-            var formp = formComponent.saveForm();
-        }
-        if (formp.givenname && formp.familyname && formp.choice && formp.userName && formp.password && formp.location) {
-            var newUser = {
-                gender : formp.choice,
-                firstName: formp.givenname,
-                lastName: formp.familyname,
-                location: formp.location,
-                userName: formp.userName,
-                password: formp.password,
-                type: type
-            };
             if(type === "provider"){
-                newUser.isOutpatientDoctor = "true";
+                var formComponent = Ext.getCmp('newProviderId');
+                var formp  = formComponent.saveForm();
             }
-            else if(type === "patient" && formp.donateOrgans){
-                newUser.donateOrgans = "true"
+            else{
+                var formComponent = Ext.getCmp('newPatientId');
+                var formp = formComponent.saveForm();
             }
-            if(formp.email){
-                newUser.email = formp.email;
-            }
-            if(formp.phone){
-                newUser.phone = formp.phone;
-            }
-            var newUserParam = Ext.encode(newUser);
-            formComponent.setMasked(true);
-            Ext.Ajax.request({
-                scope:this,
-                url: HOST + '/ws/rest/v1/raxacore/user',
-                method: 'POST',
-                params: newUserParam,
-                disableCaching: false,
-                headers: Util.getNewAccountAuthHeaders(),
-                success: function (response) {
-                    formComponent.setMasked(false);
-                    if(type==="provider"){
-                        Ext.Msg.alert("Successful", "Please login to continue.");
-                        Ext.getCmp('userName').setValue(formp.userName);
-                    }
-                    else{
-                        Ext.Msg.alert("Patient Creation Successful", "Thank you for registering.");
-                    }
-                },
-                failure: function (response) {
-                    formComponent.setMasked(false);
-                    var errorJson = Ext.decode(response.responseText);
-                    var message = errorJson.error.detail.toString().split(":")[1]
-                    Ext.Msg.alert('Error '+message);
+            if (formp.givenname && formp.familyname && formp.choice && formp.userName && formp.password && formp.location) {
+                var newUser = {
+                    gender : formp.choice,
+                    firstName: formp.givenname,
+                    lastName: formp.familyname,
+                    location: formp.location,
+                    userName: formp.userName,
+                    password: formp.password,
+                    type: type
+                };
+                if(type === "provider"){
+                    newUser.isOutpatientDoctor = "true";
                 }
-            });
-            formComponent.hide();
-            formComponent.reset();
-        }
-        else {
-            Ext.Msg.alert ("Error","Please Enter all the mandatory fields");
-        }
+                else if(type === "patient" && formp.donateOrgans){
+                    newUser.donateOrgans = "true"
+                }
+                if(formp.email){
+                    newUser.email = formp.email;
+                }
+                if(formp.phone){
+                    newUser.phone = formp.phone;
+                }
+                var newUserParam = Ext.encode(newUser);
+                formComponent.setMasked(true);
+                Ext.Ajax.request({
+                    scope:this,
+                    url: HOST + '/ws/rest/v1/raxacore/user',
+                    method: 'POST',
+                    params: newUserParam,
+                    disableCaching: false,
+                    headers: Util.getNewAccountAuthHeaders(),
+                    success: function (response) {
+                        formComponent.setMasked(false);
+                        if(type==="provider"){
+                            Ext.Msg.alert("Successful", "Please login to continue.");
+                            Ext.getCmp('userName').setValue(formp.userName);
+                        }
+                        else{
+                            Ext.Msg.alert("Patient Creation Successful", "Thank you for registering.");
+                        }
+                    },
+                    failure: function (response) {
+                        formComponent.setMasked(false);
+                        var errorJson = Ext.decode(response.responseText);
+                        var message = errorJson.error.detail.toString().split(":")[1]
+                        Ext.Msg.alert('Error '+message);
+                    }
+                });
+                formComponent.hide();
+                formComponent.reset();
+            }
+            else {
+                Ext.Msg.alert ("Error","Please Enter all the mandatory fields");
+            }
     },
     
-    passwordPatientChange: function() {this.validatePassword("#newPatientId");},
+    passwordPatientChange: function() {
+        this.validatePassword("#newPatientId");
+    },
 
-    passwordProviderChange: function() {this.validatePassword("#newProviderId");},
+    passwordProviderChange: function() {
+        this.validatePassword("#newProviderId");
+    },
 
     validatePassword : function(parentComponent) {
         var newPassword = Ext.ComponentQuery.query(parentComponent+' #password')[0]._value;
@@ -286,9 +416,13 @@ Ext.define('RaxaEmr.controller.Session', {
         }
     },
 
-    confirmPasswordPatientChange: function() {this.validateConfirmPassword("#newPatientId");},
+    confirmPasswordPatientChange: function() {
+        this.validateConfirmPassword("#newPatientId");
+    },
 
-    confirmPasswordProviderChange: function() {this.validateConfirmPassword("#newProviderId");},
+    confirmPasswordProviderChange: function() {
+        this.validateConfirmPassword("#newProviderId");
+    },
     
     validateConfirmPassword : function(parentComponent) {
         var newPassword = Ext.ComponentQuery.query(parentComponent+' #password')[0]._value;
@@ -342,9 +476,8 @@ Ext.define('RaxaEmr.controller.Session', {
      * Called when login is successful for the given user, populates AppGrid with the user's modules
      */
     loginSuccess: function () {
-        Startup.getResourceUuid();
-        Startup.repeatUuidLoadingEverySec();
         var numAppsAvailable = this.addModulesToDashboard();
+        Ext.getCmp('mainView').setMasked(false);
         //if only 1 app available, send to that page
         if (numAppsAvailable === 1) {
             window.location = userModules[0];
@@ -356,7 +489,7 @@ Ext.define('RaxaEmr.controller.Session', {
         //otherwise show the AppGrid
         else {
             window.location.hash = 'Dashboard';
-            Ext.getCmp('mainView').setActiveItem(2);
+            Ext.getCmp('mainView').setActiveItem(1);
         }
     },
 
@@ -381,38 +514,32 @@ Ext.define('RaxaEmr.controller.Session', {
     },
 
     showDashboard: function () {
-        if (localStorage.getItem('basicAuthHeader')) {
-            this.addModulesToDashboard();
-            window.location.hash = 'Dashboard';
-            Ext.getCmp('topbarSelectfield').setHidden(false);
-            Ext.getCmp('mainView').setActiveItem(2);
-        }
+        this.addModulesToDashboard();
+        window.location.hash = 'Dashboard';
+        Ext.getCmp('topbarSelectfield').setHidden(false);
+        Ext.getCmp('mainView').setActiveItem(1);
     },
 
     //This function determines the login state
     //If already logged in, it redirects to the dashboard
     getLoginState: function () {
+        if(localStorage.getItem("configVersion") !== Util.conceptVersion){
+            Startup.getResourceUuid();
+        }
         var loginState = Ext.getCmp('mainView').getActiveItem()._activeItem;
         if (localStorage.getItem('basicAuthHeader')) {
             this.loginSuccess();
-            Ext.getCmp('mainView').setActiveItem(2);
+            Ext.getCmp('mainView').setActiveItem(1);
         }
     },
 
     //on entry point for application, give control to Util.getViews()
     launch: function () {
-        Ext.create('Ext.Container', {
-            id: 'mainView',
+        var mainScreen = Ext.create('RaxaEmr.view.Main', {
             fullscreen: true,
-            layout: 'card',
-            items: [{
-                xclass: 'RaxaEmr.view.Login'
-            }, {
-                xclass: 'RaxaEmr.view.AppGrid'
-            }, {
-                xclass: 'RaxaEmr.view.AppCarousel'
-            }]
         });
+        var topBar = Ext.create('Topbar.view.TopToolbar');
+        mainScreen.add(topBar);
         this.getLoginState();
     },
 
@@ -422,6 +549,11 @@ Ext.define('RaxaEmr.controller.Session', {
     launchAfterAJAX: function (views) {
         //remove loading mask
         Ext.getCmp('mainView').setMasked(false);
+    },
+    
+    //Shows new account page for new providers or new patients
+    showNewAccount: function() {
+            Ext.getCmp('mainView').setActiveItem(2);
     }
 
 });
