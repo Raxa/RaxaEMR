@@ -477,6 +477,7 @@ Ext.define('RaxaEmr.controller.Session', {
      */
     loginSuccess: function () {
         var numAppsAvailable = this.addModulesToDashboard();
+        Ext.getCmp('mainView').setMasked(false);
         //if only 1 app available, send to that page
         if (numAppsAvailable === 1) {
             window.location = userModules[0];

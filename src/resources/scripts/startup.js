@@ -56,7 +56,6 @@ var Startup = {
                 console.log('GET failed with response status: ' + response.status); // + response.status);
             },
             success: function (response) {
-                console.log("getAttributeFromRest ... resource: " + resource + ", queryParameter: " + queryParameter + ", varName:" + varName + " RESPONSE: " + response.responseText);
                 var configConceptDescription = JSON.parse(response.responseText);
                 var uuidsInConfigArray = configConceptDescription.uuids;
                 localStorage.setItem("configVersion", configConceptDescription.version);
