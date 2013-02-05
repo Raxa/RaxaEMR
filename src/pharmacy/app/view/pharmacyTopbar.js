@@ -41,24 +41,24 @@ Ext.define('RaxaEmr.Pharmacy.view.pharmacyTopbar',{
             id: 'patientsButton',
             height: PHARMACY_TOPBAR_CONSTANTS.BUTTON_HEIGHT,
             width: PHARMACY_TOPBAR_CONSTANTS.TAB_WIDTH,
-            handler: function(){
-                // TODO: This should just be one call - we should update "main area" layout so it has 2 xtypes only, for
-                //  patient and inventory views
+            pressed: true,
+             listeners: {
+        click: function() {
                 Ext.getCmp('mainarea').getLayout().setActiveItem(0);
                 Ext.getCmp('addpatientarea').getLayout().setActiveItem(0);
-                //Ext.getCmp('addpatientgridarea').getLayout().setActiveItem(1);
 
                 // Highlight "Patients" tab
                 Ext.getCmp('inventoryButton').toggle(false);
                 Ext.getCmp('patientsButton').toggle(true);
-            }
+           // }
+        }
+             }
         },{
             xtype: 'button',
             text: 'Inventory',
             id: 'inventoryButton',
             height: PHARMACY_TOPBAR_CONSTANTS.BUTTON_HEIGHT,
             width: PHARMACY_TOPBAR_CONSTANTS.TAB_WIDTH,
-            pressed: true,  // button appears selected at startup
             handler: function(){
                 var l = Ext.getCmp('mainarea').getLayout();
                 l.setActiveItem(RaxaEmr_Pharmacy_Controller_Vars.PHARM_PAGES.ALLSTOCK.value);

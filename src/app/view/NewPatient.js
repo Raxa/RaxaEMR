@@ -10,7 +10,7 @@ Ext.define("RaxaEmr.view.NewPatient", {
         hidden: true,
         // Set the width and height of the panel
         width: 520,
-        height: 600,
+        height: 500,
         masked: {
             xtype: 'loadmask',
             message: 'Creating Patient'
@@ -54,7 +54,7 @@ Ext.define("RaxaEmr.view.NewPatient", {
             label: 'Location',
             displayField : 'name',
             valueField : 'uuid',
-            store: 'Locations',
+            store: 'locationStore',
             itemId: 'selectLocation'
         },{
             xtype: 'textfield',
@@ -98,15 +98,6 @@ Ext.define("RaxaEmr.view.NewPatient", {
                 labelWidth: 70,
             }
             ]
-        },{
-            html: 'Organ Donation'
-        },{
-            xtype: 'checkboxfield',
-            name : 'donateOrgans',
-            label: 'Would you like to learn more about organ donation?',
-            value: 'true',
-            labelWidth: 400,
-            checked: false
         },{
             xtype: 'button',
             itemId: 'savePatientButton',

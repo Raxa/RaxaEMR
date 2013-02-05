@@ -57,6 +57,10 @@ Ext.define('RaxaEmr.Pharmacy.model.drugOrderSearch', {
         type: 'string'
     },
     {
+        name: 'units',
+        type: 'string'
+    },
+    {
         name : 'orderUuid',
         type: 'string',
         mapping: 'uuid'
