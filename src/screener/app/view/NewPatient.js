@@ -6,6 +6,7 @@ var NEW_PATIENT_CONSTANTS = {
     FIELD_BORDER: 'border-color: #333333; border-width: 1px; border-style : solid;',
     FIELD_WIDTH: 300,
     LABEL_WIDTH: 135,
+    AGE_FIELD_WIDTH: 80,
     LABEL_STYLE: 'background-color: #eeeeee;',
     CONTAINER_LAYOUT: {
         type: 'hbox',
@@ -116,7 +117,7 @@ Ext.define("Screener.view.NewPatient", {
                     xtype: 'numberfield',
                     id: 'patientAge',
                     name: 'patientAge',
-                    width: NEW_PATIENT_CONSTANTS.FIELD_WIDTH,
+                    width: NEW_PATIENT_CONSTANTS.AGE_FIELD_WIDTH,
                     style: NEW_PATIENT_CONSTANTS.FIELD_BORDER,
                     allowDecimals: false,
                     listeners: {
@@ -196,7 +197,7 @@ Ext.define("Screener.view.NewPatient", {
                     width: NEW_PATIENT_CONSTANTS.LABEL_WIDTH
                 }]
             }, {
-                xtype: 'textfield',
+                xtype: 'numberfield',
                 id: 'contactNumber',
                 width: NEW_PATIENT_CONSTANTS.FIELD_WIDTH,
                 style: NEW_PATIENT_CONSTANTS.FIELD_BORDER
