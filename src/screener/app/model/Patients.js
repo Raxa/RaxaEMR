@@ -6,13 +6,13 @@ Ext.define('Screener.model.Patients', {
             type: 'string'
         }, {
             name: 'display',
-            type: 'string'
+            mapping: 'person.display'
         }, {
             name: 'gender',
-            type: 'string'
+            mapping: 'person.gender'
         }, {
             name: 'age',
-            type: 'int'
+            mapping: 'person.age'
         }, {
 			name: 'bmi',
 			persist: false
@@ -25,6 +25,9 @@ Ext.define('Screener.model.Patients', {
         }, {
             name: 'encounters',
             model: 'Screener.model.encounters'
+        }, {
+            name: 'person',
+            model: 'Screener.model.person'
         }]
     }
 });
