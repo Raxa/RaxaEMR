@@ -72,6 +72,7 @@ Ext.define("Screener.view.NewPatient", {
                 xtype: 'textfield',
                 id: 'givenName',
                 name: 'givenname',
+                tabIndex : 1,
                 width: NEW_PATIENT_CONSTANTS.FIELD_WIDTH,
                 style: NEW_PATIENT_CONSTANTS.FIELD_BORDER
             }]
@@ -93,6 +94,7 @@ Ext.define("Screener.view.NewPatient", {
                 xtype: 'textfield',
                 id: 'familyName',
                 name: 'familyname',
+                tabIndex : 2,
                 width: NEW_PATIENT_CONSTANTS.FIELD_WIDTH,
                 style: NEW_PATIENT_CONSTANTS.FIELD_BORDER
             }]
@@ -117,6 +119,7 @@ Ext.define("Screener.view.NewPatient", {
                     xtype: 'numberfield',
                     id: 'patientAge',
                     name: 'patientAge',
+                    tabIndex : 3,
                     width: NEW_PATIENT_CONSTANTS.AGE_FIELD_WIDTH,
                     style: NEW_PATIENT_CONSTANTS.FIELD_BORDER,
                     allowDecimals: false,
@@ -148,7 +151,6 @@ Ext.define("Screener.view.NewPatient", {
             }, {
                 xtype: 'container',
                 id: 'sexRadioGroup',
-                style: NEW_PATIENT_CONSTANTS.FIELD_BORDER,
                 layout: {
                     type: 'vbox',
                     align: 'strech'
@@ -199,6 +201,7 @@ Ext.define("Screener.view.NewPatient", {
             }, {
                 xtype: 'numberfield',
                 id: 'contactNumber',
+                tabIndex : 5,
                 width: NEW_PATIENT_CONSTANTS.FIELD_WIDTH,
                 style: NEW_PATIENT_CONSTANTS.FIELD_BORDER
             }]
