@@ -14,7 +14,7 @@ Ext.define('RaxaEmr.view.Login', {
             height: 220,
             id: 'logoPanel',
             items: [{
-                html: '<img src="resources/img/logoJSS.png" width="143" height="143"/>'
+                html: '<img src="resources/img/logoBeta.png" width="143" height="143"/>'
             }, {
                 html: 'Raxa EMR',
                 style: 'font-family: "Helvetica Neue",HelveticaNeue,"Helvetica-Neue",Helvetica,"BBAlpha Sans",sans-serif;'

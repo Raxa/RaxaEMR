@@ -671,10 +671,11 @@ var Util = {
             disableCaching: false,
             headers: Util.getBasicAuthHeaders(),
             success: function (response) {
-//                Ext.getStore('allDrugs').load();
-//                Ext.getStore('DrugInfos').load();
+                var jsonResponse = Ext.decode(response.responseText);
                 Ext.Msg.alert('Drug created successfully');
-                callback();
+                newDrug.dosageForm = jsonResponse.dosageForm;
+                newDrug.uuid = jsonResponse.uuid;
+                callback(newDrug);
             },
             failure: function (response) {
                 Ext.Msg.alert('Error: unable to write to server. Enter all fields.');
