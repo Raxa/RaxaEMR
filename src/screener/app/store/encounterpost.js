@@ -23,7 +23,7 @@ Ext.define('Screener.store.encounterpost', {
         model: 'Screener.model.encounterpost',
         proxy: {
             type: 'rest',
-            url : HOST + '/ws/rest/v1/encounter',
+            url : HOST + '/ws/rest/v1/raxacore/encounter',
             headers: Util.getBasicAuthHeaders(),
             reader: {
                 type: 'json'
