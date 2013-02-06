@@ -40,6 +40,10 @@ Ext.define("Screener.view.PatientListView", {
                 docked: 'top',
                 title: Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.PatientListView.pat'),
                 items: [{
+                    //sencha touch currently has a bug that resizes the first button in the title bar
+                    xtype: 'button',
+                    hidden: true
+                }, {
                     xtype: 'button',
                     text: Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.PatientListView.bmi'),
                     itemId: 'sortBMI',
