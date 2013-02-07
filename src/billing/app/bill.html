@@ -78,13 +78,13 @@ document.getElementById('balance').value = balance;
                                 <tr>
                                     <td width="150px">Name</td>
                                     <td>
-                                        <input type="text" id="Name" readonly="true" style="border-width: 0px 0px 0px 0px;">
+                                        <input type="text" id="name" readonly="true" style="border-width: 0px 0px 0px 0px;">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Patient Id:</td>
                                     <td>
-                                        <input type="text" id="PatientId" readonly="true" style="border-width: 0px 0px 0px 0px;">
+                                        <input type="text" id="identifier" readonly="true" style="border-width: 0px 0px 0px 0px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -252,7 +252,7 @@ document.getElementById('balance').value = balance;
         <script>
  			//Retrieve information about last selected Patient from localStorage       
             var selectedPatient = JSON.parse(localStorage.getItem('selectedPatient'));
-            var selectedPatientAttributes = ['Name','Id','Age','Gender','Weight','Village','Tehsil'];
+            var selectedPatientAttributes = ['name','identifier','age'];
 			for(var i=0; i<selectedPatientAttributes.length; i++)
 			{
 				if(selectedPatient[selectedPatientAttributes[i]])
