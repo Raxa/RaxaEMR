@@ -62,7 +62,7 @@ Ext.define('SearchPatient.view.SearchPanel', {
         xtype: 'gridpanel',
         itemId: 'patientSearchGrid',
         border: true,
-        height: 300,
+        height: 288,
             title: 'Search Results',
         store: Ext.create('SearchPatient.store.Patients'),
         columns: [
