@@ -220,7 +220,7 @@ Ext.define("Screener.controller.Application", {
         /*var patientWaitNumber = 5;*/
         var i;
         for (i = 0; i < patientsTitles.length; i++) {
-            patientsTitles[i].setTitle(patientWaitNumber + ' Patients Waiting');
+            patientsTitles[i].setTitle(patientWaitNumber+ ' Patients');
         }
     },
     //this method sets locally(persist = false) the bmi and encounter time in patients model

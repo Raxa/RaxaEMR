@@ -23,16 +23,7 @@ Ext.define('RaxaEmr.billing.view.Viewport', {
         {
             xtype: 'previousBills'
         },{
-            xtype: 'searchPatient'
-        },{
             xtype: 'print_Final'
-        },
-        {
-            xtype: 'AddItem'
-        } ,
-{
-            xtype:'EditItem'
-
         },
         {
             xtype: 'previousShow'

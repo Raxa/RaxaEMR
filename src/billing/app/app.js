@@ -14,7 +14,7 @@ Ext.application({
     tabletStartupScreen: 'resources/img/icon.png',
     //models: ['Session'],
     // List of Models for dynamic loading
-    requires: [ 'RaxaEmr.billing.view.main','RaxaEmr.billing.view.EditItem','RaxaEmr.billing.view.currentbill','RaxaEmr.billing.view.discount','RaxaEmr.billing.view.previousBills','RaxaEmr.billing.view.currentBill_main','RaxaEmr.billing.view.print_Final','RaxaEmr.billing.view.previousShow','RaxaEmr.billing.view.searchPatient'],
+    requires: [ 'RaxaEmr.billing.view.main','RaxaEmr.billing.view.EditItem','RaxaEmr.billing.view.currentbill','RaxaEmr.billing.view.discount','RaxaEmr.billing.view.previousBills','RaxaEmr.billing.view.currentBill_main','RaxaEmr.billing.view.print_Final','RaxaEmr.billing.view.previousShow'],
     
     controllers :['RaxaEmr.billing.controller.billings'],
      
