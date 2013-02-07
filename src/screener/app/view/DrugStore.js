@@ -23,12 +23,12 @@ Ext.define("Screener.view.DrugStore", {
                     label: Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.DrugStore.drug'),
                     name: 'drug',
                     cls: 'selectfield',
-                    width: 250,
+                    flex: 5,
                     store: Ext.create('Screener.store.druglist')
                 }, {
                     xtype: 'selectfield',
                     label: Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.DrugStore.strength'),
-                    width: 150,
+                    flex: 3,
                     labelAlign: 'top',
                     cls: 'selectfield',
                     name: 'strength',
@@ -45,7 +45,7 @@ Ext.define("Screener.view.DrugStore", {
                 }, {
                     xtype: 'selectfield',
                     labelAlign: 'top',
-                    width: 100,
+                    flex: 2,
                     label: Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.DrugStore.quant'),
                     name: 'quantity',
                     cls: 'selectfield',
