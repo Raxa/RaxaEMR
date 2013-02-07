@@ -8,6 +8,7 @@ var NEW_PATIENT_CONSTANTS = {
     LABEL_WIDTH: 135,
     AGE_FIELD_WIDTH: 80,
     LABEL_STYLE: 'background-color: #eeeeee;',
+    CONTAINER_BACKGROUND: 'background-color: #eeeeee;',
     CONTAINER_LAYOUT: {
         type: 'hbox',
         align: 'strech'
@@ -30,6 +31,7 @@ Ext.define("Screener.view.NewPatient", {
         height: 500,
         floating: true,
         //centered: true,
+        style: NEW_PATIENT_CONSTANTS.CONTAINER_BACKGROUND,
         showAnimation: {
             type: 'slide',
             direction: 'up'
@@ -208,8 +210,7 @@ Ext.define("Screener.view.NewPatient", {
         }, {
             xtype: 'button',
             id: 'savePatientButton',
-            text: 'Save Patient', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.save_p'),
-            ui: 'action',
+            html: '<font  color="white">Save Patient</font>',
             margin: '20 120 0 120'
         }],
         onChange: function () {
