@@ -52,7 +52,7 @@ Ext.define('RaxaEmr.billing.view.main', {
                                         type: 'vbox'
                                     },
                                     bodyPadding: 10,
-                                    title: 'Find Patient',
+                                    title: 'Find Patienttttt',
                                    
                                     items: [
                                         {
