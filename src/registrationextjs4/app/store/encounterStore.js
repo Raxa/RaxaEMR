@@ -22,7 +22,7 @@ Ext.define('Registration.store.encounterStore', {
     model: 'Registration.model.encounterModel',
     proxy: {
         type: 'rest',
-        url : HOST + '/ws/rest/v1/encounter',
+        url : HOST + '/ws/rest/v1/raxacore/encounter',
         headers: Util.getBasicAuthHeaders(),
         reader: {
             type: 'json'

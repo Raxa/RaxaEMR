@@ -13,25 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+//todo: change these to live in a store/localStorage
 var c;// a global variable keeping the id of the patient entered in by the user in main.js.Used to get his old bills.
 var bal;// cumulative balance remaining to be paid
 var global_amount=0;// total amount = current amount+previous balance
 var tot1=0;// current total of the bill
 var global_row;
-var BILL_PAGES = {    // not used
-    MAIN: {
-        value: 0,
-        name: "main"
-    },
-    CURRENT_BILL: {
-        value: 1,
-        name: "currentBill_main"
-    }
-};
 
 Ext.define("RaxaEmr.billing.controller.billings", {
     extend: 'Ext.app.Controller',
-    views: ['RaxaEmr.billing.view.EditItem', 'RaxaEmr.billing.view.Viewport','RaxaEmr.billing.view.currentbill','RaxaEmr.billing.view.main','RaxaEmr.billing.view.discount','RaxaEmr.billing.view.previousBills','RaxaEmr.billing.view.currentBill_main', 'RaxaEmr.billing.view.print_Final','RaxaEmr.billing.view.searchPatient','RaxaEmr.billing.view.previousShow','RaxaEmr.billing.view.AddItem', 'SearchPatient.view.SearchPanel'],
+    views: ['RaxaEmr.billing.view.EditItem', 'RaxaEmr.billing.view.Viewport','RaxaEmr.billing.view.currentbill','RaxaEmr.billing.view.main','RaxaEmr.billing.view.discount','RaxaEmr.billing.view.previousBills','RaxaEmr.billing.view.currentBill_main', 'RaxaEmr.billing.view.print_Final','RaxaEmr.billing.view.previousShow','RaxaEmr.billing.view.AddItem', 'SearchPatient.view.SearchPanel'],
     stores :['RaxaEmr.billing.store.itemS','RaxaEmr.billing.store.billingstore','RaxaEmr.billing.store.itemStore','RaxaEmr.billing.store.billingItemstore','RaxaEmr.billing.store.previousshow'],
 
     init: function () {
@@ -72,7 +63,7 @@ Ext.define("RaxaEmr.billing.controller.billings", {
                 click: this.addItem // called when ADD button in AddItem.js is Clicked.Used to add the values of teh Item in the grid in currentBill_main.js
             },
             "AddItem button[action=cancel]":{
-                click :this.back1 // called when cancel button is clicked in AddItem.js.Just returns to CurrentBill_main.js
+                click :this.cancelAddItem // called when cancel button is clicked in AddItem.js.Just returns to CurrentBill_main.js
             },
             'previousBills': {
                 showBill: this.onShowBill // called when Show Icon in front of a grid Item in PreviousBills.js is clicked. Redirects to previousShow.js 
@@ -139,10 +130,10 @@ Ext.define("RaxaEmr.billing.controller.billings", {
             status:stat,
             name: 'Successful',
             balance:bal,
-      
-            patientId:c,
+            dateCreated: Util.Datetime(new Date()),
+            patient:localStorage.currentBillingPatient,
             description :'RAXA Bill',
-            providerId:'1',// static value for the tiem being.
+            provider: localStorage.loggedInProvider,
             billItems :itemArray,
             totalAmount:tot1
             
@@ -178,6 +169,7 @@ Ext.define("RaxaEmr.billing.controller.billings", {
     getBill: function (grid, record, row) {
         var uuid = record.data.uuid;
         this.setPatientFields(record.data);
+        localStorage.setItem('selectedPatient', record.data);
         localStorage.setItem('currentBillingPatient', uuid);
         url = HOST + '/ws/rest/v1/raxacore/billing' +'?q='+uuid;// get call tgo retrive all the previous bills of the patient.
         console.log(url);
@@ -245,57 +237,31 @@ Ext.define("RaxaEmr.billing.controller.billings", {
     addItem: function(){
        
         
-        //  Ext.Msg.alert("Item", "In add item form");
         // extracting the values entered.
-        var obj1= Ext.getCmp('item_name1');
-        var itemName=obj1.getValue();
-        var obj2= Ext.getCmp('category1');
-        var itemCategory=obj2.getValue();
-        var obj3= Ext.getCmp('quantity1');
-        var itemQuantity=obj3.getValue();
-        var obj4= Ext.getCmp('price1');
-        var itemPrice=obj4.getValue();
-        var obj5 =Ext.getCmp('discount1');
-        var discount =obj5.getValue();
-        var obj6 =Ext.getCmp('discountReason1');
-        var discountReason =obj6.getValue();
-        console.log(itemName);
-        console.log(itemCategory);
-        console.log(itemQuantity);
-        console.log(itemPrice);
+        var itemName=Ext.getCmp('item_name1').getValue();
+        var itemCategory=Ext.getCmp('category1').getValue();
+        var itemQuantity=Ext.getCmp('quantity1').getValue();
+        var itemPrice=Ext.getCmp('price1').getValue();
+        var discount =Ext.getCmp('discount1').getValue();
+        var discountReason =Ext.getCmp('discountReason1').getValue();
         // few checks on the input values.
         if(itemName=='')
         {
-            Ext.Msg.alert("Alert", "field misssing");
-            var l = Ext.getCmp('mainarea').getLayout();
-            //   console.log('Initialized Users! This happens before the Application launch function is called');
-            l.setActiveItem(6);
-              
+            Ext.Msg.alert("Alert", "Item name required");
         }
         else if(itemQuantity==0)
         {
             Ext.Msg.alert("Alert", "Quantity can't be 0");
-            var l = Ext.getCmp('mainarea').getLayout();
-            //   console.log('Initialized Users! This happens before the Application launch function is called');
-            l.setActiveItem(6);
         }
         else if(itemPrice==0)
         {
             Ext.Msg.alert("Alert", "Price can't be 0");
-            var l = Ext.getCmp('mainarea').getLayout();
-            //   console.log('Initialized Users! This happens before the Application launch function is called');
-            l.setActiveItem(6);
         }
         else
         {
             var inter= itemQuantity*itemPrice;
             var total = inter- (discount/100)*inter; // calculating total value of the item added.
             var display ="Total price of the item is:"+total;
-            // Ext.Msg.alert("Alert", display);
-            //Ext.MessageBox.prompt("Confirm",display);
-            //  Ext.Msg.confirm("Confirm", display);
-        
-     
             // adding item in the itemStore.js
             var itemStore=this.getStore('RaxaEmr.billing.store.itemStore');
             itemStore.add({
@@ -305,41 +271,11 @@ Ext.define("RaxaEmr.billing.controller.billings", {
                 price:itemPrice,
                 discount:discount,
                 discountReason:discountReason,
-                total:total
+                total:total,
             })[0];
       
             itemStore.sync();   
-            itemStore.load({
-                scope: this ,
-                callback : function(){
-                    //  console.log(itemStore.getCount());
-
-                    //console.log(store.getAt(0).getData().status );
-
-                    //    console.log(store);
-                    // adding the item in the grid(gridCurrentBill) in currentBill_main using itemStore.
-                    var x2  = Ext.getCmp('gridCurrentBill').getStore();
-        
-                    // console.log(x2);
-                    x2.load();
-                    x2.sync();
-                    //  console.log("hye"+x1.getCount());
-                    Ext.Msg.alert("Confirm", display, function(btn){
-                        if (btn == "Yes"){
-                            alert("abort");
-                        } else {
-                            var l = Ext.getCmp('mainarea').getLayout();
-                            //   console.log('Initialized Users! This happens before the Application launch function is called');
-                            l.setActiveItem(0);
-                        }
-                    });
-                
-                    console.log(itemStore.getCount());
-                }
-            }
-         
-            );
-            itemStore.sync();
+            Ext.getCmp('addItem').hide();
             var itemStore1=this.getStore('RaxaEmr.billing.store.itemStore');
             var amount=Ext.getCmp('current_amount');
             var prev_amount=Ext.getCmp('prev_amount');
@@ -361,22 +297,6 @@ Ext.define("RaxaEmr.billing.controller.billings", {
             prev_amount.setValue(prev);
             tot_amount.setValue(total1);
             balance.setValue(bal);
-    
-
-       
-        //  
-        /* var x2  = Ext.getCmp('gridCurrentBill').getStore();
-       // console.log(x2);
-          x2.load();
-          x2.sync();
-                //  console.log("hye"+x1.getCount());
-             
-                //  console.log("hye"+x1.getCount());
-                 var l = Ext.getCmp('mainarea').getLayout();
-     //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(1);
-           console.log(itemStore.getCount());*/
-    
         }
         
     },
@@ -397,39 +317,35 @@ Ext.define("RaxaEmr.billing.controller.billings", {
     /*
      *called when cancel button is clicked in AddItem.js.Just returns to CurrentBill_main.js
      */
-    back1 :function(){
-    
-        var x2  = Ext.getCmp('gridCurrentBill').getStore();
-        
-        // console.log(x2);
-        x2.load();
-        x2.sync();
-        var itemStore1 = Ext.getStore('RaxaEmr.billing.store.itemStore');
-        var amount=Ext.getCmp('current_amount');
-        var prev_amount=Ext.getCmp('prev_amount');
-        var tot_amount=Ext.getCmp('total_amount');
-        var paid =Ext.getCmp('amount_paid');
-        var pay= paid.getValue();
-        var balance = Ext.getCmp('balance1');
-        var prev=global_amount;
-        var total;
-        var tot=0;
-        // calculatin the current bill, total bill and balance
-        for (var j = 0; j < itemStore1.getCount(); j++) {
-            // order[j].concept = concept[j].getAt(0).getData().uuid;
-            tot=tot+itemStore1.getAt(j).getData().total;
-        }
-        total=tot+prev;
-        bal=total-pay;
-        amount.setValue(tot);
-        prev_amount.setValue(prev);
-        tot_amount.setValue(total);
-        balance.setValue(bal);
+    cancelAddItem :function(){
+        Ext.getCmp('addItem').hide();
+//        var x2  = Ext.getCmp('gridCurrentBill').getStore();
+//        
+//        // console.log(x2);
+//        x2.load();
+//        x2.sync();
+//        var itemStore1 = Ext.getStore('RaxaEmr.billing.store.itemStore');
+//        var amount=Ext.getCmp('current_amount');
+//        var prev_amount=Ext.getCmp('prev_amount');
+//        var tot_amount=Ext.getCmp('total_amount');
+//        var paid =Ext.getCmp('amount_paid');
+//        var pay= paid.getValue();
+//        var balance = Ext.getCmp('balance1');
+//        var prev=global_amount;
+//        var total;
+//        var tot=0;
+//        // calculatin the current bill, total bill and balance
+//        for (var j = 0; j < itemStore1.getCount(); j++) {
+//            // order[j].concept = concept[j].getAt(0).getData().uuid;
+//            tot=tot+itemStore1.getAt(j).getData().total;
+//        }
+//        total=tot+prev;
+//        bal=total-pay;
+//        amount.setValue(tot);
+//        prev_amount.setValue(prev);
+//        tot_amount.setValue(total);
+//        balance.setValue(bal);
                    
-        //  console.log("hye"+x1.getCount());
-        var l = Ext.getCmp('mainarea').getLayout();
-        //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(0); // redirecting to currentBill_main.js
     },
     /*
  *Called when clicked on Create New Bill button in previousBills.js
@@ -658,29 +574,30 @@ Ext.define("RaxaEmr.billing.controller.billings", {
  *redircts to AddItem.js
  */
     displayForm: function () {
-        console.log('Initialized Users! This happens before the Application launch function is called');
-        console.log('hey');
         // setting the initial values in AddItem.js
-        var name= Ext.getCmp('item_name1');
+//        var name= Ext.getCmp('item_name1');
      
-        name.setValue("");
-        var category= Ext.getCmp('category1');
-        category.setValue("Medicine");
-        var quant= Ext.getCmp('quantity1');
-        quant.setValue(0);
-        var price= Ext.getCmp('price1');
-        price.setValue(0);
-        var disc =Ext.getCmp('discount1');
-        disc.setValue(0);
-        var discReason =Ext.getCmp('discountReason1');
-        discReason.setValue("");
-        var otherDiscount =Ext.getCmp('otherDiscount1');
-        otherDiscount.setValue("");
-        var l = Ext.getCmp('mainarea').getLayout();
-        
+//        name.setValue("");
+//        var category= Ext.getCmp('category1');
+//        category.setValue("Medicine");
+//        var quant= Ext.getCmp('quantity1');
+//        quant.setValue(0);
+//        var price= Ext.getCmp('price1');
+//        price.setValue(0);
+//        var disc =Ext.getCmp('discount1');
+//        disc.setValue(0);
+//        var discReason =Ext.getCmp('discountReason1');
+//        discReason.setValue("");
+//        var otherDiscount =Ext.getCmp('otherDiscount1');
+//        otherDiscount.setValue("");
+//        var l = Ext.getCmp('mainarea').getLayout();
+        if(!Ext.getCmp('addItem')){
+            Ext.create('RaxaEmr.billing.view.AddItem');
+        }
+        Ext.getCmp('addItem').show();
         
         //   console.log('Initialized Users! This happens before the Application launch function is called');
-        l.setActiveItem(6);// redirction to AddItem.js
+//        l.setActiveItem(6);// redirction to AddItem.js
     //  var l1 = Ext.getCmp('addpatientgridarea').getLayout();
     // l1.setActiveItem(1);
     },
@@ -712,25 +629,15 @@ Ext.define("RaxaEmr.billing.controller.billings", {
         }
         if(itemName=='')
         {
-            Ext.Msg.alert("Alert", "field misssing");
-            var l = Ext.getCmp('mainarea').getLayout();
-            //   console.log('Initialized Users! This happens before the Application launch function is called');
-            l.setActiveItem(7);
-              
+            Ext.Msg.alert("Error", "Item name required");
         }
         else if(itemQuantity==0)
         {
-            Ext.Msg.alert("Alert", "Quantity can't be 0");
-            var l = Ext.getCmp('mainarea').getLayout();
-            //   console.log('Initialized Users! This happens before the Application launch function is called');
-            l.setActiveItem(7);
+            Ext.Msg.alert("Error", "Quantity can't be 0");
         }
         else if(itemPrice==0)
         {
-            Ext.Msg.alert("Alert", "Price can't be 0");
-            var l = Ext.getCmp('mainarea').getLayout();
-            //   console.log('Initialized Users! This happens before the Application launch function is called');
-            l.setActiveItem(7);
+            Ext.Msg.alert("Error", "Price can't be 0");
         }
         else
         {
@@ -753,18 +660,9 @@ Ext.define("RaxaEmr.billing.controller.billings", {
             itemStore.load({
                 scope: this ,
                 callback : function(){
-                    //  console.log(itemStore.getCount());
-
-                    //console.log(store.getAt(0).getData().status );
-
-                    //    console.log(store);
-         
                     var x2  = Ext.getCmp('gridCurrentBill').getStore();
-        
-                    // console.log(x2);
                     x2.load();
                     x2.sync();
-                    //  console.log("hye"+x1.getCount());
                     Ext.Msg.alert("Confirm", display, function(btn){
                         if (btn == "Yes"){
                             alert("abort");
@@ -774,11 +672,9 @@ Ext.define("RaxaEmr.billing.controller.billings", {
                             l.setActiveItem(0);
                         }
                     });
-                
                     console.log(itemStore.getCount());
                 }
             }
-         
             );
             itemStore.sync();
             var itemStore1=this.getStore('RaxaEmr.billing.store.itemStore');
@@ -803,12 +699,9 @@ Ext.define("RaxaEmr.billing.controller.billings", {
             prev_amount.setValue(prev);
             tot_amount.setValue(total);
             balance.setValue(bal);
-    
             console.log("total is "+tot1);
             tot1=total-bal;
-        
         }
-           
     },
     /*
  *called when cancel button is clicked in EditItem.js.Just returns to CurrentBill_main.js
