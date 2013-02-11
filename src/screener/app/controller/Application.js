@@ -460,7 +460,7 @@ Ext.define("Screener.controller.Application", {
     // Opens form for creating new patient
     addPerson: function () {
         if (!this.newPatient) {
-            this.newPatient = Ext.create('Screener.view.NewPatient', {centered: true});
+            this.newPatient = Ext.create('Screener.view.NewPatientModal', {centered: true});
             Ext.Viewport.add(this.newPatient);
         }
         // Set new FIFO id so patients come and go in the queue!
@@ -482,7 +482,7 @@ Ext.define("Screener.controller.Application", {
             if ( formp.patientAge !== null) {
                 newPatient.age = formp.patientAge ;   
             }
-            if( formp.dob !== "" && formp.dob.length > 0 ) {
+            else if( formp.dob !== "" && formp.dob.length > 0 ) {
                 newPatient.birthdate =  formp.dob;
             }
             if(Ext.getCmp('contactNumber').getValue()!==""){
@@ -504,7 +504,7 @@ Ext.define("Screener.controller.Application", {
                     Ext.Msg.alert('Error: unable to write to server. Enter all fields.')
                 }
             });
-            Ext.getCmp('newPatient').hide();
+            Ext.getCmp('newPatientModal').hide();
             Ext.getCmp('newPatient').reset();
         }
         else {

@@ -43,7 +43,7 @@ Ext.application({
     models: ['Patient', 'Doctor', 'Links', 'PostList', 'GetList', 'Patients', 'observation', 'druglist', 'drugOrder', 'drugEncounter', 'PatientSummary', 'Obs', 'encounterpost', 'encounters'],
 
 	//here we declare the visual components
-	views: ['Main', 'PatientView', 'NewPatient', 'Sort', 'PharmacyView', 'PharmacyForm', 'DrugStore', 'PatientListView', 'LabOrderView', 'LabOrderForm', 'LabStore', 'PatientSummary', 'DoctorSummary', 'VitalViewListener'],
+	views: ['Main', 'PatientView', 'NewPatient', 'Sort', 'PharmacyView', 'PharmacyForm', 'DrugStore', 'PatientListView', 'LabOrderView', 'LabOrderForm', 'LabStore', 'PatientSummary', 'DoctorSummary', 'VitalViewListener', 'NewPatientModal'],
 
     //here we declare our controller that will perform actions
     controllers: ['Application'],

@@ -8602,7 +8602,7 @@ html, body {
 
 /* line 134, ../../lib/touchOld/resources/themes/stylesheets/sencha-touch/default/widgets/_form.scss */
 .x-form .x-scroll-container {
-  background-color: #f7f7f7;
+  background-color: #eeeeee;
 }
 /* line 137, ../../lib/touchOld/resources/themes/stylesheets/sencha-touch/default/widgets/_form.scss */
 .x-form .x-scroll-container > .x-inner {
@@ -9422,10 +9422,10 @@ input[type="search"]::-webkit-search-cancel-button {
   border-top-style: none;
   border-left-style: none;
   border-right-style: none;
-  border-top-color: #f7f7f7;
-  border-bottom-color: #f7f7f7;
-  border-left-color: #f7f7f7;
-  border-right-color: #f7f7f7;
+  border-top-color: #eeeeee;
+  border-bottom-color: #eeeeee;
+  border-left-color: #eeeeee;
+  border-right-color: #eeeeee;
   border-bottom-width: 0px;
   border-top-width: 0px;
   border-left-width: 0px;
@@ -9452,10 +9452,10 @@ input[type="search"]::-webkit-search-cancel-button {
   border-top-style: none;
   border-left-style: none;
   border-right-style: none;
-  border-top-color: #f7f7f7;
-  border-bottom-color: #f7f7f7;
-  border-left-color: #f7f7f7;
-  border-right-color: #f7f7f7;
+  border-top-color: #eeeeee;
+  border-bottom-color: #eeeeee;
+  border-left-color: #eeeeee;
+  border-right-color: #eeeeee;
   border-bottom-width: 0px;
   border-top-width: 0px;
   border-left-width: 0px;
@@ -9463,7 +9463,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* line 73, ../../screener/style/screener.scss */
 .fieldset .x-form-label {
-  background-color: #f7f7f7;
+  background-color: #eeeeee;
 }
 /* line 77, ../../screener/style/screener.scss */
 .fieldset .x-field-select {
@@ -9494,10 +9494,10 @@ input[type="search"]::-webkit-search-cancel-button {
   border-top-style: none;
   border-left-style: none;
   border-right-style: none;
-  border-top-color: #f7f7f7;
-  border-bottom-color: #f7f7f7;
-  border-left-color: #f7f7f7;
-  border-right-color: #f7f7f7;
+  border-top-color: #eeeeee;
+  border-bottom-color: #eeeeee;
+  border-left-color: #eeeeee;
+  border-right-color: #eeeeee;
   border-bottom-width: 0px;
   border-top-width: 0px;
   border-left-width: 0px;
@@ -9524,10 +9524,10 @@ input[type="search"]::-webkit-search-cancel-button {
   border-top-style: none;
   border-left-style: none;
   border-right-style: none;
-  border-top-color: #f7f7f7;
-  border-bottom-color: #f7f7f7;
-  border-left-color: #f7f7f7;
-  border-right-color: #f7f7f7;
+  border-top-color: #eeeeee;
+  border-bottom-color: #eeeeee;
+  border-left-color: #eeeeee;
+  border-right-color: #eeeeee;
   border-bottom-width: 0px;
   border-top-width: 0px;
   border-left-width: 0px;
@@ -9535,7 +9535,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* line 141, ../../screener/style/screener.scss */
 .selectfield .x-form-label {
-  background-color: #f7f7f7;
+  background-color: #eeeeee;
 }
 /* line 146, ../../screener/style/screener.scss */
 .selectfield .x-field-input {

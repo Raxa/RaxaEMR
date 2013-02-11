@@ -23,40 +23,9 @@ Ext.define("Screener.view.NewPatient", {
     xtype: 'newPatient',
     id: 'newPatient',
     config: {
-        modal: true,
-        hideOnMaskTap: true,
-        hidden: true,
-        // Set the width and height of the panel
-        width: 500,
-        height: 500,
-        floating: true,
         //centered: true,
         style: NEW_PATIENT_CONSTANTS.CONTAINER_BACKGROUND,
-        showAnimation: {
-            type: 'slide',
-            direction: 'up'
-        },
-        hideAnimation: {
-            type: 'slideOut',
-            direction: 'down'
-        },
         items: [{
-            xtype: 'toolbar',
-            docked: 'top',
-            id: 'newPatientToolbar',
-            title: 'Add New Patient',
-            items: [{
-                xtype: 'spacer'
-            }, {
-                xtype: 'button',
-                iconCls: 'delete',
-                iconMask: true,
-                handler: function () {
-                    Ext.getCmp('newPatient').hide();
-                },
-                ui: 'decline',
-            }]
-        }, {
             xtype: 'container',
             layout: NEW_PATIENT_CONSTANTS.CONTAINER_LAYOUT,
             margin: NEW_PATIENT_CONSTANTS.CONTAINER_MARGIN,
@@ -162,8 +131,9 @@ Ext.define("Screener.view.NewPatient", {
                     label: 'Male', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.male'),
                     value: 'M',
                     name: 'choice',
-                    style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
+                    //style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
                     labelAlign: 'right',
+                    labelCls: 'font-size: 18px',
                     labelWidth: NEW_PATIENT_CONSTANTS.RADIO_FIELD_WIDTH,
                     flex: 1
                 }, {

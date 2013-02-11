@@ -2,7 +2,7 @@
 $base-color: #4aa8e5;
 //change gradient style
 $base-gradient: 'bevel';
-$form-bg-color: #f7f7f7;
+$form-bg-color: #eeeeee;
 $black: #000;
 @import 'sencha-touch/default/all';
 
@@ -31,10 +31,10 @@ $black: #000;
         border-top-style: none;
         border-left-style: none;
         border-right-style: none;
-        border-top-color: #f7f7f7;
-        border-bottom-color: #f7f7f7;
-        border-left-color: #f7f7f7;
-        border-right-color: #f7f7f7;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
         border-bottom-width: 0px;
         border-top-width: 0px;
         border-left-width: 0px;
@@ -59,10 +59,10 @@ $black: #000;
         border-top-style: none;
         border-left-style: none;
         border-right-style: none;
-        border-top-color: #f7f7f7;
-        border-bottom-color: #f7f7f7;
-        border-left-color: #f7f7f7;
-        border-right-color: #f7f7f7;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
         border-bottom-width: 0px;
         border-top-width: 0px;
         border-left-width: 0px;
@@ -71,7 +71,7 @@ $black: #000;
 
     // change label backgorund color
     .x-form-label{
-       background-color : #f7f7f7;
+       background-color : #eeeeee;
     }
     // remove the arrow icon covering whole selectfield
     .x-field-select {
@@ -100,10 +100,10 @@ $black: #000;
         border-top-style: none;
         border-left-style: none;
         border-right-style: none;
-        border-top-color: #f7f7f7;
-        border-bottom-color: #f7f7f7;
-        border-left-color: #f7f7f7;
-        border-right-color: #f7f7f7;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
         border-bottom-width: 0px;
         border-top-width: 0px;
         border-left-width: 0px;
@@ -128,10 +128,10 @@ $black: #000;
         border-top-style: none;
         border-left-style: none;
         border-right-style: none;
-        border-top-color: #f7f7f7;
-        border-bottom-color: #f7f7f7;
-        border-left-color: #f7f7f7;
-        border-right-color: #f7f7f7;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
         border-bottom-width: 0px;
         border-top-width: 0px;
         border-left-width: 0px;
@@ -139,7 +139,7 @@ $black: #000;
     }
     // add background color to field label
     .x-form-label{
-       background-color : #f7f7f7;
+       background-color : #eeeeee;
     }
 
     // class for change the view of input part of select field
