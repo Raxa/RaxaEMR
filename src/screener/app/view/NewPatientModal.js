@@ -16,6 +16,7 @@ Ext.define("Screener.view.NewPatientModal", {
         items: [
         {
             xtype: 'toolbar',
+            id: 'newPatientToolbar',
             title: 'New Patient',
             items: [{
                 html: '<img src="resources/images/white-icons/add_patient_white.png" align="left" onError="this.style.display=\'none\'">',

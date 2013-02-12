@@ -180,6 +180,7 @@ Ext.define("Screener.view.NewPatient", {
         }, {
             xtype: 'button',
             id: 'savePatientButton',
+            ui: 'confirm',
             html: '<font  color="white">Save Patient</font>',
             margin: '20 120 0 120'
         }],
