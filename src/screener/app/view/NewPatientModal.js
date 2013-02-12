@@ -13,12 +13,12 @@ Ext.define("Screener.view.NewPatientModal", {
         floating: true,
         //centered: true,
         layout: 'vbox',
-        style: 'color: #ffffff;',
         items: [
         {
             xtype: 'toolbar',
             title: 'New Patient',
             items: [{
+                html: '<img src="resources/images/white-icons/add_patient_white.png" align="left" onError="this.style.display=\'none\'">',
                 xtype: 'spacer'
             }, {
                 xtype: 'button',

@@ -131,7 +131,7 @@ Ext.define("Screener.view.NewPatient", {
                     label: 'Male', // Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.NewPatient.male'),
                     value: 'M',
                     name: 'choice',
-                    //style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
+                    style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
                     labelAlign: 'right',
                     labelCls: 'font-size: 18px',
                     labelWidth: NEW_PATIENT_CONSTANTS.RADIO_FIELD_WIDTH,
