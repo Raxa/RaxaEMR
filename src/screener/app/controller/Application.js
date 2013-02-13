@@ -58,7 +58,8 @@ Ext.define("Screener.controller.Application", {
     'Screener.view.VitalsView',
     'Screener.view.VitalsForm',
     'Screener.view.Main',
-    'Screener.view.VitalViewListener'
+    'Screener.view.VitalViewListener',
+    'Screener.view.PatientView'
     ],
     models: [
     'Screener.model.Person', 
@@ -297,7 +298,7 @@ Ext.define("Screener.controller.Application", {
                     this.setComplaintBMITime(store_patientList);
                     // TODO: Add photos to patients in screener list
                     store_patientList.each(function (record) {
-                        record.set('image', '/Raxa-JSS/src/screener/resources/pic.gif');
+                        record.set('image', 'resources/pic.gif');
                     });
                 }
                 else{
@@ -460,7 +461,9 @@ Ext.define("Screener.controller.Application", {
     // Opens form for creating new patient
     addPerson: function () {
         if (!this.newPatient) {
-            this.newPatient = Ext.create('Screener.view.NewPatient', {centered: true});
+            this.newPatient = Ext.create('Screener.view.NewPatient', {
+                centered: true
+            });
             Ext.Viewport.add(this.newPatient);
         }
         // Set new FIFO id so patients come and go in the queue!
@@ -482,12 +485,14 @@ Ext.define("Screener.controller.Application", {
             if ( formp.patientAge !== null) {
                 newPatient.age = formp.patientAge ;   
             }
-            if( formp.dob !== "" && formp.dob.length > 0 ) {
-                newPatient.birthdate =  formp.dob;
-            }
+            //            if( formp.dob !== "" && formp.dob.length > 0 ) {
+            //                newPatient.birthdate =  formp.dob;
+            //            }
             if(Ext.getCmp('contactNumber').getValue()!==""){
-                newPatient.attributes = new Array({attributeType: localStorage.primaryContactUuidpersonattributetype,
-                    value: Ext.getCmp('contactNumber').getValue()})
+                newPatient.attributes = new Array({
+                    attributeType: localStorage.primaryContactUuidpersonattributetype,
+                    value: Ext.getCmp('contactNumber').getValue()
+                    })
             }
             var newPatientParam = Ext.encode(newPatient);
             Ext.Ajax.request({
@@ -692,18 +697,19 @@ Ext.define("Screener.controller.Application", {
     },
     //this method refreshes the patientList and also updates the patientWaitingTitle and bmi, encountertime locally in patient model 
     refreshList: function () {
-        Ext.getStore('patientStore').load({
-            scope: this,
-            callback: function(records, operation, success){
-                if(success){
-                    this.updatePatientsWaitingTitle();
-                    this.setComplaintBMITime(Ext.getStore('patientStore'));
-                }
-                else{
-                    Ext.Msg.alert("Error", Util.getMessageLoadError());
-                }
-            }
-        });
+        //        Ext.getStore('patientStore').load({
+        //            scope: this,
+        //            callback: function(records, operation, success){
+        //                if(success){
+        //                    this.updatePatientsWaitingTitle();
+        //                    this.setComplaintBMITime(Ext.getStore('patientStore'));
+        //                }
+        //                else{
+        //                    Ext.Msg.alert("Error", Util.getMessageLoadError());
+        //                }
+        //            }
+        //        });
+        this.finalPatientList();
     },
 
 
@@ -825,22 +831,22 @@ Ext.define("Screener.controller.Application", {
             console.log("Creating Obs for uuid types...");
             var v = Ext.getCmp("vitalsForm").getValues();
             if(v.bloodOxygenSaturationField !== null) {
-            createObs(localStorage.bloodoxygensaturationUuidconcept, v.bloodOxygenSaturationField);
+                createObs(localStorage.bloodoxygensaturationUuidconcept, v.bloodOxygenSaturationField);
             }
             if(v.diastolicBloodPressureField !== null) {
-            createObs(localStorage.diastolicbloodpressureUuidconcept, v.diastolicBloodPressureField);
+                createObs(localStorage.diastolicbloodpressureUuidconcept, v.diastolicBloodPressureField);
             }
             if(v.respiratoryRateField !== null) {
-            createObs(localStorage.respiratoryRateUuidconcept, v.respiratoryRateField);
+                createObs(localStorage.respiratoryRateUuidconcept, v.respiratoryRateField);
             }
             if(v.systolicBloodPressureField !== null) {
-            createObs(localStorage.systolicbloodpressureUuidconcept, v.systolicBloodPressureField);
+                createObs(localStorage.systolicbloodpressureUuidconcept, v.systolicBloodPressureField);
             }
             if(v.temperatureField !== null) {
-            createObs(localStorage.temperatureUuidconcept, v.temperatureField);
+                createObs(localStorage.temperatureUuidconcept, v.temperatureField);
             }
             if(v.pulseField !== null) {
-            createObs(localStorage.pulseUuidconcept, v.pulseField);
+                createObs(localStorage.pulseUuidconcept, v.pulseField);
             }
             observations.sync();
             console.log("... Complete! Created Obs for new uuid types");

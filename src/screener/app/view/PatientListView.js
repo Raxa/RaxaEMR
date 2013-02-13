@@ -16,7 +16,7 @@ Ext.define("Screener.view.PatientListView", {
         //our patient list is built on the Patients store, and has a title and sort button
         {
             xtype: 'list',
-            itemId: 'patientList',
+            id: 'patientList',
             allowDeselect: true,
             itemTpl: [
                 '<table class="patient_table">',
