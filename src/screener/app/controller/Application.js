@@ -59,7 +59,6 @@ Ext.define("Screener.controller.Application", {
     'Screener.view.VitalsForm',
     'Screener.view.Main',
     'Screener.view.VitalViewListener',
-    'Screener.view.PatientView'
     ],
     models: [
     'Screener.model.Person', 
@@ -296,6 +295,7 @@ Ext.define("Screener.controller.Application", {
             callback: function(records, operation, success){
                 if(success){
                     this.setComplaintBMITime(store_patientList);
+                    this.updatePatientsWaitingTitle();
                     // TODO: Add photos to patients in screener list
                     store_patientList.each(function (record) {
                         record.set('image', 'resources/pic.gif');
@@ -461,7 +461,9 @@ Ext.define("Screener.controller.Application", {
     // Opens form for creating new patient
     addPerson: function () {
         if (!this.newPatient) {
-            this.newPatient = Ext.create('Screener.view.NewPatientModal', {centered: true});
+            this.newPatient = Ext.create('Screener.view.NewPatientModal', {
+                centered: true
+            });
             Ext.Viewport.add(this.newPatient);
         }
         // Set new FIFO id so patients come and go in the queue!
@@ -490,7 +492,7 @@ Ext.define("Screener.controller.Application", {
                 newPatient.attributes = new Array({
                     attributeType: localStorage.primaryContactUuidpersonattributetype,
                     value: Ext.getCmp('contactNumber').getValue()
-                    })
+                })
             }
             var newPatientParam = Ext.encode(newPatient);
             Ext.Ajax.request({
@@ -695,18 +697,18 @@ Ext.define("Screener.controller.Application", {
     },
     //this method refreshes the patientList and also updates the patientWaitingTitle and bmi, encountertime locally in patient model 
     refreshList: function () {
-        //        Ext.getStore('patientStore').load({
-        //            scope: this,
-        //            callback: function(records, operation, success){
-        //                if(success){
-        //                    this.updatePatientsWaitingTitle();
-        //                    this.setComplaintBMITime(Ext.getStore('patientStore'));
-        //                }
-        //                else{
-        //                    Ext.Msg.alert("Error", Util.getMessageLoadError());
-        //                }
-        //            }
-        //        });
+//                        Ext.getStore('patientStore').load({
+//                            scope: this,
+//                            callback: function(records, operation, success){
+//                                if(success){
+//                                    this.updatePatientsWaitingTitle();
+//                                    this.setComplaintBMITime(Ext.getStore('patientStore'));
+//                                }
+//                                else{
+//                                    Ext.Msg.alert("Error", Util.getMessageLoadError());
+//                                }
+//                            }
+//                        });
         this.finalPatientList();
     },
 
@@ -726,6 +728,8 @@ Ext.define("Screener.controller.Application", {
         // TODO: https://raxaemr.atlassian.net/browse/TODO-67#comment-12611
         // Need to add location to OpenMRS for waitingUuidlocation
         this.sendEncounterData(patient, localStorage.screenerUuidencountertype, localStorage.waitingUuidlocation, provider)
+        this.finalPatientList();
+        this.updatePatientsWaitingTitle();
         this.countPatients();
     },
     // unassign a patient assigned to a doctor
@@ -941,11 +945,13 @@ Ext.define("Screener.controller.Application", {
     
     onAgeChange : function() {
         var patientAge = Ext.getCmp('patientAge').getValue();
-        if ( patientAge !== "" && patientAge.length > 0) {
-            if( Ext.isNumeric(patientAge) && patientAge < Util.OPEN_MRS_MAX_AGE && patientAge >= Util.OPEN_MRS_MIN_AGE ) {
-            } else {
-                Ext.getCmp('patientAge').reset();
-                Ext.Msg.alert("Error" , 'Age must be an integer and in between 0 and 119');
+        if(patientAge !== null) {
+            if ( patientAge !== "" && patientAge.length > 0) {
+                if( Ext.isNumeric(patientAge) && patientAge < Util.OPEN_MRS_MAX_AGE && patientAge >= Util.OPEN_MRS_MIN_AGE ) {
+                } else {
+                    Ext.getCmp('patientAge').reset();
+                    Ext.Msg.alert("Error" , 'Age must be an integer and in between 0 and 119');
+                }
             }
         }
     }

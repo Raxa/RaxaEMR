@@ -34,6 +34,7 @@ Ext.define("Screener.view.PatientView", {
                     xtype: 'button',
                     id: 'assignButton',
                     text: Ext.i18n.appBundle.getMsg('RaxaEmrScreener.view.PatientView.ass'),
+                    ui: 'normal',
                     align: 'right',
                     disabled: 'true'
                 }]
