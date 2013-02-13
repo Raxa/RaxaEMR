@@ -153,6 +153,12 @@ Ext.define('RaxaEmr.controller.Session', {
                     }
                 }
                 localStorage.setItem('providerAttributes', Ext.encode(userInfoJson.providerAttributes));
+                if(localStorage.providerAttributes){
+                    var providerAttributes= JSON.parse(localStorage.providerAttributes)
+                    for(var i=0; i<providerAttributes.length; i++) {
+                        localStorage.setItem(providerAttributes[i].attributeType , providerAttributes[i].value );
+                    }
+                }
                 localStorage.setItem('session', JSON.stringify({
                     person: userInfoJson.personUuid,
                     display: userInfoJson.display
