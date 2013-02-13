@@ -335,10 +335,10 @@ var Util = {
                     changedText = 'Screener';
                     break;
                 case 'registration' :
-                    changedText = 'Registration';
+                    changedText = 'Registration Mobile';
                     break;
                 case 'registrationextjs4':
-                    changedText = 'Registration Desktop';
+                    changedText = 'Registration';
                     break;
                 case 'pharmacy' :
                     changedText = 'Pharmacy';
@@ -357,6 +357,9 @@ var Util = {
                     break;
                 case  'admin':
                     changedText = 'Admin';
+                    break;
+                case  'billing':
+                    changedText = 'Billing';
                     break;
                 default :
                     changedText = 'You dont have permission to access any Module';

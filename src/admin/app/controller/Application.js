@@ -40,6 +40,8 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
             newProvider: '#newProvider',
             manageProvidersButton: '#manageProvidersButton',
             manageLocationsButton: '#manageLocationsButton',
+            configureProviderButton: '#configureProviderButton',
+            submitDetailsButton: '#submitDetailsButton',
             saveProviderButton:'#saveProviderButton',
             newLocation: '#newLocation',
             password: '#password',
@@ -79,6 +81,12 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
             },
             hosUnChecked: {
                 check : 'hospitalUnChecked'
+            },
+            configureProviderButton: {
+                tap : 'configureProvider'
+            },
+            submitDetailsButton: {
+                tap: 'submitDetails'
             }
         }
     },
@@ -411,5 +419,23 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
         parentLoc.setConfig ({
             hidden : false
         })
+    },
+
+    configureHospital : function() {
+        Ext.getCmp('mainView').setActiveItem(1);
+    },
+    
+    submitDetails: function() {
+//        TODO submitting details
+//        var providerAttributes = 
+//                id: 'configureSpecialty'
+//                id: 'configureDegree'
+//                id: 'configureRegistrationNumber'
+//                id: 'configureTimingsLine1'
+//                id: 'configureTimingsLine2'
+//                id: 'configureContactNumber'
+//                id: 'configureSecondaryContactNumber'
+//                id: 'configureEmail'
     }
+
 });

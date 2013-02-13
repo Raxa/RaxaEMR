@@ -39,4 +39,10 @@
         { "name": "tabletUuidconcept", "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
         { "name": "tehsilUuidpersonattributetype", "uuid": "raxa00000-0000-0000-0000-000000000013" }, 
         { "name": "temperatureUuidconcept", "uuid": "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }, 
-        { "name": "weightUuidconcept", "uuid": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" } ] }
+        { "name": "weightUuidconcept", "uuid": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+        { "name": "specialtyUuidproviderattributetype", "uuid": "raxa00000-0000-0000-0000-000000000031" },
+        { "name": "degreeUuidproviderattributetype", "uuid": "raxa00000-0000-0000-0000-000000000032" },
+        { "name": "regnumberUuidproviderattributetype", "uuid": "raxa00000-0000-0000-0000-000000000033" },
+        { "name": "timings1Uuidproviderattributetype", "uuid": "raxa00000-0000-0000-0000-000000000034" },
+        { "name": "timings2Uuidproviderattributetype", "uuid": "raxa00000-0000-0000-0000-000000000035" } 
+    ] }
