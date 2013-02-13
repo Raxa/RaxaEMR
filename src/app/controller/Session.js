@@ -291,6 +291,7 @@ Ext.define('RaxaEmr.controller.Session', {
                             Ext.getCmp('newProviderId').reset();
                             Ext.getCmp('newProviderDetailsId').reset();
                             Ext.getCmp('providerAgreementId').reset();
+                            Ext.getCmp('mainView').setActiveItem(0);
                         },
                         failure: function (response) {
                             formComponent.setMasked(false);
