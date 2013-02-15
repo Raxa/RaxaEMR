@@ -153,12 +153,20 @@ Ext.define('RaxaEmr.controller.Session', {
                     }
                 }
                 localStorage.setItem('providerAttributes', Ext.encode(userInfoJson.providerAttributes));
-                if(localStorage.providerAttributes){
-                    var providerAttributes= JSON.parse(localStorage.providerAttributes)
+                var providerAttributes= JSON.parse(localStorage.providerAttributes)
+                if(providerAttributes !==null){
                     for(var i=0; i<providerAttributes.length; i++) {
-                        localStorage.setItem(providerAttributes[i].attributeType , providerAttributes[i].value );
+                        localStorage.setItem("provider"+providerAttributes[i].attributeType , providerAttributes[i].value );
                     }
                 }
+                localStorage.setItem('personAttributes', Ext.encode(userInfoJson.personAttributes));
+                var personAttributes= JSON.parse(localStorage.personAttributes)
+                if(personAttributes !==null){
+                    for(var i=0; i<personAttributes.length; i++) {
+                        localStorage.setItem("provider"+personAttributes[i].attributeType , personAttributes[i].value );
+                    }
+                }
+
                 localStorage.setItem('session', JSON.stringify({
                     person: userInfoJson.personUuid,
                     display: userInfoJson.display
@@ -170,21 +178,16 @@ Ext.define('RaxaEmr.controller.Session', {
                 localStorage.setItem('serverTimeDiff', now.getTime() - serverTime);
                 localStorage.setItem('loggedInProvider', userInfoJson.providerUuid);
                 var location = userInfoJson.location;
-                if(location===null){
-                    Ext.Error.raise('Location Health Center for user is not set');
+                if(location===undefined){
+                    Ext.Msg.alert('Location Health Center for user is not set');
                 }
                 else{
                     localStorage.setItem('location', location);
-                    var presentLocation = Ext.getStore('locationStore').getAt(Ext.getStore('locationStore').findExact('uuid',location));
-                    for(var k = 0; k< presentLocation.raw.attributes.length; k++){
-                        if(presentLocation.raw.attributes[k].display.indexOf('headerPrescription')>=0 && presentLocation.raw.attributes[k].value ){
-                            localStorage.setItem('headerPrescription',presentLocation.raw.attributes[k].value);
-                        }
-
-                        if(presentLocation.raw.attributes[k].display.indexOf('headerAddressPrescription')>=0 && presentLocation.raw.attributes[k].value ){
-                            localStorage.setItem('headerAddressPrescription',presentLocation.raw.attributes[k].value);
-                        }
-                    }
+                }
+                var locationAddress = userInfoJson.locationAddress;
+                if(locationAddress !== undefined){
+                    localStorage.setItem("locationName", locationAddress.name);
+                    localStorage.setItem("locationAddress", locationAddress.address1+ ", "+locationAddress.cityVillage);
                 }
                 this.loginSuccess();
             },

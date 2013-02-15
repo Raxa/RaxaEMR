@@ -89,10 +89,12 @@
     }
     tab += '</tbody></table>';
     document.getElementById('tab2').innerHTML = tab;
-    document.getElementById('title').innerHTML = localStorage.headerPrescription;
-    document.getElementById('header').innerHTML = localStorage.headerPrescription;
-    document.getElementById('headerDetails').innerHTML = localStorage.providerDetailsForPrescription;
-    document.getElementById('locationDetails').innerHTML = localStorage.providerTimings;
+    document.getElementById('title').innerHTML = localStorage.locationName;
+    document.getElementById('header').innerHTML = localStorage.locationName;
+    var providerDetails = Ext.decode(localStorage.session).display + ", " + localStorage.providerDegree + "<br>" + localStorage.providerRegistrationNumber + "<br>" + localStorage.providerSpecialty + "<br>" + localStorage.providerEmail;
+    document.getElementById('headerDetails').innerHTML = providerDetails;
+    var locationDetails = localStorage.locationAddress + "<br>" + localStorage.providerTimingsLine1 + "<br>" + localStorage.providerTimingsLine2;
+    document.getElementById('locationDetails').innerHTML = locationDetails;
 </script>
 </body>
 </html>

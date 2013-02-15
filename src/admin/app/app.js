@@ -38,7 +38,7 @@ Ext.application({
 
     stores: ['Providers', 'Locations', 'NewPersons', 'ParChildLocation'],
     models: ['Provider', 'Names', 'Person', 'ProviderAttribute', 'Location', 'ListItem'],
-    views: ['Main', 'ProviderView', 'LocationView', 'NewProvider', 'AddLocation', 'ConfigureHospital', 'MainMenu'],
+    views: ['Main', 'ProviderView', 'LocationView', 'NewProvider', 'AddLocation', 'EditDetails', 'MainMenu'],
     controllers: ['Application'],
         //entry point
         launch: function() {

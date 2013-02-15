@@ -28,14 +28,14 @@ Ext.define("RaxaEmr.Admin.view.MainMenu",{
             ui: 'action',
             action: 'manageLocations'
         }, {
-            id: 'configureHospitalButton',
+            id: 'editDetailsButton',
             xtype: 'button',
             text : 'Edit Details',
             width: 200,
             height: 200,
             margin: 5,
             ui: 'action',
-            action: 'configureProvider'
+            action: 'editDetails'
         }]
     }
 });

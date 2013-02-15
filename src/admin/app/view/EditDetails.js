@@ -1,6 +1,6 @@
-Ext.define('RaxaEmr.Admin.view.ConfigureHospital',{
-    extend: 'Ext.Panel',
-    id: 'configureHospital',
+Ext.define('RaxaEmr.Admin.view.EditDetails',{
+    extend: 'Ext.Container',
+    id: 'editDetails',
     config: {
         layout: {
             type: 'vbox',
