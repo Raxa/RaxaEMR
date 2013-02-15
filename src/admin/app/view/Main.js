@@ -8,7 +8,7 @@ Ext.define("RaxaEmr.Admin.view.Main",{
             type: 'hbox',
             align: 'center',
             pack: 'center'
-        }, 
+        },  
         items: [
         {
             id: 'manageProvidersButton',
