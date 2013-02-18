@@ -17,7 +17,7 @@ Ext.define("Screener.view.Main", {
             id: 'maintabs',
             activeItem: 0,
             tabBar: {
-                docked: 'left',
+                docked: 'left'
             },
             listeners: {
                 activate: function () {
@@ -41,27 +41,30 @@ Ext.define("Screener.view.Main", {
                 }
             },
             items: [
-
             {
                 id: 'assignPatientButton',
                 xtype: 'patientView',
                 title: '<div class="screener_tabs">OPD</div>'
-            }, {
-                id: 'showPharmacyButton',
-                xtype: 'pharmacylist',
-                title: '<div class="screener_tabs">PHARMACY</div>'
-            }, {
-                id: 'showLabButton',
-                xtype: 'labOrder',
-                title: '<div class="screener_tabs">LABORATORY</div>'
-            }, {
+            }, 
+//            {
+//                id: 'showPharmacyButton',
+//                xtype: 'pharmacylist',
+//                title: '<div class="screener_tabs">PHARMACY</div>'
+//            }, {
+//                id: 'showLabButton',
+//                xtype: 'labOrder',
+//                title: '<div class="screener_tabs">LABORATORY</div>'
+//            }, 
+            {
                 id: 'showVitalsButton',
                 xtype: 'vitalslist',
                 title: '<div class="screener_tabs">VITAL</div>'
-            }, {
-                id: 'showUltrasoundButton',
-                title: '<div class="screener_tabs">ULTRASOUND</div>'
-            }, ]
+            }, 
+//            {
+//                id: 'showUltrasoundButton',
+//                title: '<div class="screener_tabs">ULTRASOUND</div>'
+//            }, 
+        ]
         }, ]
 
     }

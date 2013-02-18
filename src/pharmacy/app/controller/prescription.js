@@ -622,6 +622,13 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         var numDrugs = drugs.items.length;
         for (var i1 = 0; i1 < numDrugs; i1++) {
             // value of Url for get call is made here using name of drug
+            if(!Ext.getCmp("saveLoadMask")){
+                var myMask = new Ext.LoadMask(Ext.getCmp('prescribedDrugs'), {
+                    msg:"Saving",
+                    id:"saveLoadMask"
+                });
+            }
+            Ext.getCmp("saveLoadMask").show();
             if(drugs.items[i1].data.orderUuid !== "") {
                 Ext.Ajax.request({
                     url: HOST + '/ws/rest/v1/order/' + drugs.items[i1].data.orderUuid + '?!purge',  //'/ws/rest/v1/concept?q=height',
@@ -713,6 +720,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                                 encounterStore.sync({
                                     scope: this,
                                     success: function(){
+                                        if(Ext.getCmp("saveLoadMask") !== undefined) {
+                                            Ext.getCmp("saveLoadMask").hide();
+                                        }
                                         Ext.Msg.alert('Successful');
                                         var l = Ext.getCmp('mainarea').getLayout();
                                         l.setActiveItem(0);
@@ -726,18 +736,28 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                                         this.sendPrescriptionFill();
                                     },
                                     failure: function(){
+                                        if(Ext.getCmp("saveLoadMask") !== undefined) {
+                                            Ext.getCmp("saveLoadMask").hide();
+                                        }
                                         Ext.Msg.alert("Failure -- Please try again");
+                                         
                                     }
                                 });
                             }
                         }
                         else{
+                            if(Ext.getCmp("saveLoadMask") !== undefined) {
+                                Ext.getCmp("saveLoadMask").hide();
+                            }
                             Ext.Msg.alert("Error: failed to read from server");
                         }
                     }
                 });
             }
             else{
+                if(Ext.getCmp("saveLoadMask") !== undefined) {
+                    Ext.getCmp("saveLoadMask").hide();
+                }
                 Ext.Msg.alert('Error: enter a drug');
                 return;
             }
@@ -857,7 +877,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     // Sets the fields realted to patient in main screen and then calls for function getDrugOrders()
     patientSelect: function (x, searchPanel, drugOrderGrid, addPatientArea) {
         
-        Ext.getCmp('currentButton').toggle(false);
+        Ext.getCmp('currentButton').toggle(true);
         Ext.getCmp('historyButton').toggle(false);
         Ext.getCmp('prescriptionPatientName').setValue(x.name);
         //below its commented as the identifier are not sent in patient search results
@@ -1958,6 +1978,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     
     currentDatePrescription: function() {
         var orderStore = Ext.getStore('orderStore');
+        if(orderStore.data.items[0] !== undefined)
         var filterStartDate = orderStore.data.items[0].data.date;
         orderStore.filter(function(r) {
             var value = r.get('date');
