@@ -18,20 +18,28 @@
 -->
 <html>
 <head>
-    <title>JSS Pharmacy Prescription</title>
+    <title id='title'>JSS Pharmacy Prescription</title>
 </head>
 <body>
     <div style="height: 2px; width: 100%; background: lightblue"></div> 
-    <table align="center" style="width: 500px; align:center;" >
-        <td>
+    <table align="center" style="width: 100%; align:center;" >
+        <tr>
+<!--        <td>
             <p style="text-align: center; ">
-<!--                <img src="../../resources/img/jss-icon.png" style="float: center; width: 100px; height: 100px; "
-                />-->
+                <img src="../../resources/img/jss-icon.png" style="float: center; width: 100px; height: 100px; "
+                />
             </p>
+        </td>-->
+        <h2 style="text-align: center; width: 100% " id='header'>Jan Swasthya Sahyog <br> Ganiari, Bilaspur </h2>
+        </tr>
+        <tr>
+        <td>
+            <h4 style="text-align: left; " id='headerDetails'></h4>
         </td>
-        <td width="75%">
-            <h2 style="text-align: left; ">Jan Swasthya Sahyog <br> Ganiari, Bilaspur </h2>
+        <td>
+            <h4 style="text-align: right; " id='locationDetails'></h4>
         </td>
+        </tr>
     </table>
     <div style="height: 2px; width: 100%; background: lightblue"></div> 
     <table border="0" cellpadding="1" cellspacing="1" style="width: 100%; height: auto">
@@ -81,6 +89,12 @@
     }
     tab += '</tbody></table>';
     document.getElementById('tab2').innerHTML = tab;
+    document.getElementById('title').innerHTML = localStorage.locationName;
+    document.getElementById('header').innerHTML = localStorage.locationName;
+    var providerDetails = Ext.decode(localStorage.session).display + ", " + localStorage.providerDegree + "<br>" + localStorage.providerRegistrationNumber + "<br>" + localStorage.providerSpecialty + "<br>" + localStorage.providerEmail;
+    document.getElementById('headerDetails').innerHTML = providerDetails;
+    var locationDetails = localStorage.locationAddress + "<br>" + localStorage.providerTimingsLine1 + "<br>" + localStorage.providerTimingsLine2;
+    document.getElementById('locationDetails').innerHTML = locationDetails;
 </script>
 </body>
 </html>

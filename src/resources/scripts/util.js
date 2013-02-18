@@ -124,7 +124,7 @@ var TIME_BEFORE_NOW = 0.1;
 
 // The Util class provids several methods that are shared by the core, apps and modules
 var Util = {
-    conceptVersion : "0.3-SNAPSHOT",
+    conceptVersion : "0.3.01",
     // Enum to capture pages in each app. E.g. Util.PAGES.SCREENER.PAGE_NAME
     PAGES: {},
     
@@ -335,10 +335,10 @@ var Util = {
                     changedText = 'Screener';
                     break;
                 case 'registration' :
-                    changedText = 'Registration';
+                    changedText = 'Registration Mobile';
                     break;
                 case 'registrationextjs4':
-                    changedText = 'Registration Desktop';
+                    changedText = 'Registration';
                     break;
                 case 'pharmacy' :
                     changedText = 'Pharmacy';
@@ -357,6 +357,9 @@ var Util = {
                     break;
                 case  'admin':
                     changedText = 'Admin';
+                    break;
+                case  'billing':
+                    changedText = 'Billing';
                     break;
                 default :
                     changedText = 'You dont have permission to access any Module';
