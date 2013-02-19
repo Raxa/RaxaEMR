@@ -58,7 +58,7 @@ Ext.define("Screener.controller.Application", {
     'Screener.view.VitalsView',
     'Screener.view.VitalsForm',
     'Screener.view.Main',
-    'Screener.view.VitalViewListener'
+    'Screener.view.VitalViewListener',
     ],
     models: [
     'Screener.model.Person', 
@@ -295,9 +295,10 @@ Ext.define("Screener.controller.Application", {
             callback: function(records, operation, success){
                 if(success){
                     this.setComplaintBMITime(store_patientList);
+                    this.updatePatientsWaitingTitle();
                     // TODO: Add photos to patients in screener list
                     store_patientList.each(function (record) {
-                        record.set('image', '/Raxa-JSS/src/screener/resources/pic.gif');
+                        record.set('image', 'resources/pic.gif');
                     });
                 }
                 else{
@@ -460,7 +461,9 @@ Ext.define("Screener.controller.Application", {
     // Opens form for creating new patient
     addPerson: function () {
         if (!this.newPatient) {
-            this.newPatient = Ext.create('Screener.view.NewPatientModal', {centered: true});
+            this.newPatient = Ext.create('Screener.view.NewPatientModal', {
+                centered: true
+            });
             Ext.Viewport.add(this.newPatient);
         }
         // Set new FIFO id so patients come and go in the queue!
@@ -482,12 +485,14 @@ Ext.define("Screener.controller.Application", {
             if ( formp.patientAge !== null) {
                 newPatient.age = formp.patientAge ;   
             }
-            else if( formp.dob !== "" && formp.dob.length > 0 ) {
-                newPatient.birthdate =  formp.dob;
-            }
+            //            if( formp.dob !== "" && formp.dob.length > 0 ) {
+            //                newPatient.birthdate =  formp.dob;
+            //            }
             if(Ext.getCmp('contactNumber').getValue()!==""){
-                newPatient.attributes = new Array({attributeType: localStorage.primaryContactUuidpersonattributetype,
-                    value: Ext.getCmp('contactNumber').getValue()})
+                newPatient.attributes = new Array({
+                    attributeType: localStorage.primaryContactUuidpersonattributetype,
+                    value: Ext.getCmp('contactNumber').getValue()
+                })
             }
             var newPatientParam = Ext.encode(newPatient);
             Ext.Ajax.request({
@@ -692,18 +697,19 @@ Ext.define("Screener.controller.Application", {
     },
     //this method refreshes the patientList and also updates the patientWaitingTitle and bmi, encountertime locally in patient model 
     refreshList: function () {
-        Ext.getStore('patientStore').load({
-            scope: this,
-            callback: function(records, operation, success){
-                if(success){
-                    this.updatePatientsWaitingTitle();
-                    this.setComplaintBMITime(Ext.getStore('patientStore'));
-                }
-                else{
-                    Ext.Msg.alert("Error", Util.getMessageLoadError());
-                }
-            }
-        });
+//                        Ext.getStore('patientStore').load({
+//                            scope: this,
+//                            callback: function(records, operation, success){
+//                                if(success){
+//                                    this.updatePatientsWaitingTitle();
+//                                    this.setComplaintBMITime(Ext.getStore('patientStore'));
+//                                }
+//                                else{
+//                                    Ext.Msg.alert("Error", Util.getMessageLoadError());
+//                                }
+//                            }
+//                        });
+        this.finalPatientList();
     },
 
 
@@ -722,6 +728,8 @@ Ext.define("Screener.controller.Application", {
         // TODO: https://raxaemr.atlassian.net/browse/TODO-67#comment-12611
         // Need to add location to OpenMRS for waitingUuidlocation
         this.sendEncounterData(patient, localStorage.screenerUuidencountertype, localStorage.waitingUuidlocation, provider)
+        this.finalPatientList();
+        this.updatePatientsWaitingTitle();
         this.countPatients();
     },
     // unassign a patient assigned to a doctor
@@ -825,22 +833,22 @@ Ext.define("Screener.controller.Application", {
             console.log("Creating Obs for uuid types...");
             var v = Ext.getCmp("vitalsForm").getValues();
             if(v.bloodOxygenSaturationField !== null) {
-            createObs(localStorage.bloodoxygensaturationUuidconcept, v.bloodOxygenSaturationField);
+                createObs(localStorage.bloodoxygensaturationUuidconcept, v.bloodOxygenSaturationField);
             }
             if(v.diastolicBloodPressureField !== null) {
-            createObs(localStorage.diastolicbloodpressureUuidconcept, v.diastolicBloodPressureField);
+                createObs(localStorage.diastolicbloodpressureUuidconcept, v.diastolicBloodPressureField);
             }
             if(v.respiratoryRateField !== null) {
-            createObs(localStorage.respiratoryRateUuidconcept, v.respiratoryRateField);
+                createObs(localStorage.respiratoryRateUuidconcept, v.respiratoryRateField);
             }
             if(v.systolicBloodPressureField !== null) {
-            createObs(localStorage.systolicbloodpressureUuidconcept, v.systolicBloodPressureField);
+                createObs(localStorage.systolicbloodpressureUuidconcept, v.systolicBloodPressureField);
             }
             if(v.temperatureField !== null) {
-            createObs(localStorage.temperatureUuidconcept, v.temperatureField);
+                createObs(localStorage.temperatureUuidconcept, v.temperatureField);
             }
             if(v.pulseField !== null) {
-            createObs(localStorage.pulseUuidconcept, v.pulseField);
+                createObs(localStorage.pulseUuidconcept, v.pulseField);
             }
             observations.sync();
             console.log("... Complete! Created Obs for new uuid types");
@@ -937,11 +945,13 @@ Ext.define("Screener.controller.Application", {
     
     onAgeChange : function() {
         var patientAge = Ext.getCmp('patientAge').getValue();
-        if ( patientAge !== "" && patientAge.length > 0) {
-            if( Ext.isNumeric(patientAge) && patientAge < Util.OPEN_MRS_MAX_AGE && patientAge >= Util.OPEN_MRS_MIN_AGE ) {
-            } else {
-                Ext.getCmp('patientAge').reset();
-                Ext.Msg.alert("Error" , 'Age must be an integer and in between 0 and 119');
+        if(patientAge !== null) {
+            if ( patientAge !== "" && patientAge.length > 0) {
+                if( Ext.isNumeric(patientAge) && patientAge < Util.OPEN_MRS_MAX_AGE && patientAge >= Util.OPEN_MRS_MIN_AGE ) {
+                } else {
+                    Ext.getCmp('patientAge').reset();
+                    Ext.Msg.alert("Error" , 'Age must be an integer and in between 0 and 119');
+                }
             }
         }
     }

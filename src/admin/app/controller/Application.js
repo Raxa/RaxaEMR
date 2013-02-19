@@ -6,7 +6,7 @@
  * the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -40,6 +40,8 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
             newProvider: '#newProvider',
             manageProvidersButton: '#manageProvidersButton',
             manageLocationsButton: '#manageLocationsButton',
+            editDetailsButton: '#editDetailsButton',
+            submitDetailsButton: '#submitDetailsButton',
             saveProviderButton:'#saveProviderButton',
             newLocation: '#newLocation',
             password: '#password',
@@ -79,6 +81,12 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
             },
             hosUnChecked: {
                 check : 'hospitalUnChecked'
+            },
+            editDetailsButton: {
+                tap : 'editDetails'
+            },
+            submitDetailsButton: {
+                tap: 'submitDetails'
             }
         }
     },
@@ -411,5 +419,100 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
         parentLoc.setConfig ({
             hidden : false
         })
+    },
+
+    editDetails : function() {
+        Ext.getCmp('mainView').setActiveItem(1);
+    },
+    
+    submitDetails: function() {
+        var providerAttributes= [{
+            value: Ext.getCmp('configureSpecialty').getValue(),
+            attributeType: localStorage.specialtyUuidproviderattributetype
+        }, {
+            value: Ext.getCmp('configureDegree').getValue(),
+            attributeType: localStorage.degreeUuidproviderattributetype
+        }, {
+            value: Ext.getCmp('configureRegistrationNumber').getValue(),
+            attributeType: localStorage.regnumberUuidproviderattributetype
+        }, {
+            value: Ext.getCmp('configureTimingsLine1').getValue(),
+            attributeType: localStorage.timings1Uuidproviderattributetype
+        }, {
+            value: Ext.getCmp('configureTimingsLine2').getValue(),
+            attributeType: localStorage.timings2Uuidproviderattributetype
+        }
+        ];
+        
+        var providerParams = this.removeBlankAttributes(providerAttributes);
+                
+        var personAttributes = [{
+            value: Ext.getCmp('configureContactNumber').getValue(),
+            attributeType: localStorage.primaryContactUuidpersonattributetype
+        }, {
+            value: Ext.getCmp('configureSecondaryContactNumber').getValue(),
+            attributeType: localStorage.secondaryContactUuidpersonattributetype
+        }, {
+            value: Ext.getCmp('configureEmail').getValue(),
+            attributeType: localStorage.emailUuidpersonattributetype
+        }];
+    
+        var personParams = this.removeBlankAttributes(personAttributes);
+
+        var attributeParams = {
+            providerAttributes: providerParams,
+            personAttributes: personParams
+        };
+        
+        Ext.Ajax.request({
+            url: HOST + '/ws/rest/v1/raxacore/provider/'+localStorage.loggedInProvider,
+            method: 'POST',
+            params: Ext.encode(attributeParams),
+            disableCaching: false,
+            headers: Util.getBasicAuthHeaders(),
+            success: function (response) {
+                Ext.Msg.alert('Details Updated');
+                Ext.getCmp('mainView').setActiveItem(0);
+                var responseJson = Ext.decode(response.responseText);
+                this.addAttributesToStorage(responseJson);
+            },
+            failure: function() {
+                Ext.Msg.alert("Error", Util.getMessageSyncError());
+            },
+            scope: this
+        });
+    
+    },
+    
+    addAttributesToStorage: function(attributes) {
+        console.log(attributes);
+        yyy = attributes;
+        for(var i =0; i< attributes.personAttributes.length; i++){
+            var attribute = attributes.personAttributes[i];
+            var attributeName = "provider"+attribute.attributeType;
+            attributeName = attributeName.replace(/\s+/g, '');
+            localStorage.setItem(attributeName, attribute.value);
+        }
+        for(var i =0; i< attributes.providerAttributes.length; i++){
+            var attribute = attributes.providerAttributes[i];
+            var attributeName = "provider"+attribute.attributeType;
+            attributeName = attributeName.replace(/\s+/g, '');
+            localStorage.setItem(attributeName, attribute.value);
+        }
+    },
+    
+    /**
+     * takes an array of attributes, strips out those with blank values
+     */
+    removeBlankAttributes: function(attributes) {
+        var newAttributes = [];
+        for(var i=0; i<attributes.length; i++){
+            var attribute = attributes[i];
+            if(attribute.value !== ""){
+                newAttributes.push(attribute);
+            }
+        }
+        return newAttributes;
     }
+
 });

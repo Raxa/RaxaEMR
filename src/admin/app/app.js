@@ -38,11 +38,11 @@ Ext.application({
 
     stores: ['Providers', 'Locations', 'NewPersons', 'ParChildLocation'],
     models: ['Provider', 'Names', 'Person', 'ProviderAttribute', 'Location', 'ListItem'],
-    views: ['Main', 'ProviderView', 'LocationView', 'NewProvider', 'AddLocation'],
+    views: ['Main', 'ProviderView', 'LocationView', 'NewProvider', 'AddLocation', 'EditDetails', 'MainMenu'],
     controllers: ['Application'],
         //entry point
         launch: function() {
-                if (Util.checkModulePrivilege('admin')&& Util.uuidLoadedSuccessfully()) {
+                if (Util.checkModulePrivilege('admin')) {
             var mainScreen = Ext.create('RaxaEmr.Admin.view.Main', {
                 fullscreen: true
             });

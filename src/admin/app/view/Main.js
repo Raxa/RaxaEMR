@@ -20,13 +20,7 @@ Ext.define("RaxaEmr.Admin.view.Main",{
             ui: 'action',
             action: 'manageProviders'
         }, {
-            id: 'manageLocationsButton',
-            xtype: 'button',
-            text : 'Manage Locations',
-            width: 200,
-            height: 200,
-            ui: 'action',
-            action: 'manageLocations'
+            xclass: 'RaxaEmr.Admin.view.EditDetails'
         }]
     }
 });
