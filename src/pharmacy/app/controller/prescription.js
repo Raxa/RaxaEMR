@@ -1148,7 +1148,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             // For each inventory, populate the drug name and quantity
             var currDrugUuid = records[0].data.inventories[i].drug.uuid;
             var currDrugName = records[0].data.inventories[i].drug.display;
-            var currDrugIndex = Ext.getStore('allDrugs').find('uuid', currDrugUuid);
+            //TODO: add in drug name to receipt
+            //var currDrugIndex = Ext.getStore('allDrugs').find('uuid', currDrugUuid);
             
             Ext.getStore('newReceipt').add({
                 drug: {
@@ -1158,7 +1159,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 batch: records[0].data.inventories[i].batch,
                 quantity: records[0].data.inventories[i].quantity,
                 originalQuantity: records[0].data.inventories[i].originalQuantity,
-                drugName: records[0].data.inventories[i].drug.display,
+                //drugName: records[0].data.inventories[i].drug.display,
                 expiryDate: records[0].data.inventories[i].expiryDate,
                 uuid: records[0].data.inventories[i].uuid,
                 supplier: records[0].data.inventories[i].supplier
