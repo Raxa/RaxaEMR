@@ -604,7 +604,7 @@ var Util = {
         //First, we check if the new drug concept exists in RxNorm/Openmrs -- if not, we will have to create
         //a new concept
         Ext.Ajax.request({
-            url: HOST + '/ws/rest/v1/concept?q='+newDrugParam.drugName+"&v=full",
+            url: HOST + '/ws/rest/v1/concept?q='+newDrugParam.genericName+"&v=full",
             method: 'GET',
             disableCaching: false,
             headers: Util.getBasicAuthHeaders(),
@@ -645,16 +645,15 @@ var Util = {
             concept: newDrugParam.conceptUuid,
             name: newDrugParam.drugName,
             dosageForm: newDrugParam.dosageForm,
-            minimumDailyDose: newDrugParam.minimumDailyDose,
-            maximumDailyDose: newDrugParam.maximumDailyDose,
+            strength: newDrugParam.strength,
             units: newDrugParam.units,
             drugInfo: newDrugInfo
         };
-        var newDrugParam = Ext.encode(newDrug);
+        var drugParam = Ext.encode(newDrug);
         Ext.Ajax.request({
             url: HOST + '/ws/rest/v1/raxacore/drug',
             method: 'POST',
-            params: newDrugParam,
+            params: drugParam,
             disableCaching: false,
             headers: Util.getBasicAuthHeaders(),
             success: function (response) {
@@ -678,7 +677,7 @@ var Util = {
     postConceptForNewDrug: function(newDrugParam, callback){
         var newConcept = {
             names: [{
-                name: newDrugParam.drugName, 
+                name: newDrugParam.genericName, 
                 locale: "en", 
                 conceptNameType: "FULLY_SPECIFIED"
             }],
