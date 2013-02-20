@@ -32,7 +32,7 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
     'RaxaEmr.Admin.model.Person', 
     'RaxaEmr.Admin.model.Location',
     'RaxaEmr.Admin.model.ProviderAttribute'
-    ],
+    ], 
     extend: 'Ext.app.Controller',
     config: {
         refs: {

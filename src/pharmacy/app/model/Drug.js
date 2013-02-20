@@ -8,6 +8,11 @@ Ext.define('RaxaEmr.Pharmacy.model.Drug', {
     }, {
         name: 'name',
         type: 'string',
+        mapping: 'name'
+    }, {
+        name: 'text',
+        type: 'string',
+        mapping: 'fullName'
     },{
         name: 'uuid',
         type: 'string',

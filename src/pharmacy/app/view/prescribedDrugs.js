@@ -47,6 +47,21 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
                         , 
                         scope: this
                     },
+                    'keyup': {
+                        fn: function(combobox) {
+                            var drugStore = Ext.getStore('allDrugs');
+                            drugStore.setProxy({
+                                type: 'rest',
+                                url: HOST + '/ws/rest/v1/raxacore/drug?q='+combobox.getValue(),
+                                headers: Util.getBasicAuthHeaders(),
+                                reader: {
+                                    type: 'json',
+                                    root: 'results'
+                                }
+                            });
+                            drugStore.load();
+                        }
+                    },
                     'select': {
                         fn: function (comboField, records) {
                             var drugUuid = records[0].data.uuid;
