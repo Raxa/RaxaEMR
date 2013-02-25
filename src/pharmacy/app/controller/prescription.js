@@ -1005,7 +1005,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             Ext.getCmp("searchLoadMask").show();
         }
         Ext.getStore('orderStore').removeAll();
-        var Url = HOST + '/ws/rest/v1/order?patient=';
+        var Url = HOST + '/ws/rest/v1/raxacore/order?patient=';
         Url = Url + x + '&&v=full';
         // setting up the proxy here because url is not fixed
         var drudOrderStore = Ext.getStore('drugOrder')
@@ -1036,6 +1036,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                     if(records.length > 0){
                         var filterStartDate = drudOrderStore.data.items[0].data.date;
                         for(var i = 0 ; i < drudOrderStore.data.length ; i++) {
+                            console.log(drudOrderStore.data.items[i]);
                             that.DrugOrderSelect(drudOrderStore.data.items[i] , filterStartDate)
                         }
                     }
