@@ -37,6 +37,7 @@ if (localStorage.getItem("host") === null) {
 } else { 
     HOST = localStorage.getItem("host"); 
 }
+var CONCEPT_HOST = 'http://23.21.75.27:4000';
 
 var username;
 var password;
