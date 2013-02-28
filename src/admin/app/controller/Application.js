@@ -193,12 +193,12 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
     
     saveProviderButton: function() {
         var formp = Ext.getCmp('newProviderId').saveForm();
-        if (formp.givenname && formp.familyname && formp.choice && formp.userName && formp.password && formp.location && formp.boolChoice) {
+        if (formp.givenname && formp.familyname && formp.choice && formp.userName && formp.password && formp.boolChoice) {
             var newUser = {
                 gender : formp.choice,
                 firstName: formp.givenname,
                 lastName: formp.familyname,
-                location: formp.location,
+                location: localStorage.location,
                 userName: formp.userName,
                 password: formp.password,
                 type: "provider"

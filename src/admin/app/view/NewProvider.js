@@ -57,7 +57,8 @@ Ext.define("RaxaEmr.Admin.view.NewProvider", {
             displayField : 'name',
             valueField : 'uuid',
             store: 'Locations',
-            id: 'selectLocation'
+            id: 'selectLocation',
+            hidden: true
         },
         {
             xtype  : 'container',
