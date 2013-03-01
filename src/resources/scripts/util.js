@@ -48,6 +48,8 @@ var hospitalName = 'JSS Hospital';
 // Put the Identifier Type Name in between the /.* and the .*/
 var idPattern = /.*RaxaEMR Identification Number.*/;
 
+var DEFAULT_PRESCRIPTION_QUANTITY = 15;
+
 //Open Mrs age limits
  
 
@@ -316,8 +318,8 @@ var Util = {
      */
     getModules: function () {
         //always keep login at first position as its app path is different
-        return ['login', 'screener', 'registrationextjs4', 'pharmacy', 'chw', 'outpatient', 'laboratory', 'patientfacing', 'admin', 'billing'];
-        
+        //return ['login', 'screener', 'registrationextjs4', 'pharmacy', 'chw', 'outpatient', 'laboratory', 'patientfacing', 'admin', 'billing'];
+        return ['login', 'screener', 'registrationextjs4', 'pharmacy', 'outpatient', 'admin'];        
     },
 
     /**
@@ -708,5 +710,38 @@ var Util = {
             scope: this
         });
     },
-
+    
+    calculateMedicationQuantity: function(prescription){
+        var duration = prescription.duration;
+        var frequency = prescription.frequency;
+        console.log(prescription);
+        switch(frequency) {
+            case 'q.h.' :
+                return duration * 24;
+            case 'qqh' :
+                return duration * 6;
+            case 'q.d.s.' :
+                return duration * 4;
+            case 't.d.s.' :
+                return duration * 3;
+            case 'b.d' :
+                return duration * 2;
+            case 'q.d., q1d' || 'q.a.m.' || 'q.p.m.' || 'q4PM' || 'q.h.s.':
+                return duration;
+            case 'q.a.d.':
+                return Math.ceil(duration/2);
+            case 't.i.w.':
+                return Math.round(duration*3/7);
+            case 'QWK' :
+                return Math.ceil(duration/7);
+            case 'p.r.n':
+                return DEFAULT_PRESCRIPTION_QUANTITY;
+            case 'q.s.':
+                return DEFAULT_PRESCRIPTION_QUANTITY;
+            case 'ad lib':
+                return DEFAULT_PRESCRIPTION_QUANTITY;
+            default :
+                return DEFAULT_PRESCRIPTION_QUANTITY;
+        }
+    }
 }
