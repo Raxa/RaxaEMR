@@ -36,6 +36,7 @@ Ext.define("Screener.view.NewPatient", {
                     xtype: 'textfield',
                     clearIcon: false,
                     style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
+                    readOnly : true,
                     value: 'First Name',
                     width: NEW_PATIENT_CONSTANTS.LABEL_WIDTH
                 }]
@@ -57,6 +58,7 @@ Ext.define("Screener.view.NewPatient", {
                 items: [{
                     xtype: 'textfield',
                     clearIcon: false,
+                    readOnly : true,
                     style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
                     value: 'Last Name',
                     width: NEW_PATIENT_CONSTANTS.LABEL_WIDTH
@@ -79,6 +81,7 @@ Ext.define("Screener.view.NewPatient", {
                 items: [{
                     xtype: 'textfield',
                     clearIcon: false,
+                    readOnly : true,
                     style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
                     value: 'Age',
                     width: NEW_PATIENT_CONSTANTS.LABEL_WIDTH
@@ -116,6 +119,7 @@ Ext.define("Screener.view.NewPatient", {
                     xtype: 'textfield',
                     clearIcon: false,
                     style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
+                    readOnly : true,
                     value: 'Gender',
                     width: NEW_PATIENT_CONSTANTS.LABEL_WIDTH
                 }]
@@ -166,6 +170,7 @@ Ext.define("Screener.view.NewPatient", {
                 items: [{
                     xtype: 'textfield',
                     clearIcon: false,
+                    readOnly : true,
                     style: NEW_PATIENT_CONSTANTS.LABEL_STYLE,
                     value: 'Contact No',
                     width: NEW_PATIENT_CONSTANTS.LABEL_WIDTH
