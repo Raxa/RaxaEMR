@@ -1,141 +1,185 @@
+var NEW_PROV_CONSTANTS = {
+    FIELD_BORDER: 'border-color: #333333; border-width: 1px; border-style : solid;',
+    FIELD_WIDTH: 300,
+    LABEL_WIDTH: 160,
+    AGE_FIELD_WIDTH: 80,
+    LABEL_STYLE: 'background-color: #eeeeee;',
+    CONTAINER_BACKGROUND: 'background-color: #eeeeee;',
+    CONTAINER_LAYOUT: {
+        type: 'hbox'
+    },
+    CONTAINER_MARGIN: '5 0 5 0',
+    RADIO_FIELD_WIDTH: 230
+}
 Ext.define("RaxaEmr.view.NewProviderDetails", {
     requires: ['Ext.field.Text', 'Ext.field.Number'],
     extend: 'Ext.form.Panel',
     xtype: 'newProviderDetails',
     id: 'newProviderDetailsId',
     that : this,
+    
     config: {
-        centered: true,
-        modal: true,
-        hideOnMaskTap: true,
-        hidden: true,
-        // Set the width and height of the panel
-        width: 1000,
-        height: 480,
-        layout: 'hbox',
+        layout: 'vbox',
+        style: NEW_PROV_CONSTANTS.CONTAINER_BACKGROUND,
+        scrollable: false,
+        margin: 5,
         items: [
         {
             flex: 1,
             items: [
             {
-                xtype: 'textfield',
-                id: 'firstName',
-                name: 'firstname',
-                label: 'First Name'
-            }, 
-            {
-                xtype: 'textfield',
-                id: 'lastName',
-                name: 'lastname',
-                label: 'Last Name'
+                xtype: 'container',
+                layout: NEW_PROV_CONSTANTS.CONTAINER_LAYOUT,
+                margin: NEW_PROV_CONSTANTS.CONTAINER_MARGIN,
+                items: [{
+                    xtype: 'container',
+                    width: NEW_PROV_CONSTANTS.LABEL_WIDTH,
+                    items: [{
+                        xtype: 'textfield',
+                        clearIcon: false,
+                        style: NEW_PROV_CONSTANTS.LABEL_STYLE,
+                        value: 'Practice Name',
+                        readOnly: true,
+                        width: NEW_PROV_CONSTANTS.LABEL_WIDTH,
+                    }]
+                }, {
+                    xtype: 'textfield',
+                    id: 'nameOfSetup',
+                    name: 'nameOfSetup',
+                    tabIndex : 1,
+                    width: 400,
+                    style: NEW_PROV_CONSTANTS.FIELD_BORDER,
+                }]
             },
             {
-                xtype  : 'container',
-                id: 'sexRadioGroup',
-                layout : {
-                    type  : 'hbox',
-                    align : 'strech'
-                },
-                items  : [
+                xtype: 'container',
+                layout: NEW_PROV_CONSTANTS.CONTAINER_LAYOUT,
+                margin: NEW_PROV_CONSTANTS.CONTAINER_MARGIN,
+                items: [{
+                    xtype: 'container',
+                    width: NEW_PROV_CONSTANTS.LABEL_WIDTH,
+                    items: [{
+                        xtype: 'textfield',
+                        clearIcon: false,
+                        style: NEW_PROV_CONSTANTS.LABEL_STYLE,
+                        value: 'Practice Address',
+                        readOnly: true,
+                        width: NEW_PROV_CONSTANTS.LABEL_WIDTH
+                    }]
+                }, {
+                    xtype: 'textfield',
+                    id: 'address',
+                    name: 'address',
+                    tabIndex : 1,
+                    width: 400,
+                    style: NEW_PROV_CONSTANTS.FIELD_BORDER,
+                    listeners: {
+                        keyup : function(value) {
+                            Ext.getCmp('newProviderDetailsId').locationChanged(value);
+                        }
+                    }
+                }]
+            },
+            {
+                layout: 'hbox',
+                items: [
                 {
-                    xtype : 'radiofield',
-                    label : 'Male',
-                    value: 'M',
-                    name  : 'choice',
-                    labelWidth: 70,
-                    flex  : 1
-                },
-                {
-                    xtype : 'radiofield',
-                    label : 'Female',
-                    value: 'F',
-                    name  : 'choice',
-                    labelWidth: 90,
-                    flex  : 1
-                },
-                {
-                    xtype : 'radiofield',
-                    label : 'Other', 
-                    value: 'O',
-                    name  : 'choice',
-                    labelWidth: 70,
-                    flex  : 1
-                }
+                
+                    xtype: 'container',
+                    layout: NEW_PROV_CONSTANTS.CONTAINER_LAYOUT,
+                    items: [
+                    {
+                        xtype: 'container',
+                        layout: NEW_PROV_CONSTANTS.CONTAINER_LAYOUT,
+                        margin: NEW_PROV_CONSTANTS.CONTAINER_MARGIN,
+                        items: [{
+                            xtype: 'container',
+                            width: NEW_PROV_CONSTANTS.LABEL_WIDTH,
+                            items: [{
+                                xtype: 'textfield',
+                                clearIcon: false,
+                                style: NEW_PROV_CONSTANTS.LABEL_STYLE,
+                                value: 'City',
+                                readOnly: true,
+                                flex : 1
+                            }]
+                        }, {
+                            xtype: 'textfield',
+                            id: 'city',
+                            name: 'city',
+                            tabIndex : 1,
+                            width : 200,
+                            style: NEW_PROV_CONSTANTS.FIELD_BORDER,
+                            flex : 2,
+                            listeners: {
+                                keyup : function(value) {
+                                    Ext.getCmp('newProviderDetailsId').locationChanged(value);
+                                }
+                            }
+                        }]
+                    },
+                    {
+                        xtype : 'spacer',
+                        width : 25
+                    },    
+                    {
+                        xtype: 'container',
+                        width: 80,
+                        items: [{
+                            xtype: 'textfield',
+                            clearIcon: false,
+                            style: NEW_PROV_CONSTANTS.LABEL_STYLE,
+                            value: 'State',
+                            readOnly: true,
+                            flex : 1
+                        }]
+                    }, {
+                        xtype: 'textfield',
+                        id: 'state',
+                        name: 'state',
+                        flex: 2,
+                        tabIndex : 1,
+                        width: 200,
+                        height: 20,
+                        style: NEW_PROV_CONSTANTS.FIELD_BORDER,
+                        listeners: {
+                            keyup : function(value) {
+                                Ext.getCmp('newProviderDetailsId').locationChanged(value);
+                            }
+                        }
+                    }]
+                    },
                 ]
-            },
-            //            {
-            //                xtype: 'textfield',
-            //                id: 'qualification',
-            //                name: 'qualification',
-            //                label: "Qualification"
-            //            },
-            //            {
-            //                xtype: 'textfield',
-            //                id: 'regNumber',
-            //                name: 'regNumber',
-            //                inputType: 'regNumber',
-            //                label: 'Reg Number'
-            //            },
-            //            {
-            //                xtype: 'selectfield',
-            //                label: 'Type of physician',
-            //                name: 'typeOfPhysician',
-            //                options: [{
-            //                    text: 'Skin Doctor',
-            //                    value: 'skinDoctor'
-            //                }, {
-            //                    text: 'General Physician',
-            //                    value: 'generalPhysician'
-            //                }]
-            //            },
-            {
-                xtype: 'textfield',
-                id: 'nameOfSetup',
-                name: 'nameOfSetup',
-                label: "Name Of The Setup"
-            },{
-                xtype: 'textfield',
-                id: 'country',
-                name: 'country',
-                label: "Country",
-                listeners: {
-                    keyup : function(value) {
-                        Ext.getCmp('newProviderDetailsId').locationChanged(value);
+                },
+
+                {
+                xtype: 'container',
+                layout: NEW_PROV_CONSTANTS.CONTAINER_LAYOUT,
+                margin: NEW_PROV_CONSTANTS.CONTAINER_MARGIN,
+                items: [{
+                    xtype: 'container',
+                    width: NEW_PROV_CONSTANTS.LABEL_WIDTH,
+                    items: [{
+                        xtype: 'textfield',
+                        clearIcon: false,
+                        style: NEW_PROV_CONSTANTS.LABEL_STYLE,
+                        value: 'Country',
+                        readOnly: true,
+                        width: NEW_PROV_CONSTANTS.LABEL_WIDTH
+                    }]
+                }, {
+                    xtype: 'textfield',
+                    id: 'country',
+                    name: 'country',
+                    tabIndex : 1,
+                    width: NEW_PROV_CONSTANTS.FIELD_WIDTH,
+                    style: NEW_PROV_CONSTANTS.FIELD_BORDER,
+                    listeners: {
+                        keyup : function(value) {
+                            Ext.getCmp('newProviderDetailsId').locationChanged(value);
+                        }
                     }
-                }
-            },
-            {
-                xtype: 'textfield',
-                id: 'address',
-                name: 'address',
-                label: "Address",
-                listeners: {
-                    keyup : function(value) {
-                        Ext.getCmp('newProviderDetailsId').locationChanged(value);
-                    }
-                }
-            },
-            {
-                xtype: 'textfield',
-                id: 'city',
-                name: 'city',
-                label: "City",
-                listeners: {
-                    keyup : function(value) {
-                        Ext.getCmp('newProviderDetailsId').locationChanged(value);
-                    }
-                }
-            },
-            {
-                xtype: 'textfield',
-                id: 'state',
-                name: 'state',
-                label: "State",
-                listeners: {
-                    keyup : function(value) {
-                        Ext.getCmp('newProviderDetailsId').locationChanged(value);
-                    }
-                }
+                }]
             },
             {
                 xtype: 'textfield',
@@ -151,43 +195,42 @@ Ext.define("RaxaEmr.view.NewProviderDetails", {
                 hidden: true,
                 label: 'Longitude'
             },
-            {
-                xtype  : 'container',
-                id: 'nextBackButton',
-                layout : {
-                    type  : 'hbox',
-                    pack : 'center'
-                },  
-                items: [
-                {
-                    xtype: 'button',
-                    itemId: 'backProviderDetailsButton',
-                    text: 'Back',
-                    ui: 'action',
-                    width : 150
-                },
-                {
-                    xtype: 'spacer',
-                    width: 50
-                },
-                {
-                    xtype: 'button',
-                    itemId: 'saveProviderDetailsButton',
-                    text: 'Next',
-                    ui: 'action',
-                    width : 150
-                },
-                ]
-            },
             ]
         },
         {
             xtype: 'googleMapForm',
             flex: 1
-        }]
+        }, {
+            xtype  : 'container',
+            id: 'nextBackButton',
+            layout : {
+                type  : 'hbox',
+                pack : 'center'
+            },
+            items: [
+            {
+                xtype: 'button',
+                itemId: 'backProviderDetailsButton',
+                html: '<font  color="white">Back</font>',
+                margin: '17 350 0 0',
+                ui: 'confirm',
+                width : 150,
+                height : 50
+            },
+            {
+                xtype: 'button',
+                itemId: 'saveProviderDetailsButton',
+                html: '<font  color="white">Next</font>',
+                ui: 'confirm',
+                width : 150,
+                height: 50,
+                margin: '17 0 0 0'
+            },
+            ]
+        },]
     },
     locationChanged : function(value) {
-        if(Ext.getCmp('country').getValue() !== "" && Ext.getCmp('address').getValue() !== "" && Ext.getCmp('city').getValue() !== "" && Ext.getCmp('state').getValue() !== "") {
+        if(Ext.getCmp('country').getValue() !== "" && Ext.getCmp('address').getValue() !== "" &&  Ext.getCmp('state').getValue() !== "" && Ext.getCmp('city').getValue() !== "") {
             Ext.getCmp('locationGoogleMapId').renderMap();    
         }
     },
