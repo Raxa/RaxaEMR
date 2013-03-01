@@ -5,6 +5,8 @@ Ext.define("RaxaEmr.view.GoogleMapForm", {
     id: 'googleMapFormId',
     config: {
         layout: 'card',
+        width: 668,
+        height: 280,
         items: [
         {
             xtype: 'locationGoogleMap'        
