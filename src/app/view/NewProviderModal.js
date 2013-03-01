@@ -11,7 +11,6 @@ Ext.define("RaxaEmr.view.NewProviderModal", {
         scrollable: false,
         // Set the width and height of the panel
         width: 700,
-        height: 622,// todo change the height to 700
         layout: 'vbox',
         items: [
         {
@@ -38,5 +37,15 @@ Ext.define("RaxaEmr.view.NewProviderModal", {
             xtype: 'newProviderDetails',
             flex: 1
         }]
+    },
+    initialize : function() {
+        var isiPad = navigator.userAgent.match(/iPad/i);
+        if(isiPad !== null) {
+            Ext.getCmp('newProviderModal').setHeight(622);
+            Ext.getCmp('googleMapFormId').setHeight(280);
+        } else {
+            Ext.getCmp('newProviderModal').setHeight(710);
+            Ext.getCmp('googleMapFormId').setHeight(315);
+        }
     }
 });

@@ -311,7 +311,7 @@ Ext.define('RaxaEmr.controller.Session', {
                         headers: Util.getNewAccountAuthHeaders(),
                         success: function (response) {
                             Ext.getCmp('agreementId').setMasked(false);
-                            Ext.Msg.alert("Successful", "Please login to continue.");
+                            Ext.Msg.alert("Account created ","Please wait 24 hours for your account to be approved.");
                             Ext.getCmp('userName').setValue(formp.userName);
                             Ext.getCmp('providerAgreementId').hide();
                             Ext.getCmp('newProviderId').reset();
