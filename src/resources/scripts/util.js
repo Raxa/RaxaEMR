@@ -37,6 +37,7 @@ if (localStorage.getItem("host") === null) {
 } else { 
     HOST = localStorage.getItem("host"); 
 }
+var CONCEPT_HOST = 'http://23.21.75.27:4000';
 
 var username;
 var password;
@@ -70,7 +71,8 @@ var BMI_WEIGHT_MIN = 0;
 // Enum for Key Maps
 var KEY = {
     DELETE: 8,
-    ENTER: 13
+    ENTER: 13,
+    ESCAPE: 27
 };
 var keyMap = {
 };
