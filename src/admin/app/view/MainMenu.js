@@ -26,6 +26,7 @@ Ext.define("RaxaEmr.Admin.view.MainMenu",{
             width: 200,
             height: 200,
             ui: 'action',
+            hidden: true,
             action: 'manageLocations'
         }, {
             id: 'editDetailsButton',
