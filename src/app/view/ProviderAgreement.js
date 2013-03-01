@@ -11,7 +11,6 @@ Ext.define("RaxaEmr.view.ProviderAgreement", {
         hidden: true,
         // Set the width and height of the panel
         width: 700,
-        height: 622,
         items  : [
         {
             xtype: 'toolbar',
@@ -32,7 +31,6 @@ Ext.define("RaxaEmr.view.ProviderAgreement", {
         {
             xtype: 'container',
             docked : 'top',
-            height: 450,
             id: 'agreementId',
             scrollable: {
                 direction: 'vertical',
@@ -99,6 +97,18 @@ Ext.define("RaxaEmr.view.ProviderAgreement", {
         },
         ]
     },
+    
+    initialize : function() {
+        var isiPad = navigator.userAgent.match(/iPad/i);
+        if(isiPad !== null) {
+            Ext.getCmp('providerAgreementId').setHeight(622);
+            Ext.getCmp('agreementId').setHeight(450);
+        } else {
+            Ext.getCmp('providerAgreementId').setHeight(710);
+            Ext.getCmp('agreementId').setHeight(520);
+        }
+    },
+    
     saveForm: function () {
         return this.getValues();
     }

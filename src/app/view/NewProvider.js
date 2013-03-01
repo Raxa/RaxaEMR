@@ -12,7 +12,6 @@ var NEW_PROVIDER_CONSTANTS = {
     CONTAINER_MARGIN: '5 0 5 0',
     RADIO_FIELD_WIDTH: 90
 }
-
 Ext.define("RaxaEmr.view.NewProvider", {
     requires: ['Ext.field.Text', 'Ext.field.Number'],
     extend: 'Ext.form.Panel',
@@ -28,8 +27,7 @@ Ext.define("RaxaEmr.view.NewProvider", {
             directionLock: true
         },
         // Set the width and height of the panel
-        width: 700,
-        height: 622,
+        width: 720,
         layout: 'vbox',
         items: [
         {
@@ -203,7 +201,7 @@ Ext.define("RaxaEmr.view.NewProvider", {
                     xtype: 'label',
                     html: '<h1 style="text-align:left;font-size:12px;"> You can use letters, numbers and periods.For example,</p><p>someone named Robert Max might choose "robert.max </h1>'
                 }]
-                }
+            }
             ]
         },
         {
@@ -284,13 +282,13 @@ Ext.define("RaxaEmr.view.NewProvider", {
                 xtype: 'numberfield',
                 itemId: 'phone',
                 name: 'phone',
-                 height: 50,
+                height: 50,
                 tabIndex : 1,
                 width: NEW_PROVIDER_CONSTANTS.FIELD_WIDTH,
                 style: NEW_PROVIDER_CONSTANTS.FIELD_BORDER
             }]
-            },
-            {            
+        },
+        {            
             xtype: 'button',
             id: 'saveProviderButton',
             ui: 'confirm',
@@ -301,6 +299,16 @@ Ext.define("RaxaEmr.view.NewProvider", {
             margin: '-40 0 0 0'
         }
         ]
+    },
+    initialize : function() {
+        var isiPad = navigator.userAgent.match(/iPad/i);
+        if(isiPad !== null) {
+            Ext.getCmp('newProviderId').setHeight(622);
+            Ext.getCmp('newProviderId').setWidth(700);
+        } else {
+            Ext.getCmp('newProviderId').setHeight(710);
+            Ext.getCmp('newProviderId').setWidth(712);
+        }
     },
     saveForm: function () {
         return this.getValues();
