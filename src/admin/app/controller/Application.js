@@ -192,6 +192,7 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
     //},
     
     saveProviderButton: function() {
+        this.newProvider.hide();
         var formp = Ext.getCmp('newProviderId').saveForm();
         if (formp.givenname && formp.familyname && formp.choice && formp.userName && formp.password && formp.boolChoice) {
             var newUser = {
@@ -217,7 +218,8 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
                 disableCaching: false,
                 headers: Util.getNewAccountAuthHeaders(),
                 success: function (response) {
-                    Ext.Msg.alert("Successful", "Provider is been successfully created.");
+                    Ext.Msg.alert("Successful", "Provider has been created.");
+                    formp.clearValues();
                 },
                 failure: function (response) {
                     var errorJson = Ext.decode(response.responseText);
@@ -422,7 +424,11 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
     },
 
     editDetails : function() {
-        Ext.getCmp('mainView').setActiveItem(1);
+        if (!this.detailsForm) {
+            this.detailsForm = Ext.create('RaxaEmr.Admin.view.EditDetails');
+            Ext.Viewport.add(this.detailsForm);
+        }
+        this.detailsForm.show();
     },
     
     submitDetails: function() {
@@ -471,13 +477,14 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
             disableCaching: false,
             headers: Util.getBasicAuthHeaders(),
             success: function (response) {
-                Ext.Msg.alert('Details Updated');
-                Ext.getCmp('mainView').setActiveItem(0);
+                Ext.Msg.alert('Success', 'Details updated');
+                this.detailsForm.hide();
                 var responseJson = Ext.decode(response.responseText);
                 this.addAttributesToStorage(responseJson);
             },
             failure: function() {
                 Ext.Msg.alert("Error", Util.getMessageSyncError());
+                this.detailsForm.hide();
             },
             scope: this
         });

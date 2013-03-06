@@ -389,7 +389,7 @@ Ext.define('RaxaEmr.controller.Session', {
                 success: function (response) {
                     formComponent.setMasked(false);
                     if(type==="provider"){
-                        Ext.Msg.alert("Successful", "Please login to continue.");
+                        Ext.Msg.alert("Patient Created", "Patient software coming soon from Raxa.");
                         Ext.getCmp('userName').setValue(formp.userName);
                     }
                     else{
