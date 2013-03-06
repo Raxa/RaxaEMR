@@ -216,7 +216,7 @@ Ext.define("RaxaEmr.Admin.controller.Application",{
                 method: 'POST',
                 params: newUserParam,
                 disableCaching: false,
-                headers: Util.getNewAccountAuthHeaders(),
+                headers: Util.getBasicAuthHeaders(),
                 success: function (response) {
                     Ext.Msg.alert("Successful", "Provider has been created.");
                     formp.clearValues();
