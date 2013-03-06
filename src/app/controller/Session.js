@@ -334,7 +334,7 @@ Ext.define('RaxaEmr.controller.Session', {
         }
         else {
             console.log("inside else");
-            Ext.Msg.alert("Please Check","To Agree The Terms Of Services");
+            Ext.Msg.alert("","Please check to agree the terms of service");
         }
     },
     

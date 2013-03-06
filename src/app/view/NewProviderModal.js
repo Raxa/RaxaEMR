@@ -18,7 +18,7 @@ Ext.define("RaxaEmr.view.NewProviderModal", {
             xtype: 'toolbar',
             id: 'newProviderToolbar',
             docked : 'top',
-            title: 'Step2 : Practice Address and Location on Map',
+            title: 'Step 2 : Practice Location....',
             items: [{
                 xtype: 'spacer'
             }, {

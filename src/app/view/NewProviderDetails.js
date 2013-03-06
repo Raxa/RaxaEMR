@@ -1,7 +1,7 @@
 var NEW_PROV_CONSTANTS = {
     FIELD_BORDER: 'border-color: #333333; border-width: 1px; border-style : solid;',
     FIELD_WIDTH: 300,
-    LABEL_WIDTH: 160,
+    LABEL_WIDTH: 170,
     AGE_FIELD_WIDTH: 80,
     LABEL_STYLE: 'background-color: #eeeeee;',
     CONTAINER_BACKGROUND: 'background-color: #eeeeee;',
