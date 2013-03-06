@@ -9,6 +9,7 @@ Ext.define("RaxaEmr.view.ProviderAgreement", {
         hideOnMaskTap: true,
         scrollable: false,
         hidden: true,
+        style: 'zoom:100%',
         // Set the width and height of the panel
         width: 700,
         items  : [
