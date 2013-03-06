@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>RaXa EMR</title>
-        <link rel="stylesheet" href="lib/touchOld/resources/css/sencha-touch.css" type="text/css">
-        <link rel="stylesheet" href="resources/css/app.css" type="text/css">
-        <!-- TODO: Using Debug all with comments for development -->  
-        <script type="text/javascript" src="lib/touchOld/sencha-touch-all-debug.js"></script>
-        <script type="text/javascript" src="app/app.js"></script>
-        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-
-        <script type="text/javascript" src="resources/scripts/startup.js"></script>       
-        <script type="text/javascript" src="resources/scripts/util.js"></script>
-        <script type="text/javascript" src="resources/common/topbar/view/UrlSettingsPanel.js"></script>
-        <script type="text/javascript" src="resources/common/topbar/view/UrlSettingsButton.js"></script>
-        <script type="text/javascript" src="resources/common/topbar/view/LogoutConfirmPanel.js"></script>
-        <script type="text/javascript" src="resources/common/topbar/view/TopToolbar.js"></script>  
-        <script type="text/javascript">
+<head>
+<title>RaXa EMR</title>
+<link rel="stylesheet" href="lib/touchOld/resources/css/sencha-touch.css" type="text/css">
+<link rel="stylesheet" href="resources/css/app.css" type="text/css">
+<!-- TODO: Using Debug all with comments for development -->
+<script type="text/javascript" src="lib/touchOld/sencha-touch-all-debug.js"></script>
+<script type="text/javascript" src="app/app.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="resources/scripts/startup.js"></script>
+<script type="text/javascript" src="resources/scripts/util.js"></script>
+<script type="text/javascript" src="resources/common/topbar/view/UrlSettingsPanel.js"></script>
+<script type="text/javascript" src="resources/common/topbar/view/UrlSettingsButton.js"></script>
+<script type="text/javascript" src="resources/common/topbar/view/LogoutConfirmPanel.js"></script>
+<script type="text/javascript" src="resources/common/topbar/view/TopToolbar.js"></script>
+<script type="text/javascript">
             if (!Ext.browser.is.WebKit) {
                 var redirect = 'nonWebKitBrowser.html';
                 window.location = redirect;
             }
-        </script>  
-    </head>
-    <body>
-    </body>
+        </script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-39068121-1']);
+  _gaq.push(['_setDomainName', 'raxa.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</head>
+<body>
+</body>
 </html>

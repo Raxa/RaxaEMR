@@ -12,6 +12,7 @@ Ext.define("RaxaEmr.view.NewProviderModal", {
         // Set the width and height of the panel
         width: 700,
         layout: 'vbox',
+        style: 'zoom:100%',
         items: [
         {
             xtype: 'toolbar',
