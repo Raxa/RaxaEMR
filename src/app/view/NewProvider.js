@@ -26,6 +26,7 @@ Ext.define("RaxaEmr.view.NewProvider", {
             direction: 'vertical',
             directionLock: true
         },
+        style: 'zoom:100%',
         // Set the width and height of the panel
         width: 720,
         layout: 'vbox',
