@@ -1,0 +1,509 @@
+//change base color
+$base-color: #4aa8e5;
+//change gradient style
+$base-gradient: 'bevel';
+$form-bg-color: #eeeeee;
+$black: #000;
+@import 'sencha-touch/default/all';
+
+// You may remove any of the following modules that you
+// do not use in order to create a smaller css file.
+@include sencha-panel;
+@include sencha-buttons;
+@include sencha-sheet;
+@include sencha-picker;
+@include sencha-tabs;
+@include sencha-toolbar;
+@include sencha-toolbar-forms;
+@include sencha-indexbar;
+@include sencha-list;
+@include sencha-layout;
+@include sencha-carousel;
+@include sencha-form;
+@include sencha-msgbox;
+
+// class for selectset
+.fieldset{
+
+    //below three class remove borders from the form fields
+    .x-inner{
+        border-bottom-style: none;
+        border-top-style: none;
+        border-left-style: none;
+        border-right-style: none;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+    }
+    .x-form-fieldset-inner{
+        border-bottom-style: none;
+        border-top-style: none;
+        border-left-style: none;
+        border-right-style: none;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+    }
+    .x-form-fieldset, .x-field, .x-layout-hbox{
+        border-bottom-style: none;
+        border-top-style: none;
+        border-left-style: none;
+        border-right-style: none;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+    }
+
+    // change label backgorund color
+    .x-form-label{
+       background-color : #eeeeee;
+    }
+    // remove the arrow icon covering whole selectfield
+    .x-field-select {
+        position: relative;
+
+        .x-component-outer {
+            &:after {
+                    background: none;
+                    z-index: 2;
+            }
+            &:before {
+                    @include insertion(0em,auto,0,auto);
+                    right: 0;
+                    bottom: 0;
+                    @if $include-highlights { background: none;}
+                    z-index: 1;
+            }
+        }
+    }
+}
+
+.selectfield {
+    //below three class remove borders from the form fields
+    .x-inner{
+        border-bottom-style: none;
+        border-top-style: none;
+        border-left-style: none;
+        border-right-style: none;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+    }
+    .x-form-fieldset-inner{
+        border-bottom-style: none;
+        border-top-style: none;
+        border-left-style: none;
+        border-right-style: none;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+    }
+    .x-form-fieldset, .x-field, .x-layout-hbox{
+        border-bottom-style: none;
+        border-top-style: none;
+        border-left-style: none;
+        border-right-style: none;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+    }
+    // add background color to field label
+    .x-form-label{
+       background-color : #eeeeee;
+    }
+
+    // class for change the view of input part of select field
+    .x-field-input {
+        //change backgound of input part of selectfield
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1e5799), color-stop(0%,#f1f1f1), color-stop(100%,#d3d3d3)); 
+        background-image: -webkit-linear-gradient(top, #1e5799 0%,#f1f1f1 0%,#d3d3d3 100%); 
+        background-image: linear-gradient(to bottom, #1e5799 0%,#f1f1f1 0%,#d3d3d3 100%);
+        
+        //things below make set the arrow icon after the input the part of select field
+        &:after {
+              @include selectmark(#eeeeee);
+              background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a4a4a4), color-stop(100%,#6c6c6c), color-stop(100%,#7db9e8));
+              z-index: 2;
+        }
+
+        &:before,
+        &:after {
+            pointer-events: none;
+            position: absolute;
+            display: block;
+        }
+
+        &:before {
+            @include insertion(4em,auto,0,auto);
+            right: 0;
+            bottom: 0;
+            @if $include-border-radius { @include border-right-radius($form-fieldset-radius); }
+            @if $include-highlights { background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1e5799), color-stop(0%,#f1f1f1), color-stop(100%,#d3d3d3)); }
+            z-index: 1;
+        }
+
+        //give border to the input part of select field
+        border-bottom-style: solid;
+        border-top-style: solid;
+        border-left-style: solid;
+        border-right-style: solid;
+        border-top-color: #eeeeee;
+        border-bottom-color: #eeeeee;
+        border-left-color: #eeeeee;
+        border-right-color: #eeeeee;
+        border-bottom-width: 1px;
+        border-top-width: 1px;
+        border-left-width: 1px;
+        border-right-width: 1px;
+        @include border-bottom-radius(8px);
+        @include border-top-radius(8px);
+    }
+ 
+}
+
+//class for text area giving border radius
+.textarea{
+    .x-component-outer{
+        border-top-left-radius: $form-fieldset-radius;
+        border-bottom-left-radius: $form-fieldset-radius;
+        border-top-right-radius: $form-fieldset-radius;
+        border-bottom-right-radius: $form-fieldset-radius;
+    }
+}
+
+//class  for pharmacy view to give border radius to child component of container
+.pharmacyview{
+    .x-container{
+        border-radius: $form-fieldset-radius;
+    }
+}
+
+//Body
+
+body.x-desktop {
+	font-size:100%;
+}
+
+//Heading
+
+#topbarSelectfield {
+	width:7em;
+	.x-component-outer {
+		border:none;
+		background:transparent;
+	}
+	.x-component-outer::before {
+		width:1.7em;
+		-webkit-mask: none;
+		border-radius: 16px;
+		background: #4D91BA;
+		border: none;
+	}
+	.x-component-outer::after {
+		background:#EEE;
+	}
+}
+//Screener Tab changes
+
+.x-title .x-innerhtml {
+	overflow:visible;
+	font-size:18px;
+	text-transform:uppercase;
+	color:#555555;
+	font-weight:400;
+}
+
+.x-navigation-bar {
+	background:#efefef;
+	border-bottom:2px solid #bbb !important; 
+	border-radius:15px 15px 0 0;
+}
+
+.x-list {
+	background:none;
+}
+
+.x-list-inner {
+	background:#efefef;
+}
+
+#assignButton {
+	span {
+		opacity:10;
+		font-weight:bold;
+	}
+}
+
+.x-msgbox.x-floating {
+	background:#333;
+}
+.x-msgbox {
+	border:0.15em solid #111;
+	.x-innerhtml {
+		color:#efefef;
+	}
+}
+.screener_tabs {
+	height:130px;
+	-webkit-transform:rotate(-90deg);
+	-moz-transform:rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	font-size: 13px;
+	padding-top: 50px;
+	position: relative;
+	width: 64px;
+}
+@media (max-width:770px) {
+	#maintabs {
+		.x-docking-horizontal {
+			#ext-tabbar-1 {
+				.x-tabbar-inner {
+					.x-tab {
+						margin-right:-7px;
+						margin-top:9px;
+					}
+				}
+			}
+		}
+	}
+}
+
+#maintabs {
+	.x-docking-horizontal{
+		#ext-tabbar-1 {
+			background:#4d91ba;
+			height:768px;
+		.x-tabbar-inner {
+			.x-tab-active {
+				border:none;
+				color:#555;
+				background:#efefef !important;
+			}
+			.x-tab {
+				border-radius: 20px 0 0 20px;
+				background:#999;
+				color:#555;
+				margin-top: 15px;
+				margin-right: -14px;
+				width:40px;
+			}
+		}
+		
+		}
+	}
+}
+
+//Pharmacy CSS edited. 
+.patient_table {
+	margin-left:25px;
+	width:90%;
+	background:lighten($black, 90%);
+	border-radius:15px;
+	box-shadow:0 0 5px lighten($black, 60%);
+		tr {	
+			td {
+			
+			}			
+			#patient_table_image {
+				padding:10px;
+				width:20%;
+				
+				img {
+					position:absolute;
+					top:15%;
+					width:5%;
+					height:auto;
+				}			
+				#patient-name {
+					padding-left:70px;
+					font-weight:500;
+				}
+			}
+		}
+		
+		.patient_table_details {
+			padding-left:20px;
+			td {
+				padding-left:80px;
+			}
+		}	
+}
+
+#ext-patientListView-1 {
+	padding:1%;
+	background:#4d91b1;
+}
+
+#ext-patientListView-2 {
+	padding:1%;
+	background:#4d91b1;
+}
+
+#ext-patientListView-3 {
+	padding:1%;
+	background:#4d91b1;
+}
+
+#vitalsPatientList {
+	padding:1%;
+	background:#4d91b1;
+}
+
+#ext-pharmacyForm-1 {
+	padding:1%;
+	background:#4d91ba;
+}
+
+#ext-labOrderForm-1 {
+	padding:1%;
+	background:#4d91ba;
+}
+
+#vitalsForm {
+	padding:1%;
+	background:#4d91ba;
+}
+
+#doctorList {
+	padding:1%;
+	background:#4d91ba;
+	.x-docking-vertical {
+		.x-scroll-view {
+			background:#efefef;
+		}
+	}
+}
+.x-item-selected {
+	.x-list-item-label {		
+		.patient_table {
+			margin-left:25px;
+			width:90%;
+			box-shadow:none;
+			border-radius:15px;
+			color:#2E2E2E;
+		}
+	}
+}
+
+#givenName {
+	margin:5px;
+}
+
+#familyName {
+	margin:5px;
+}
+
+#userName {
+	margin:5px;
+}
+
+#password {
+	margin:5px;
+}
+
+#confirmPassword {
+	margin:5px;
+}
+
+#familyName {
+	margin:5px;
+}
+#ageDateOfBirth {
+	margin:5px;
+}
+
+#isOutPatient {
+	margin:5px;
+}
+
+#sexRadioGroup {
+	margin:5px;
+}
+
+#addDrugFormButton {
+	margin-left:10px;
+}
+#removeDrugFormButton {
+ 	margin-left:10px;
+}
+#drugSubmitButton {
+	margin-left:10px;
+}
+
+#savePatientButton {
+	margin-top:10px;
+}
+
+input[name="dob"] {
+	width:173px !important;
+}
+input[name="patientAge"] {
+	width:163px !important;
+	margin-left:2px;
+}
+.x-field-text {
+    border-top-left-radius: 0.0em;
+    .x-form-label {
+        background-color: #eeeeee;
+        border-radius: 0px;
+    }
+    .x-component-outer {
+        border-color: #333333;
+        border-width: 1px;
+        border-style: solid;
+        background-color: #ffffff;
+    }
+}
+.x-field-number {
+    border-top-left-radius: 0.0em;
+    .x-form-label {
+        background-color: #eeeeee;
+        border-radius: 0px;
+    }
+    .x-component-outer {
+        border-color: #333333;
+        border-width: 1px;
+        border-style: solid;
+        background-color: #ffffff;
+    }
+}
+.x-field-radio {
+    background-color: #eeeeee;
+    .x-form-label {
+        background-color: #eeeeee;
+        border-radius: 0px;
+    }
+    .x-component-outer {
+        background-color: #eeeeee;
+    }
+}
