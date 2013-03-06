@@ -84,6 +84,7 @@ Ext.define('Registration.controller.Main', {
 
         // Copies all fields from registration form to confirmation screen
         Ext.getCmp('oldPatientIdentifierConfirm').setText(Ext.getCmp('oldPatientIdentifier').value);
+        Ext.getCmp('UIDAIIdentifierConfirm').setText(Ext.getCmp('UIDAIIdentifier').value);
         Ext.getCmp('patientNameConfirm').setText(Ext.getCmp('patientFirstName').value + " " + Ext.getCmp('patientLastName').value);
         Ext.getCmp('patientNameHindiConfirm').setText((Ext.getCmp('patientFirstNameHindi').value || "") + " " + (Ext.getCmp('patientLastNameHindi').value || ""));
         Ext.getCmp('relativeNameConfirm').setText((Ext.getCmp('relativeFirstName').value || "") + " " + (Ext.getCmp('relativeLastName').value || ""));

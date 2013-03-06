@@ -109,6 +109,34 @@ Ext.define('Registration.view.RegistrationPart1', {
                                 allowBlank: true
 
                             }]
+                        },{
+                            xtype: 'fieldcontainer',
+                            fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.rp1.UIDAI'),
+                            layout: 'hbox',
+                            combineErrors: true,
+                            labelAlign: 'right',
+                            labelPad: 20,
+                            labelWidth: 200,
+                            anchor: '95%',
+                            defaults: {
+                                hideLabel: 'true'
+                            },
+                            items: [{
+                                xtype: 'numberfield',
+                                cls: 'raxa-form-panel',
+                                name: 'UIDAI (Adhaar)',
+                                id: 'UIDAIIdentifier',
+                                fieldLabel: 'UIDAI (Adhaar)',
+                                minLength: 12,
+                                maxLength: 12,
+                                enforceMaxLength: true,
+                                enforceMinLength: true,
+                                width: 172,
+                                emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.rp1.UIDAI.emptytext'),
+                                allowBlank: true,
+                                hideTrigger: true,
+                                allowDecimals: false
+                            }]
                         }, {
                             xtype: 'fieldcontainer',
                             html:'1,2',

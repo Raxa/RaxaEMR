@@ -56,6 +56,24 @@ Ext.define('Registration.view.RegistrationConfirm', {
                             name: 'Old Patient Identifier',
                             id: 'oldPatientIdentifierConfirm',
                         }]
+                    },                    
+                    {
+                        xtype: 'fieldcontainer',
+                        fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.rc.UIDAI'),
+                        layout: 'hbox',
+                        combineErrors: true,
+                        defaultType: 'text',
+                        labelAlign: 'right',
+                        labelPad: 20,
+                        labelWidth: 250,
+                        anchor: '95%',
+                        defaults: {
+                            hideLabel: 'true'
+                        },
+                        items: [{
+                            name: 'UIDAI (Adhaar) Identifier',
+                            id: 'UIDAIIdentifierConfirm',
+                        }]
                     },
                     {
                         xtype: 'fieldcontainer',

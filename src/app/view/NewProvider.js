@@ -27,6 +27,7 @@ Ext.define("RaxaEmr.view.NewProvider", {
             direction: 'vertical',
             directionLock: true
         },
+        style: 'zoom:100%',
         // Set the width and height of the panel
         width: 720,
         layout: 'vbox',
@@ -34,7 +35,7 @@ Ext.define("RaxaEmr.view.NewProvider", {
         {
             xtype: 'toolbar',
             docked : 'top',
-            title: 'Step 1: Create Username And Password',
+            title: 'Step 1: Create Username and Password....',
             items: [{
                 xtype: 'spacer'
             }, {
@@ -200,7 +201,7 @@ Ext.define("RaxaEmr.view.NewProvider", {
                     style: NEW_PROVIDER_CONSTANTS.FIELD_BORDER
                 },{
                     xtype: 'label',
-                    html: '<h1 style="text-align:left;font-size:12px;"> You can use letters, numbers and periods.For example,<br>someone named Robert Max might choose "robert.max </h1>'
+                    html: '<h1 style="text-align:left;font-size:12px;"> You can use letters, numbers and periods.</p><p>Example: Someone named Robert Max might choose "robert.max" </h1>'
                 }]
             }
             ]
@@ -234,7 +235,7 @@ Ext.define("RaxaEmr.view.NewProvider", {
                     style: NEW_PROVIDER_CONSTANTS.FIELD_BORDER
                 },{
                     xtype: 'label',
-                    html: '<h1 style="text-align:left;font-size:12px;"> Password must be at least eight characters in length, and must contain at least <br>one lowercase, one uppercase and one number. Example: Golden43# </h1>'
+                    html: '<h1 style="text-align:left;font-size:12px;"> Password must be atleast 8 characters in length, and must contain at least </p><p>one lowercase, one uppercase and one number in it. Example: Golden123</h1>'
                 }]
             }]
         },
