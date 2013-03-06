@@ -215,16 +215,16 @@ Ext.define('RaxaEmr.controller.Session', {
     saveProviderDetails: function () {
         var formCmpDetails = Ext.getCmp('newProviderDetailsId');
         var formDetails = formCmpDetails.saveForm();
-         if(formDetails.nameOfSetup && formDetails.country && formDetails.address && formDetails.city && formDetails.state) {
-        Ext.getCmp('newProviderModal').hide();
-        if (!this.ProviderAgreement) {
-            this.ProviderAgreement = Ext.create('RaxaEmr.view.ProviderAgreement');
-            Ext.Viewport.add(this.ProviderAgreement);
-        }
-        this.ProviderAgreement.show();
-            } else {
-                Ext.Msg.alert("","Please Enter All Fields");
+        if(formDetails.nameOfSetup && formDetails.country && formDetails.address && formDetails.city && formDetails.state) {
+            Ext.getCmp('newProviderModal').hide();
+            if (!this.ProviderAgreement) {
+                this.ProviderAgreement = Ext.create('RaxaEmr.view.ProviderAgreement');
+                Ext.Viewport.add(this.ProviderAgreement);
             }
+            this.ProviderAgreement.show();
+        } else {
+            Ext.Msg.alert("","Please Enter All Fields");
+        }
     },
     
     backProviderDetails: function() {
@@ -245,16 +245,16 @@ Ext.define('RaxaEmr.controller.Session', {
         var formComponent = Ext.getCmp('newProviderId');
         var formp  = formComponent.saveForm();
         if(formp.email && formp.userName && formp.password && formp.phone && formp.confirmPassword && formp.firstname && formp.lastname && formp.choice ) {
-        Ext.getCmp('newProviderId').hide();
-        if (!this.newProviderDetails) {
-            this.newProviderDetails = Ext.create('RaxaEmr.view.NewProviderModal');
-            Ext.Viewport.add(this.newProviderDetails);
-        }
-        this.newProviderDetails.show();
-        Ext.getCmp('locationGoogleMapId').renderMap();
-            } else {
-                Ext.Msg.alert("","Please Enter All Fields");
+            Ext.getCmp('newProviderId').hide();
+            if (!this.newProviderDetails) {
+                this.newProviderDetails = Ext.create('RaxaEmr.view.NewProviderModal');
+                Ext.Viewport.add(this.newProviderDetails);
             }
+            this.newProviderDetails.show();
+            Ext.getCmp('locationGoogleMapId').renderMap();
+        } else {
+            Ext.Msg.alert("","Please Enter All Fields");
+        }
     },
     
     saveNewProvider: function() {
@@ -264,7 +264,7 @@ Ext.define('RaxaEmr.controller.Session', {
         var formp  = formComponent.saveForm();
         var formDetails = formCmpDetails.saveForm();
         var formAggrementDetails = formAgDetails.saveForm();
-        if(formAggrementDetails.AgreeServices){
+        if(Ext.getCmp('agreementChecked')._checked){
             Ext.getCmp('agreementId').setMasked({
                 xtype: 'loadmask',
                 message: 'Creating Account',

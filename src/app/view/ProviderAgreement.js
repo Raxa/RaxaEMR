@@ -55,6 +55,7 @@ Ext.define("RaxaEmr.view.ProviderAgreement", {
             {
                 xtype: 'checkboxfield',
                 flex : 1,
+                id: 'agreementChecked',
                 name : 'AgreeServices',
                 checked: false,
                 label: 'Agree To Term Of Services',
