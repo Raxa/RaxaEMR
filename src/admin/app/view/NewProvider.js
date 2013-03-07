@@ -14,20 +14,21 @@ Ext.define("RaxaEmr.Admin.view.NewProvider", {
         hideOnMaskTap: true,
         hidden: true,
         // Set the width and height of the panel
-        width: 500,
-        height: 410,
+        width: 550,
+        height: 450,
 
         items: [{
+            xtype: 'titlebar',
+            title: 'Add New Provider'
+        },{
             xtype: 'textfield',
             id: 'givenName',
             name: 'givenname',
-            dataIndex : 'givenName',
             label: Ext.i18n.appBundle.getMsg('RaxaEmrAdmin.view.NewProvider.giv_name')
         }, {
             xtype: 'textfield',
             id: 'familyName',
             name: 'familyname',
-            dataIndex : 'familyName',
             label: Ext.i18n.appBundle.getMsg('RaxaEmrAdmin.view.NewProvider.fam_name')
         },
         {
@@ -75,7 +76,8 @@ Ext.define("RaxaEmr.Admin.view.NewProvider", {
                 name: 'IsOutPatientDoctor',
                 label: 'IsOutPatientDoctor',
                 flex : 1,
-                labelWidth: 150
+                labelWidth: 150,
+                width: 150
             },
             {
                 xtype : 'radiofield',
@@ -83,7 +85,8 @@ Ext.define("RaxaEmr.Admin.view.NewProvider", {
                 value: 'true',
                 name  : 'boolChoice',
                 labelWidth: 70,
-                flex  : 1
+                width: 130,
+                labelAlign: 'right'
             },
             {
                 xtype : 'radiofield',
@@ -91,7 +94,8 @@ Ext.define("RaxaEmr.Admin.view.NewProvider", {
                 value: 'false',
                 name  : 'boolChoice',
                 labelWidth: 70,
-                flex  : 1
+                width: 130,
+                labelAlign: 'right'
             }
             ]
         },
@@ -110,15 +114,17 @@ Ext.define("RaxaEmr.Admin.view.NewProvider", {
                 value: 'M',
                 name  : 'choice',
                 labelWidth: 70,
-                flex  : 1
+                width: 130,
+                labelAlign: 'right'
             },
             {
                 xtype : 'radiofield',
                 label : Ext.i18n.appBundle.getMsg('RaxaEmrAdmin.view.NewProvider.female'),
                 value: 'F',
                 name  : 'choice',
-                labelWidth: 90,
-                flex  : 1
+                labelWidth: 70,
+                width: 130,
+                labelAlign: 'right'
             },
             {
                 xtype : 'radiofield',
@@ -126,7 +132,8 @@ Ext.define("RaxaEmr.Admin.view.NewProvider", {
                 value: 'O',
                 name  : 'choice',
                 labelWidth: 70,
-                flex  : 1
+                width: 130,
+                labelAlign: 'right'
             }
             ]
         },{

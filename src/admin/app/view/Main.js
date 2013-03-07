@@ -8,8 +8,6 @@ Ext.define("RaxaEmr.Admin.view.Main",{
         activeItem: 0,
         items: [{
             xclass: 'RaxaEmr.Admin.view.MainMenu'
-        }, {
-            xclass: 'RaxaEmr.Admin.view.EditDetails'
         }]
     }
 });

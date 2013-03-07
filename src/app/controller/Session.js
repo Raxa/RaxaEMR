@@ -334,7 +334,7 @@ Ext.define('RaxaEmr.controller.Session', {
         }
         else {
             console.log("inside else");
-            Ext.Msg.alert("Please Check","To Agree The Terms Of Services");
+            Ext.Msg.alert("","Please check to agree the terms of service");
         }
     },
     
@@ -390,7 +390,7 @@ Ext.define('RaxaEmr.controller.Session', {
                 success: function (response) {
                     formComponent.setMasked(false);
                     if(type==="provider"){
-                        Ext.Msg.alert("Successful", "Please login to continue.");
+                        Ext.Msg.alert("Patient Created", "Patient software coming soon from Raxa.");
                         Ext.getCmp('userName').setValue(formp.userName);
                     }
                     else{
