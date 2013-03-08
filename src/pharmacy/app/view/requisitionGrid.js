@@ -29,24 +29,7 @@ Ext.define('RaxaEmr.Pharmacy.view.requisitionGrid', {
                 dataIndex: 'drugname',
                 text: 'Name Of drug',
                 editor: {
-                    xtype: 'combobox',
-                    editable: true,
-                    minChars: 2,
-                    typeAhead: true,
-                    autoSelect: false,
-                    queryMode: 'local',
-                    store: 'allDrugs',
-                    displayField: 'text',
-                    hideTrigger : true,
-                    forceSelection: true, 
-                    listeners: {
-                        'focus': {
-                            fn: function (comboField) {
-                                comboField.expand();
-                            },
-                            scope: this
-                        }
-                    }
+                    xtype: 'drugComboBox'
                 }
             },
             {

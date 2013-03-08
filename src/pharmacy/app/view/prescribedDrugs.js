@@ -281,7 +281,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
                         fn: function (comboField) {
                             //if any filters exist on main stock list, clear them so we can use it as a master list                            
                             Ext.getStore('StockList').clearFilter();
-                            if(localStorage.pharmacyLocation!==null){
+                            if(localStorage.location!==null){
                                 console.log(comboField.getStore());
                                 var selectedDrug = Ext.getCmp('prescribedDrugs').getSelectionModel().lastSelected.data.drugName;
                                 comboField.getStore().clearFilter();
@@ -293,7 +293,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
                                     var isAvailable = (record.get('status')===RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.AVAILABLE);
                                     var isCurrentDrug = (record.get('drugName')===selectedDrug);
                                     var isBatch = (Ext.getStore('StockList').find("batch",record.get('batch'))!==-1);
-                                    var isAtLocation = (record.get('location').uuid===localStorage.pharmacyLocation)
+                                    var isAtLocation = (record.get('location').uuid===localStorage.location)
                                     console.log(isAvailable+" "+isCurrentDrug+" "+isBatch+" "+isAtLocation);
                                     return isAvailable && isCurrentDrug && isBatch && isAtLocation;
                                 });

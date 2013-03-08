@@ -27,29 +27,7 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
             dataIndex: 'drugName',
             text: 'Name Of drugs',
             editor: {
-                xtype: 'combobox',
-                editable: true,
-                minChars: 2,
-                typeAhead: true,
-                autoSelect: false,
-                store: 'allDrugs',
-                queryMode: 'local',
-                hideTrigger : true,
-                displayField: 'text',
-                forceSelection: true,
-                listeners: {
-                    'focus': {
-                        fn: function (comboField) {
-                            comboField.expand();
-                        },
-                        scope: this
-                    },
-                    'select':{
-                        fn: function(comboField, records){
-                        // TODO: when drug is changed, clear all corresponding fields, as they'll need to be updated
-                        }
-                    }
-                }
+                xtype: 'drugComboBox'
             }
         },
         {
@@ -97,7 +75,7 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsIssueGrid', {
                                 var isAvailable = (record.get('status')===RaxaEmr_Pharmacy_Controller_Vars.STOCK_STATUS.AVAILABLE);
                                 var isCurrentDrug = (record.get('drugName')===selectedDrug);
                                 var notInCurrentIssue = (Ext.getStore('newIssue').find("batch",record.get('batch'))===-1);
-                                var locationUuid = Ext.getCmp('allStockLocationPicker').value;
+                                var locationUuid = localStorage.location;
                                 var isAtLocation = (record.get('location').uuid===locationUuid)
                                 return isAvailable && isCurrentDrug && notInCurrentIssue && isAtLocation;
                             });

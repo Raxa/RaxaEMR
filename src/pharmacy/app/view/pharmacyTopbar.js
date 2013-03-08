@@ -72,26 +72,8 @@ Ext.define('RaxaEmr.Pharmacy.view.pharmacyTopbar',{
             xtype: 'tbfill'
         },
         {
-            margin: 5,
-            xtype: 'combobox',
-            id: 'allStockLocationPicker',
-            fieldLabel: 'Your Location',
-            store: 'Locations',
-            displayField: 'name',
-            queryMode: 'local',
-            hideTrigger: true,
-            forceSelection: true,
-            valueField: 'uuid',
-            emptyText: 'All Locations',
-            listeners: {
-                'focus': {
-                    fn: function (comboField) {
-                        comboField.doQuery(comboField.allQuery, true);
-                        comboField.expand();
-                    },
-                    scope: this
-                }
-            }
+            xtype: 'tbtext',
+            text: 'Your Location: ' + localStorage.getItem('locationName')
         },
         {
             xtype: 'button',
