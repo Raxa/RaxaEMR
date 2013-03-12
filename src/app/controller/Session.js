@@ -15,7 +15,7 @@
  */
 Ext.define('RaxaEmr.controller.Session', {
     extend: 'Ext.app.Controller',
-    requires: ['RaxaEmr.view.Main', 'RaxaEmr.view.NewAccount'],
+    requires: ['RaxaEmr.view.Main', 'RaxaEmr.view.NewAccount','RaxaEmr.view.LocationList'],
     config: {
 
 
@@ -38,6 +38,7 @@ Ext.define('RaxaEmr.controller.Session', {
             backNewProviderButton:'#providerAgreementId #backNewProviderButton',
             saveProviderDetailsButton:'#newProviderDetailsId #saveProviderDetailsButton',
             backProviderDetailsButton:'#newProviderDetailsId #backProviderDetailsButton',
+            newLocationButton: '#locationList #newLocationButton',
             passwordPatient: '#newPatientId #password',
             confirmPasswordPatient: '#newPatientId #confirmPassword',
             savePatientButton:'#newPatientId #savePatientButton',
@@ -85,6 +86,9 @@ Ext.define('RaxaEmr.controller.Session', {
             },
             backProviderDetailsButton: {
                 tap: 'backProviderDetails'
+            },
+            newLocationButton: {
+                tap: 'newLocation'
             },
             savePatientButton: {
                 tap: 'savePatient'
@@ -241,6 +245,11 @@ Ext.define('RaxaEmr.controller.Session', {
         this.newPatient.show();
     },
     
+    newLocation: function() {
+        localStorage.removeItem('oldLocationUuid');
+        Ext.getCmp('locationFormPanel').hide();
+    },
+    
     saveProvider: function() {
         var formComponent = Ext.getCmp('newProviderId');
         var formp  = formComponent.saveForm();
@@ -270,67 +279,37 @@ Ext.define('RaxaEmr.controller.Session', {
                 message: 'Creating Account',
                 modal: true
             });
-            var locAddress = {
-                name : formDetails.nameOfSetup,
-                address1 : formDetails.address,
-                cityVillage : formDetails.city,
-                stateProvince : formDetails.state,
-                country : formDetails.country,
-                latitude : formDetails.latitude,
-                longitude : formDetails.longitude     
-            }
-            var locAddressParam = Ext.encode(locAddress);
-            Ext.Ajax.request({
-                scope:this,
-                url: HOST + '/ws/rest/v1/location',
-                method: 'POST',
-                params: locAddressParam,
-                disableCaching: false,
-                headers: Util.getNewAccountAuthHeaders(),
-                success: function (response) {
-                    var newUser ={
-                        isOutpatientDoctor: 'true',
-                        email: formp.email,
-                        userName: formp.userName,
-                        password: formp.password,
-                        phone: formp.phone,
-                        firstName: formp.firstname,
-                        lastName: formp.lastname,
-                        type: 'provider',
-                        gender : formp.choice,
-                        location: JSON.parse(response.responseText).uuid
-                
-                    }
-                    var newUserParam = Ext.encode(newUser);
-                    Ext.Ajax.request({
-                        scope:this,
-                        url: HOST + '/ws/rest/v1/raxacore/user',
-                        method: 'POST',
-                        params: newUserParam,
-                        disableCaching: false,
-                        headers: Util.getNewAccountAuthHeaders(),
-                        success: function (response) {
-                            Ext.getCmp('agreementId').setMasked(false);
-                            Ext.Msg.alert("Account created ","Please wait 24 hours for your account to be approved.");
-                            Ext.getCmp('userName').setValue(formp.userName);
-                            Ext.getCmp('providerAgreementId').hide();
-                            Ext.getCmp('newProviderId').reset();
-                            Ext.getCmp('newProviderDetailsId').reset();
-                            Ext.getCmp('providerAgreementId').reset();
-                            Ext.getCmp('mainView').setActiveItem(0);
-                        },
-                        failure: function (response) {
-                            Ext.getCmp('agreementId').setMasked(false);
-                            Ext.Msg.alert("","Error");
-                        }
-                    });
-                },
-                failure: function (response) {
-                    Ext.getCmp('agreementId').setMasked(false);
-                    console.log("inside failure");
-                    Ext.Msg.alert("","Error");
+            if(!localStorage.oldLocationUuid){
+                var locAddress = {
+                    name : formDetails.nameOfSetup,
+                    address1 : formDetails.address,
+                    cityVillage : formDetails.city,
+                    stateProvince : formDetails.state,
+                    country : formDetails.country,
+                    latitude : formDetails.latitude,
+                    longitude : formDetails.longitude     
                 }
-            });
+                var locAddressParam = Ext.encode(locAddress);
+                Ext.Ajax.request({
+                    scope:this,
+                    url: HOST + '/ws/rest/v1/location',
+                    method: 'POST',
+                    params: locAddressParam,
+                    disableCaching: false,
+                    headers: Util.getNewAccountAuthHeaders(),
+                    success: function (response) {
+                        this.sendNewProvider(JSON.parse(response.responseText).uuid);
+                    },
+                    failure: function (response) {
+                        Ext.getCmp('agreementId').setMasked(false);
+                        console.log("inside failure");
+                        Ext.Msg.alert("","Error");
+                    }
+                });
+            }
+            else{
+                this.sendNewProvider(localStorage.oldLocationUuid);
+            }
         }
         else {
             console.log("inside else");
@@ -338,6 +317,47 @@ Ext.define('RaxaEmr.controller.Session', {
         }
     },
     
+    sendNewProvider: function(locationUuid){
+        var formComponent = Ext.getCmp('newProviderId');
+        var formp  = formComponent.saveForm();
+        var newUser ={
+            isOutpatientDoctor: 'true',
+            email: formp.email,
+            userName: formp.userName,
+            password: formp.password,
+            phone: formp.phone,
+            firstName: formp.firstname,
+            lastName: formp.lastname,
+            type: 'provider',
+            gender : formp.choice,
+            location: locationUuid
+
+        }
+        var newUserParam = Ext.encode(newUser);
+        Ext.Ajax.request({
+            scope:this,
+            url: HOST + '/ws/rest/v1/raxacore/user',
+            method: 'POST',
+            params: newUserParam,
+            disableCaching: false,
+            headers: Util.getNewAccountAuthHeaders(),
+            success: function (response) {
+                Ext.getCmp('agreementId').setMasked(false);
+                Ext.Msg.alert("Account created ","Please wait 24 hours for your account to be approved.");
+                Ext.getCmp('userName').setValue(formp.userName);
+                Ext.getCmp('providerAgreementId').hide();
+                Ext.getCmp('newProviderId').reset();
+                Ext.getCmp('newProviderDetailsId').reset();
+                Ext.getCmp('providerAgreementId').reset();
+                Ext.getCmp('mainView').setActiveItem(0);
+            },
+            failure: function (response) {
+                Ext.getCmp('agreementId').setMasked(false);
+                Ext.Msg.alert("","Error");
+            }
+        });
+    },
+
     backNewProvider: function() {
         Ext.getCmp('newProviderModal').show();
         Ext.getCmp('providerAgreementId').hide();

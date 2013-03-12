@@ -6,12 +6,20 @@ Ext.define('RaxaEmr.model.Location',{
             persist: false
         },{
             name: 'uuid',
-            type: 'string',
+            type: 'string'
         }, {
             name: 'display',
             type: 'string'
         },{
             name: 'name'
+        },{
+            name: 'address1'
+        },{
+            name: 'cityVillage'
+        },{
+            name: 'stateProvince'
+        },{
+            name: 'country'
         }]
     }
 });
