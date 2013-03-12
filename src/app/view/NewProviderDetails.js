@@ -49,6 +49,42 @@ Ext.define("RaxaEmr.view.NewProviderDetails", {
                     tabIndex : 1,
                     width: 400,
                     style: NEW_PROV_CONSTANTS.FIELD_BORDER,
+                    listeners: {
+                        focus: function() {
+                            localStorage.removeItem('oldLocationUuid');
+                            if(!Ext.getCmp('locationFormPanel')){
+                                Ext.create('Ext.Panel', {
+                                    id: 'locationFormPanel',
+                                    items: [{
+                                        height: 280,
+                                        xtype: 'locationList',
+                                        scrollable: true,
+                                        hidden: false,
+                                        listeners: {
+                                            select: function(list, record) {
+                                                console.log(record);
+                                                Ext.getCmp('nameOfSetup').setValue(record.data.name);
+                                                localStorage.setItem('oldLocationUuid', record.data.uuid);
+                                                Ext.getCmp('address').setValue(record.data.address1);
+                                                Ext.getCmp('city').setValue(record.data.cityVillage);
+                                                Ext.getCmp('state').setValue(record.data.stateProvince);
+                                                Ext.getCmp('country').setValue(record.data.country);
+                                                Ext.getCmp('locationFormPanel').hide();
+                                                Ext.getCmp('locationGoogleMapId').renderMap();    
+                                            }
+                                        }
+                                    }],
+                                    width: 300,
+                                    height: 300
+                                }).showBy(Ext.getCmp('nameOfSetup'), 'tc-bc?');
+                            }
+                            Ext.getCmp('locationFormPanel').show();
+                        },
+                        keyup: function() {
+                            Ext.getCmp('locationList').getStore().clearFilter();
+                            Ext.getCmp('locationList').getStore().filter('name', Ext.getCmp('nameOfSetup').getValue());
+                        }
+                    }
                 }]
             },
             {

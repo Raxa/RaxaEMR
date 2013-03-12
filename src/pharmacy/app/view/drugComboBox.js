@@ -5,6 +5,7 @@ Ext.define('RaxaEmr.Pharmacy.view.drugComboBox', {
     autoSelect: false,
     store: 'allDrugs',
     displayField: 'text',
+    valueField: 'uuid',
     enableKeyEvents: true,
     disableKeyFilter: true,
     queryMode: 'local',
@@ -16,28 +17,36 @@ Ext.define('RaxaEmr.Pharmacy.view.drugComboBox', {
             this.drawNewDrugButton();
         },
         keyup: function (comboField, key) {
-            if(key.getKey() === KEY.DELETE){
-                this.filterComboBox(comboField.rawValue);
-            }
-            this.drawNewDrugButton();
+//            if(key.getKey() === KEY.DELETE){
+//                //this.filterComboBox(comboField.rawValue);
+//            }
+//            this.drawNewDrugButton();
         },
         keypress: function (comboField, key) {
+            
             var query = (comboField.rawValue + String.fromCharCode(key.getKey())).toLowerCase();
-            console.log(this.store.count());
-            this.filterComboBox(query);
+            this.getStore().setProxy({
+                type: 'rest',
+                url: HOST + '/ws/rest/v1/raxacore/drug?q='+query,
+                headers: Util.getBasicAuthHeaders(),
+                reader: {
+                    type:'json',
+                    root: 'results'
+                }
+            });
+            this.getStore().load();
             comboField.expand();
             this.drawNewDrugButton();
         },
         beforequery: function(queryEvent) {
-            queryEvent.combo.onLoad();
-            // prevent doQuery from firing and clearing out my filter.
-            return false;
+//            queryEvent.combo.onLoad();
+//            // prevent doQuery from firing and clearing out my filter.
+//            return false;
         }
     },
     filterComboBox: function(query) {
             this.store.clearFilter(true);
             this.store.filterBy(function(record, id) {
-                console.log(record);
                 return record.data.name.toLowerCase().indexOf(query)!==-1 ||
                     record.data.shortName.toLowerCase().indexOf(query)!==-1 ||
                     record.data.brandName.toLowerCase().indexOf(query)!==-1;

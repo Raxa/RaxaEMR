@@ -55,7 +55,7 @@ Ext.define('RaxaEmr.view.NewAccount', {
                 },{
                     xtype: 'button',
                     text: 'New Provider Account',
-                    id: 'newProviderAccountButton',
+                    id: 'newPharmacistAccountButton',
                     style: NEW_PERSON_FORM_CONSTANTS.ADD_PERSON_BUTTON,
                 }]
             }]

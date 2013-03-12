@@ -69,8 +69,8 @@ Ext.define('RaxaEmr.view.LocationGoogleMap', {
         },
         
         setMapMarker : function(latLang , map , address , geocoder , addedAddress) {
-            Ext.getCmp('latitude').setValue(latLang.Ya);
-            Ext.getCmp('longitude').setValue(latLang.Za);
+            Ext.getCmp('latitude').setValue(latLang.ib);
+            Ext.getCmp('longitude').setValue(latLang.jb);
             map.setCenter(latLang);
             var marker = new google.maps.Marker({
                 position: latLang,

@@ -206,9 +206,6 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             "inventoryNavBar button[action=newDrugGroup]": {
                 click: this.newDrugGroup
             },
-            'pharmacyTopBar #allStockLocationPicker':{
-                select: this.filterAllStocksByLocation
-            },
             'requisitionText #stockLocationPicker':{
                 select: this.localStorageStoreLocation
             },
@@ -1194,9 +1191,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     submitReceipt: function(){
         var drugInventories = [];
         var receipts = Ext.getStore('newReceipt').data;
-        var receiptLocationUuid = Ext.getCmp("allStockLocationPicker").value;
+        var receiptLocationUuid = localStorage.location;
         var stockLocationUuid = localStorage.stockLocation;
-        var receiptLocationString = Ext.getCmp("allStockLocationPicker").rawValue.split(" - ")[0];
+        var receiptLocationString = localStorage.locationName;
         var purchaseOrderUuid = Ext.getCmp('receiptPurchaseOrderPicker').getValue();
         for (var i = 0; i < receipts.items.length; i++) {
             if(receipts.items[i].data.drugname !== ""){
@@ -1418,7 +1415,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     // Submit Drug Request via REST to database  
     submitRequisition: function(){
         // Create Drug Inventories (??)
-        if(!((Ext.getCmp('allStockLocationPicker').value === undefined  || Ext.getCmp('allStockLocationPicker').value === null ) || (Ext.getCmp('stockLocationPicker').value === undefined  || Ext.getCmp('stockLocationPicker').value === null ))) {
+        if(!(localStorage.location===null || Ext.getCmp('stockLocationPicker').value === undefined  || Ext.getCmp('stockLocationPicker').value === null )) {
             var drugInventories = [];
             var requisitions = Ext.getStore('RequisitionItems').data;
             for (var i = 0; i < requisitions.items.length; i++) {
@@ -1444,9 +1441,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             } else {
                 timeOfDay = currentTime.getHours() + ":" + currentTime.getMinutes()+ "AM";    
             }
-            var dispenseLocationIndex = Ext.getStore("Locations").find('uuid', Ext.getCmp("allStockLocationPicker").value);
             var stockLocationIndex = Ext.getStore("Locations").find('uuid', Ext.getCmp("stockLocationPicker").value);
-            var dispenseLocationString = Ext.getStore("Locations").getAt(dispenseLocationIndex).data.name.toString();
+            var dispenseLocationString = localStorage.locationName;
             var stockLocationString = Ext.getStore("Locations").getAt(stockLocationIndex).data.name.toString();
             // Model for posting the encounter for given drug orders
             var purchaseOrder = Ext.create('RaxaEmr.Pharmacy.model.PurchaseOrder', {
@@ -1455,7 +1451,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 received: "false",
                 provider: Util.getLoggedInProviderUuid(),
                 stockLocation: Ext.getStore("Locations").getAt(stockLocationIndex).data.uuid,
-                dispenseLocation: Ext.getStore("Locations").getAt(dispenseLocationIndex).data.uuid,
+                dispenseLocation: localStorage.location,
                 drugPurchaseOrderDate: Util.getCurrentTime(),
                 inventories: drugInventories
             });
@@ -1511,9 +1507,10 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     
     // Fills a purchase order when a stock admin wants to make a new issue
     // Populates issue drug fields with drugs + quantites from the purchase order
+    //TODO: make sure to only populate issues for the current location
     populateIssueFromPurchaseOrder: function(combo, records){
         Ext.getCmp('issuedispenseLocationPicker').setValue(records[0].data.dispenseLocation.uuid);
-        Ext.getCmp('allStockLocationPicker').setValue(records[0].data.stockLocation.uuid);
+        //Ext.getCmp('allStockLocationPicker').setValue(records[0].data.stockLocation.uuid);
         
         // Emptying previous fields
         Ext.getStore('newIssue').removeAll();
@@ -1582,9 +1579,6 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
                 return "Quantity cannot exceed batch";
             }
         }
-        if( Ext.getCmp('allStockLocationPicker').getValue() === null || Ext.getCmp('allStockLocationPicker').getValue() === undefined) {
-            return "Please select a Stock location";
-        }
         if( Ext.getCmp('issuedispenseLocationPicker').getValue() === null || Ext.getCmp('issuedispenseLocationPicker').getValue() === undefined) {
             return "Please select a Dispense location";
         }
@@ -1611,9 +1605,9 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         // batchUuidField.persist = true;
         
         var issuedispenseLocationUuid = Ext.getCmp("issuedispenseLocationPicker").value;
-        var issueStockLocationUuid = Ext.getCmp("allStockLocationPicker").value;
+        var issueStockLocationUuid = localStorage.location;
         var purchaseOrderUuid = Ext.getCmp('issuePurchaseOrderPicker').getValue();
-        var issueStockLocationString = Ext.getCmp("allStockLocationPicker").rawValue;
+        var issueStockLocationString = localStorage.locationName;
         var issuedispenseLocationString = Ext.getCmp("issuedispenseLocationPicker").rawValue;
         for (var i = 0; i < issues.items.length; i++) {
             var drugIndex = Ext.getStore('allDrugs').find('text', issues.items[i].data.drugName);
@@ -1706,12 +1700,11 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
     // TODO: Refactor all of these filters into a common function. Just pass it an argument to do filtering
 
     
-    filterAllStocksByLocation: function() {
+    filterAllStocksByLocation: function(location) {
         Ext.getStore('StockList').clearFilter();
         //if current location, filter by that
-        if(Ext.getCmp('allStockLocationPicker').getValue()){
-            Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
-            localStorage.setItem('pharmacyLocation', Ext.getCmp('allStockLocationPicker').getValue());
+        if(location){
+            Ext.getStore('StockList').filter('locationUuid', location);
         }
     },
     
@@ -1725,8 +1718,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         // Ext.getCmp('availableStockButton').setUI('raxa-orange-small');
         Ext.getStore('StockList').clearFilter();
         //if current location, filter by that
-        if(Ext.getCmp('allStockLocationPicker').getValue()){
-            Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
+        if(localStorage.location){
+            Ext.getStore('StockList').filter('locationUuid', localStorage.location);
         }
         Ext.getStore('StockList').filter('status', 'available');
         //        var regExp = /\d+/;
@@ -1740,8 +1733,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         // Ext.getCmp('expiringStockButton').setUI('raxa-orange-small');
         Ext.getStore('StockList').clearFilter();
         //if current location, filter by that
-        if(Ext.getCmp('allStockLocationPicker').getValue()){
-            Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
+        if(localStorage.location){
+            Ext.getStore('StockList').filter('locationUuid', localStorage.location);
         }
         Ext.getStore('StockList').filterBy(function(record, id){
             return(Util.monthsFromNow(record.data.expiryDate)<RaxaEmr_Pharmacy_Controller_Vars.MONTHS_TO_EXPIRE);
@@ -1755,8 +1748,8 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
         // Ext.getCmp('lowStockButton').setUI('raxa-orange-small');
         Ext.getStore('StockList').clearFilter();
         //if current location, filter by that
-        if(Ext.getCmp('allStockLocationPicker').getValue()){
-            Ext.getStore('StockList').filter('locationUuid', Ext.getCmp('allStockLocationPicker').getValue());
+        if(localStorage.location){
+            Ext.getStore('StockList').filter('locationUuid', localStorage.location);
         }
         Ext.getStore('StockList').filterBy(function(record, id){
             return(record.data.quantity<RaxaEmr_Pharmacy_Controller_Vars.STOCK_OUT_LIMIT);
@@ -1819,7 +1812,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             received: "true",
             provider: Util.getLoggedInProviderUuid(),
             stockLocation: prescriptionStockLocationUuid,
-            dispenseLocation: localStorage.pharmacyLocation,
+            dispenseLocation: localStorage.location,
             drugPurchaseOrderDate: time,
             inventories: drugInventories
         });
