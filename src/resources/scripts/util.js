@@ -743,5 +743,12 @@ var Util = {
             default :
                 return DEFAULT_PRESCRIPTION_QUANTITY;
         }
+    },
+    
+    //adds the server time difference to account for time zones differences with server
+    getTimeAsServerTime: function(time) {
+        var newTime = new Date();
+        newTime.setTime(time.getTime() + parseInt(localStorage.serverTimeDiff));
+        return newTime;
     }
 }
