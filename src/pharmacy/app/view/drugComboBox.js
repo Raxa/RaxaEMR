@@ -8,41 +8,10 @@ Ext.define('RaxaEmr.Pharmacy.view.drugComboBox', {
     valueField: 'uuid',
     enableKeyEvents: true,
     disableKeyFilter: true,
-    queryMode: 'local',
+    queryMode: 'remote',
+    queryParam: 'q',
     forceSelection: false,
     listeners: {
-        focus: function (comboField) {
-            this.store.clearFilter(true);
-            comboField.expand();
-            this.drawNewDrugButton();
-        },
-        keyup: function (comboField, key) {
-//            if(key.getKey() === KEY.DELETE){
-//                //this.filterComboBox(comboField.rawValue);
-//            }
-//            this.drawNewDrugButton();
-        },
-        keypress: function (comboField, key) {
-            
-            var query = (comboField.rawValue + String.fromCharCode(key.getKey())).toLowerCase();
-            this.getStore().setProxy({
-                type: 'rest',
-                url: HOST + '/ws/rest/v1/raxacore/drug?q='+query,
-                headers: Util.getBasicAuthHeaders(),
-                reader: {
-                    type:'json',
-                    root: 'results'
-                }
-            });
-            this.getStore().load();
-            comboField.expand();
-            this.drawNewDrugButton();
-        },
-        beforequery: function(queryEvent) {
-//            queryEvent.combo.onLoad();
-//            // prevent doQuery from firing and clearing out my filter.
-//            return false;
-        }
     },
     filterComboBox: function(query) {
             this.store.clearFilter(true);
