@@ -87,8 +87,8 @@ Ext.define('RaxaEmr.Pharmacy.view.newPatient', {
                             id: 'patientPrimaryContact',
                             allowBlank: true
                         }, {
-                            name: 'secondryContact',
-                            emptyText: 'Secondry Contact',
+                            name: 'secondaryContact',
+                            emptyText: 'Secondary Contact',
                             id: 'patientSecondaryContact',
                             allowBlank: true
                         }]

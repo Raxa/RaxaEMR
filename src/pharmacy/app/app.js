@@ -6,7 +6,7 @@ Ext.Loader.setConfig({
 Ext.application({
     name: 'RaxaEmr.Pharmacy',
     
-    views: ['Viewport', 'prescription', 'pharmacyTopbar', 'addFacility', 'goodsReceipt', 'listOfDrugs', 'pharmacyDetails', 'reports', 'stockIssue', 'stockIssueGrid', 'goodsReceiptGrid', 'goodsReceiptText', 'goodsIssueText', 'goodsIssueGrid', 'goodsIssue', 'allStockPanel', 'allStockGrid', 'allStock', 'addDrug', 'allStock', 'prescribedDrugs', 'patientsGridPanel', 'requisition', 'DrugDetails', 'DrugDetailsText', 'DrugDetailsGrid', 'alertGrid', 'InventoryEditor', 'drugComboBox' , 'patientAssignedDrugs' , 'newPatient'],
+    views: ['Viewport', 'prescription', 'pharmacyTopbar', 'addFacility', 'goodsReceipt', 'listOfDrugs', 'pharmacyDetails', 'reports', 'stockIssue', 'stockIssueGrid', 'goodsReceiptGrid', 'goodsReceiptText', 'goodsIssueText', 'goodsIssueGrid', 'goodsIssue', 'allStockPanel', 'allStockGrid', 'allStock', 'addDrug', 'allStock', 'prescribedDrugs', 'patientsGridPanel', 'requisition', 'DrugDetails', 'DrugDetailsText', 'DrugDetailsGrid', 'alertGrid', 'InventoryEditor', 'drugComboBox' , 'patientAssignedDrugs' , 'newPatient', 'PatientSearchandQueue', 'PatientDetails'],
     
     controllers: ['prescription'],
     

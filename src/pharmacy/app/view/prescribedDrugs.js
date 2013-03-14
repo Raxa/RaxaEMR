@@ -4,7 +4,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
     id: 'prescribedDrugs',
     height: 300,
     styleHtmlContent: false,
-    width: 750,
+    width: 738,
     store: 'orderStore',
     selType: 'cellmodel',
     cellEditor: Ext.create('Ext.grid.plugin.CellEditing', {
@@ -89,7 +89,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
         {
             xtype: 'actioncolumn',
             text: 'Times',
-            width: 80,
+            width: 150,
             id: 'timesActionId',
             renderer: function (value, metadata, record) {
                 if (record.get('takeInMorning')) {
@@ -156,6 +156,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
             editor: 
             {
                 xtype: 'combobox',
+                width: 200,
                 allowBlank: false,
                 editable: true,
                 queryMode: 'local',
@@ -234,9 +235,9 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
         },
         {
             xtype: 'gridcolumn',
-            width: 90,
+            width: 50,
             dataIndex: 'duration',
-            text: 'Duration (Days)',
+            text: 'Days',
             resizable: false,
             editor: {
                 xtype: 'numberfield',
@@ -264,7 +265,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
             xtype: 'gridcolumn',
             text: 'Batch No.',
             dataIndex: 'batchQuantity',
-            width: 120,
+            width: 80,
             editor: {
                 xtype: 'combobox',
                 allowBlank: false,
