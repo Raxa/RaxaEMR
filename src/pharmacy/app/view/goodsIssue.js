@@ -1,7 +1,6 @@
 Ext.define('RaxaEmr.Pharmacy.view.goodsIssue', {
     extend: 'Ext.panel.Panel',
     id: '.goodsIssue',
-    autoScroll: true,
     alias: 'widget.goodsIssue',
     title: 'Orders >> Send Drugs',
     items:[{

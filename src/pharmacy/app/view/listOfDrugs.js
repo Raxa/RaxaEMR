@@ -9,12 +9,10 @@ Ext.define('RaxaEmr.Pharmacy.view.listOfDrugs', {
         layout:{
             type: 'auto'
         },
-        autoScroll: true,
         margin: '20 50 0 110',
         items:[{
             xtype: 'tabpanel',
             activeTab: 0,
-            autoScroll: true,
             tabPosition: 'left',
             tabHeight: 100,
             height: 580,
@@ -71,7 +69,6 @@ Ext.define('RaxaEmr.Pharmacy.view.listOfDrugs', {
                         xtype: 'panel',
                         width: 255,
                         border: false,
-                        autoScroll: true,
                         title: 'List OF Drug Groups',
                         margin: '10 10 10 110',
                         height: 500,
@@ -156,7 +153,6 @@ Ext.define('RaxaEmr.Pharmacy.view.listOfDrugs', {
                 },{
                     xtype: 'gridpanel',
                     margin: '10 170 10 150',
-                    autoScroll: true,
                     height: 450,
                     columns: [
                     {

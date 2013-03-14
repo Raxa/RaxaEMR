@@ -107,7 +107,6 @@ Ext.define('RaxaEmr.Pharmacy.view.pharmacyDetails', {
             xtype: 'gridpanel',
             height: 170,
             width: 570,
-            autoScroll: true,
             title: '',
             x: 20,
             y: 170,

@@ -8,7 +8,6 @@ PHARMACY_TOPBAR_CONSTANTS = {
 Ext.define('RaxaEmr.Pharmacy.view.pharmacyTopbar',{
     extend: 'Ext.container.Container',
     alias: 'widget.pharmacyTopBar',
-    autoScroll: true,
     width: 960,
     id: 'pharmacyTopbar',
     layout: {

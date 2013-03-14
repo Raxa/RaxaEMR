@@ -9,7 +9,6 @@ Ext.define('RaxaEmr.Pharmacy.view.requisitionGrid', {
         type: 'absolute'
     },
     store: 'RequisitionItems',
-    autoScroll: true,
     selType: 'cellmodel',
     cellEditor: Ext.create('Ext.grid.plugin.CellEditing', {
         clicksToEdit: 1

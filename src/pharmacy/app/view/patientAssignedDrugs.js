@@ -6,7 +6,6 @@
 Ext.define('RaxaEmr.Pharmacy.view.patientAssignedDrugs',{
     extend: 'Ext.container.Container',
     alias: 'widget.patientAssignedDrugs',
-    autoScroll: true,
     id: 'patientPrescibedDrugs',
     height: 480,
     width: 750,

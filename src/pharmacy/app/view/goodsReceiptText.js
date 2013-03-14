@@ -4,7 +4,6 @@ Ext.define('RaxaEmr.Pharmacy.view.goodsReceiptText', {
     layout: {
         type: 'vbox'
     },
-    autoScroll: true,
     items: [
     {
         margin: 5,

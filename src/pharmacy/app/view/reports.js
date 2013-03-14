@@ -1,6 +1,5 @@
 Ext.define('RaxaEmr.Pharmacy.view.reports', {
     extend: 'Ext.container.Container',
-    autoScroll: true,
     id: 'reports',
     alias: 'widget.reports',
     layout: 'auto',

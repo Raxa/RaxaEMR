@@ -1,7 +1,6 @@
 Ext.define('RaxaEmr.Pharmacy.view.DrugDetails', {
     extend: 'Ext.container.Container',
     id: 'drugDetails',
-    autoScroll: true,
     alias: 'widget.drugDetails',
     layout: 'vbox',
     margin: '0 0 0 110',

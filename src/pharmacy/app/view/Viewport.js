@@ -54,7 +54,6 @@ Ext.define('RaxaEmr.Pharmacy.view.Viewport', {
     {
         xtype: 'addDrug'
     },{
-        autoScroll: true,
         layout: 'auto',
         width:960,
         items:[{

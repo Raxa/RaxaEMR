@@ -1,7 +1,6 @@
 Ext.define('RaxaEmr.Pharmacy.view.requisition', {
     extend: 'Ext.panel.Panel',
     id: '.requisition',
-    autoScroll: true,
     alias: 'widget.requisition',
     title: 'Orders >> Request Drugs',
     width: 780,
