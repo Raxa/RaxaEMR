@@ -4,7 +4,7 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
     id: 'prescribedDrugs',
     height: 300,
     styleHtmlContent: false,
-    width: 738,
+    width: 740,
     store: 'orderStore',
     selType: 'cellmodel',
     cellEditor: Ext.create('Ext.grid.plugin.CellEditing', {
@@ -349,18 +349,6 @@ Ext.define('RaxaEmr.Pharmacy.view.prescribedDrugs', {
             }]
         }];
         this.plugins = [this.cellEditor];
-        this.dockedItems = [{
-            xtype: 'toolbar',
-            dock: 'bottom',
-            config:{
-                align: 'left'
-            },
-            items: ['->',{
-                text: 'Add Drug',
-                iconCls: 'icon-add',
-                action: 'addDrugToPrescription'
-            }]
-        }];
         this.callParent(arguments);
     }
 });

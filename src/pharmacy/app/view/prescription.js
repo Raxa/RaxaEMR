@@ -79,14 +79,22 @@ Ext.define('RaxaEmr.Pharmacy.view.prescription', {
                 width: 60,
                 text: 'Save',
                 id: 'saveButton',
+                margin: '10 0 0 50',
                 action: 'doneWithQueuedPatientPrescription'
             },{
                 xtype: 'button',
                 width: 60,
                 text: 'Print',
+                margin: '10 0 0 50',
                 action: 'printPrescribedDrugs'
-            }
-            ]
+            }, {
+                xtype: 'button',
+                width: 80,
+                text: 'Add Drug',
+                margin: '10 0 0 0',
+                docked: 'left',
+                action: 'addDrugToPrescription'
+            }]
         }]
     }]
 });

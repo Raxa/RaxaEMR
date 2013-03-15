@@ -115,7 +115,7 @@ Ext.define("RaxaEmr.Pharmacy.controller.prescription", {
             },
 
             // Prescribed Drugs
-            'prescribedDrugs button[action=addDrugToPrescription]': {
+            'prescription button[action=addDrugToPrescription]': {
                 click: this.addDrug
             },
             'prescribedDrugs': {
