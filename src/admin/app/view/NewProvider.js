@@ -35,7 +35,31 @@ Ext.define("RaxaEmr.Admin.view.NewProvider", {
             xtype: 'textfield',
             id: 'userName',
             name: 'userName',
-            label: Ext.i18n.appBundle.getMsg('RaxaEmrAdmin.view.NewProvider.user_name')
+            label: Ext.i18n.appBundle.getMsg('RaxaEmrAdmin.view.NewProvider.user_name'),
+            listeners: {
+                change: function(textField, newValue) {
+                    Ext.getCmp('newProviderId').setMasked({
+                        xtype: 'loadmask'
+                    });
+                    Ext.Ajax.request({
+                        scope: this,
+                        url: HOST + '/ws/rest/v1/raxacore/user?checkUsername='+newValue,
+                        method: 'GET',
+                        headers: Util.getBasicAuthHeaders(),
+                        success: function (response) {
+                            var usernameResponse = Ext.decode(response.responseText);
+                            if(usernameResponse.userExists === "true"){
+                                Ext.Msg.alert('Error', 'User name exists');
+                                textField.setValue("");
+                            }
+                            Ext.getCmp('newProviderId').setMasked(false);
+                        },
+                        failure: function () {
+                            Ext.getCmp('newProviderId').setMasked(false);
+                        }
+                    });
+                }
+            }
         },
         {
             xtype: 'textfield',

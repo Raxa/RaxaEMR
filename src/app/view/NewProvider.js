@@ -198,7 +198,31 @@ Ext.define("RaxaEmr.view.NewProvider", {
                     name: 'userName',
                     tabIndex : 1,
                     width: NEW_PROVIDER_CONSTANTS.FIELD_WIDTH,
-                    style: NEW_PROVIDER_CONSTANTS.FIELD_BORDER
+                    style: NEW_PROVIDER_CONSTANTS.FIELD_BORDER,
+                    listeners: {
+                        change: function(textField, newValue) {
+                            Ext.getCmp('newProviderId').setMasked({
+                                xtype: 'loadmask'
+                            });
+                            Ext.Ajax.request({
+                                scope: this,
+                                url: HOST + '/ws/rest/v1/raxacore/user?checkUsername='+newValue,
+                                method: 'GET',
+                                headers: Util.getBasicAuthHeaders(),
+                                success: function (response) {
+                                    var usernameResponse = Ext.decode(response.responseText);
+                                    if(usernameResponse.userExists === "true"){
+                                        Ext.Msg.alert('Error', 'User name exists');
+                                        textField.setValue("");
+                                    }
+                                    Ext.getCmp('newProviderId').setMasked(false);
+                                },
+                                failure: function () {
+                                    Ext.getCmp('newProviderId').setMasked(false);
+                                }
+                            });
+                        }
+                    }
                 },{
                     xtype: 'label',
                     html: '<h1 style="text-align:left;font-size:12px;"> You can use letters, numbers and periods.<br>Example: Someone named Robert Max might choose "robert.max" </h1>'
