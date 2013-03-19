@@ -256,16 +256,6 @@ var Util = {
         return headers;
     },
 
-    getNewAccountAuthHeaders: function () {
-        var headers = {
-            "Authorization": "Basic " + window.btoa("newAccount:Hello123"),  
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        };
-        return headers;
-    },
-
-
     /**
      * Logout the current user. Ends the current session
      */

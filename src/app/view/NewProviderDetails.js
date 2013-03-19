@@ -83,6 +83,11 @@ Ext.define("RaxaEmr.view.NewProviderDetails", {
                         keyup: function() {
                             Ext.getCmp('locationList').getStore().clearFilter();
                             Ext.getCmp('locationList').getStore().filter('name', Ext.getCmp('nameOfSetup').getValue());
+                        },
+                        blur: function() {
+                            if(Ext.getCmp('locationFormPanel')){
+                                Ext.getCmp('locationFormPanel').hide();
+                            }
                         }
                     }
                 }]

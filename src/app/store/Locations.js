@@ -9,8 +9,7 @@ Ext.define('RaxaEmr.store.Locations', {
         model: 'RaxaEmr.model.Location',
         proxy: {
             type: 'rest',
-            headers: Util.getNewAccountAuthHeaders(),
-            url: HOST + '/ws/rest/v1/location?v=full&limit=100',
+            url: HOST + '/ws/rest/v1/raxacore/location?v=full&limit=100',
             reader: {
               type: 'json',
               rootProperty: 'results'
