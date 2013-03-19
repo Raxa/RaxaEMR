@@ -296,6 +296,7 @@ Ext.define('RaxaEmr.controller.Session', {
                     method: 'POST',
                     params: locAddressParam,
                     disableCaching: false,
+                    headers: Util.getBasicAuthHeaders(),
                     success: function (response) {
                         this.sendNewProvider(JSON.parse(response.responseText).uuid);
                     },
@@ -339,6 +340,7 @@ Ext.define('RaxaEmr.controller.Session', {
             method: 'POST',
             params: newUserParam,
             disableCaching: false,
+            headers: Util.getBasicAuthHeaders(),
             success: function (response) {
                 Ext.getCmp('agreementId').setMasked(false);
                 Ext.Msg.alert("Account created ","Please wait 24 hours for your account to be approved.");
@@ -404,6 +406,7 @@ Ext.define('RaxaEmr.controller.Session', {
                 method: 'POST',
                 params: newUserParam,
                 disableCaching: false,
+                headers: Util.getBasicAuthHeaders(),
                 success: function (response) {
                     formComponent.setMasked(false);
                     if(type==="provider"){
