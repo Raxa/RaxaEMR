@@ -45,11 +45,11 @@ Ext.define('RaxaEmr.Pharmacy.view.pharmacyTopbar',{
              listeners: {
         click: function() {
                 Ext.getCmp('mainarea').getLayout().setActiveItem(0);
-                Ext.getCmp('addpatientarea').getLayout().setActiveItem(0);
 
                 // Highlight "Patients" tab
-                Ext.getCmp('inventoryButton').toggle(false);
                 Ext.getCmp('patientsButton').toggle(true);
+                Ext.getCmp('inventoryButton').toggle(false);
+                
            // }
         }
              }
@@ -59,10 +59,11 @@ Ext.define('RaxaEmr.Pharmacy.view.pharmacyTopbar',{
             id: 'inventoryButton',
             height: PHARMACY_TOPBAR_CONSTANTS.BUTTON_HEIGHT,
             width: PHARMACY_TOPBAR_CONSTANTS.TAB_WIDTH,
+            //pressed: true,
             handler: function(){
                 var l = Ext.getCmp('mainarea').getLayout();
                 l.setActiveItem(RaxaEmr_Pharmacy_Controller_Vars.PHARM_PAGES.ALLSTOCK.value);
-                
+
                 // Highlight "Inventory" tab
                 Ext.getCmp('inventoryButton').toggle(true);
                 Ext.getCmp('patientsButton').toggle(false);
