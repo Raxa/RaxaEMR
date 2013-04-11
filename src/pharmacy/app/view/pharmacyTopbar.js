@@ -59,7 +59,6 @@ Ext.define('RaxaEmr.Pharmacy.view.pharmacyTopbar',{
             id: 'inventoryButton',
             height: PHARMACY_TOPBAR_CONSTANTS.BUTTON_HEIGHT,
             width: PHARMACY_TOPBAR_CONSTANTS.TAB_WIDTH,
-            //pressed: true,
             handler: function(){
                 var l = Ext.getCmp('mainarea').getLayout();
                 l.setActiveItem(RaxaEmr_Pharmacy_Controller_Vars.PHARM_PAGES.ALLSTOCK.value);
