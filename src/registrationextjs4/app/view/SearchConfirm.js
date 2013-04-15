@@ -66,7 +66,7 @@ Ext.define('Registration.view.SearchConfirm', {
                             listeners: {
                                 change: function(object) {
                                     if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
-                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][0] = {"attributeType": "raxa00000-0000-0000-0000-000000000017","value":object.value};
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][0] = {"attributeType": localStorage.getItem('oldPatientIdentificationNumberUuidpersonattributetype'),"value":object.value};
                                 }
                             }
                         }]
@@ -120,7 +120,7 @@ Ext.define('Registration.view.SearchConfirm', {
                             listeners: {
                                 change: function(object) {
                                     if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
-                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][1] = {"attributeType": "raxa00000-0000-0000-0000-000000000008","value":object.value};
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][1] = {"attributeType": localStorage.getItem('primaryRelativeUuidpersonattributetype'),"value":object.value};
                                 }
                             }
                         }]
@@ -201,7 +201,7 @@ Ext.define('Registration.view.SearchConfirm', {
                             listeners: {
                                 change: function(object) {
                                     if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
-                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][2] = {"attributeType": "raxa00000-0000-0000-0000-000000000014","value":object.value};
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][2] = {"attributeType": localStorage.getItem("educationUuidpersonattributetype"),"value":object.value};
                                 }
                             }
                         }]
@@ -228,7 +228,7 @@ Ext.define('Registration.view.SearchConfirm', {
                             listeners: {
                                 change: function(object) {
                                     if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
-                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][3] = {"attributeType": "raxa00000-0000-0000-0000-000000000016","value":object.value};
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][3] = {"attributeType": localStorage.getItem("casteUuidpersonattributetype"),"value":object.value};
                                 }
                             }
                         }]
@@ -256,7 +256,7 @@ Ext.define('Registration.view.SearchConfirm', {
                             listeners: {
                                 change: function(object) {
                                     if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
-                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][4] = {"attributeType": "raxa00000-0000-0000-0000-000000000015","value":object.value};
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][4] = {"attributeType": localStorage.getItem("occupationUuidpersonattributetype"),"value":object.value};
                                 }
                             }
                         }]
@@ -433,7 +433,7 @@ Ext.define('Registration.view.SearchConfirm', {
                             listeners: {
                                 change: function(object) {
                                     if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
-                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][4] = {"attributeType": "raxa00000-0000-0000-0000-000000000010","value":object.value};
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][4] = {"attributeType": localStorage.getItem("primaryContactUuidpersonattributetype"),"value":object.value};
                                 }
                             }
                         }, {
