@@ -61,6 +61,7 @@ Ext.define('RaxaEmr.Registration.view.Bmi', {
                 value: 30,
                 minValue: 0,
                 maxValue: 60,
+                background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#CC0000), color-stop(0.5, #99FF00), to(#ffff00)) no-repeat,
                 readOnly: true
             }, {
                 xtype: 'textfield',
