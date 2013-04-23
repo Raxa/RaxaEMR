@@ -47,7 +47,7 @@ Ext.define('Laboratory.view.Viewport', {
                       }
                 } , {
                     xtype: 'tbtext',
-                    text: 'Logged in as ' + username
+                    text: 'Logged in as ' + localStorage.getItem('username')
                 }, {
                     xtype: 'tbseparator'
                 }, {

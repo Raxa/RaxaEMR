@@ -40,6 +40,7 @@ Ext.define('Registration.view.SearchConfirm', {
                     xtype: 'fieldset',
                     id : 'fieldsetSearchedPatient',
                     padding: 10,
+                    updateData: {"attributes":[],addresses:[]},
                     title: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.title'),
                     items: [{
                         xtype: 'fieldcontainer',
@@ -61,7 +62,13 @@ Ext.define('Registration.view.SearchConfirm', {
                             id: 'oldPatientIdentifierSearchedPatient',
                             readOnly: true,
                             emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.OPI.emptytext'),
-                            allowBlank: true
+                            allowBlank: true,
+                            listeners: {
+                                change: function(object) {
+                                    if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][0] = {"attributeType": localStorage.getItem('oldPatientIdentificationNumberUuidpersonattributetype'),"value":object.value};
+                                }
+                            }
                         }]
                     }, {
                         xtype: 'fieldcontainer',
@@ -82,7 +89,13 @@ Ext.define('Registration.view.SearchConfirm', {
                             emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.PN.emptytext'),
                             flex: 1,
                             readOnly: true,
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners :{
+                                change: function(object) {
+                                    var names = object.value.split(" ");
+                                    Ext.getCmp('fieldsetSearchedPatient').updateData['names'] = [{"givenName":names[0],"familyName":names[1]}];
+                                }
+                            }
                         }]
                     }, {
                         xtype: 'fieldcontainer',
@@ -103,7 +116,13 @@ Ext.define('Registration.view.SearchConfirm', {
                             emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.FHN.emptytext'),
                             flex: 1,
                             readOnly: true,
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners: {
+                                change: function(object) {
+                                    if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][1] = {"attributeType": localStorage.getItem('primaryRelativeUuidpersonattributetype'),"value":object.value};
+                                }
+                            }
                         }]
                     }, {
                         xtype: 'fieldcontainer',
@@ -124,7 +143,13 @@ Ext.define('Registration.view.SearchConfirm', {
                             emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.Age.emptytext'),
                             flex: 1,
                             readOnly: true,
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners: {
+                                change: function(object) {
+                                    var age = object.value;
+                                    Ext.getCmp('fieldsetSearchedPatient').updateData['age'] = age; 
+                                }
+                            }
                         }]
                     }, {
                         xtype: 'fieldcontainer',
@@ -145,7 +170,13 @@ Ext.define('Registration.view.SearchConfirm', {
                             emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.Gender.emptytext'),
                             flex: 1,
                             readOnly: true,
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners: {
+                                change: function(object) {
+                                    var gender = object.value;
+                                    Ext.getCmp('fieldsetSearchedPatient').updateData['gender'] = gender; 
+                                }
+                            }
                         }]
                     }, {
                         xtype: 'fieldcontainer',
@@ -166,7 +197,13 @@ Ext.define('Registration.view.SearchConfirm', {
                             emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.ED.emptytext'),
                             flex: 1,
                             readOnly: true,
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners: {
+                                change: function(object) {
+                                    if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][2] = {"attributeType": localStorage.getItem("educationUuidpersonattributetype"),"value":object.value};
+                                }
+                            }
                         }]
                     }, {
                         xtype: 'fieldcontainer',
@@ -187,7 +224,13 @@ Ext.define('Registration.view.SearchConfirm', {
                             emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.Caste.emptytext'),
                             flex: 1,
                             readOnly: true,
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners: {
+                                change: function(object) {
+                                    if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][3] = {"attributeType": localStorage.getItem("casteUuidpersonattributetype"),"value":object.value};
+                                }
+                            }
                         }]
                     }, {
                         xtype: 'fieldcontainer',
@@ -209,7 +252,13 @@ Ext.define('Registration.view.SearchConfirm', {
 
                             readOnly: true,
                             flex: 1,
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners: {
+                                change: function(object) {
+                                    if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][4] = {"attributeType": localStorage.getItem("occupationUuidpersonattributetype"),"value":object.value};
+                                }
+                            }
                         }]
                     // TODO: https://raxaemr.atlassian.net/browse/RAXAJSS-613
                     // }, {
@@ -243,7 +292,13 @@ Ext.define('Registration.view.SearchConfirm', {
                         readOnly: true,
                         labelPad: 20,
                         labelWidth: 250,
-                        anchor: '95%'
+                        anchor: '95%',
+                        listeners: {
+                            change:  function(object) {
+                                
+                            }
+                        }
+                        
                     }, {
                         xtype: 'textfield',
                         id: 'stretSearchedPatient',
@@ -254,7 +309,14 @@ Ext.define('Registration.view.SearchConfirm', {
                         readOnly: true,
                         labelPad: 20,
                         labelWidth: 250,
-                        anchor: '95%'
+                        anchor: '95%',
+                        street: {},
+                        listeners: {
+                            change:  function(object) {
+                                if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['addresses'] != 'undefined')
+                                    Ext.getCmp('fieldsetSearchedPatient').updateData['addresses']['address1'] = object.value || ''; 
+                            }
+                        }
                     }, {
                         xtype: 'textfield',
                         id: 'townSearchedPatient',
@@ -265,7 +327,13 @@ Ext.define('Registration.view.SearchConfirm', {
                         readOnly: true,
                         labelPad: 20,
                         labelWidth: 250,
-                        anchor: '95%'
+                        anchor: '95%',
+                        listeners: {
+                            change:  function(object) {
+                                if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['addresses'] != 'undefined')
+                                    Ext.getCmp('fieldsetSearchedPatient').updateData['addresses']['cityVillage'] = object.value; 
+                            }
+                        }
                     },/* POST Office & Pincode are no longer in New Patient Registration Form, so removed from here as well
                      {
                         xtype: 'textfield',
@@ -299,7 +367,13 @@ Ext.define('Registration.view.SearchConfirm', {
                         readOnly: true,
                         labelPad: 20,
                         labelWidth: 250,
-                        anchor: '95%'
+                        anchor: '95%',
+                        listeners: {
+                            change:  function(object) {
+                                if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['addresses'] != 'undefined')
+                                    Ext.getCmp('fieldsetSearchedPatient').updateData['addresses']['address3'] = object.value; 
+                            }
+                        }
                     }, {
                         xtype: 'textfield',
                         fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.District'),
@@ -311,7 +385,13 @@ Ext.define('Registration.view.SearchConfirm', {
                         labelPad: 20,
                         labelWidth: 250,
                         hideTrigger: true,
-                        anchor: '95%'
+                        anchor: '95%',
+                        listeners: {
+                            change:  function(object) {
+                                if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['addresses'] != 'undefined')
+                                    Ext.getCmp('fieldsetSearchedPatient').updateData['addresses']['address3'] = object.value; 
+                            }
+                        }
                     },{
                         xtype: 'textfield',
                         fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.State'),
@@ -322,7 +402,13 @@ Ext.define('Registration.view.SearchConfirm', {
                         labelPad: 20,
                         labelWidth: 250,
                         hideTrigger: true,
-                        anchor: '95%'
+                        anchor: '95%',
+                        listeners: {
+                            change:  function(object) {
+                                if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['addresses'] != 'undefined')
+                                    Ext.getCmp('fieldsetSearchedPatient').updateData['addresses']['stateProvince'] = object.value; 
+                            }
+                        }
                     }, {
                         xtype: 'fieldcontainer',
                         fieldLabel: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.CN'),
@@ -343,7 +429,13 @@ Ext.define('Registration.view.SearchConfirm', {
 
                             readOnly: true,
                             flex: 1,
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners: {
+                                change: function(object) {
+                                    if(typeof Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'] != 'undefined')
+                                        Ext.getCmp('fieldsetSearchedPatient').updateData['attributes'][4] = {"attributeType": localStorage.getItem("primaryContactUuidpersonattributetype"),"value":object.value};
+                                }
+                            }
                         }, {
                             name: 'lastName',
                             emptyText: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.CN.emptytext2'),
@@ -376,6 +468,35 @@ Ext.define('Registration.view.SearchConfirm', {
                         text: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.BMI'),
                         // ui: 'raxa-aqua-small',
                         action: 'bmipage'
+                    }, {
+                        xtype: 'button',
+                        margin: '10 0 0 20',
+                        id: 'updateButton',
+                        text: Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.EDIT'),
+                        handler: function () {
+                            var ids = ['oldPatientIdentifierSearchedPatient','patientNameSearchedPatient','relativeNameSearchedPatient','ageSearchedPatient','sexSearchedPatient','educationSearchedPatient','casteSearchedPatient','occupationSearchedPatient','residentialAreaSearchedPatient','stretSearchedPatient','townSearchedPatient','tehsilSearchedPatient','districtSearchedPatient','stateSearchedPatient','primaryContactNumberSearchedPatient'];
+                            //console.log(updateData);
+                            if(Ext.getCmp('updateButton').text == Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.EDIT') ) {
+                                console.log(Ext.getCmp('updateButton').text);
+                                for( id in ids) {
+                                    Ext.getCmp(ids[id]).setReadOnly(false);
+                                }
+                                Ext.getCmp('updateButton').setText(Ext.i18n.appBundle.getMsg('RaxaEmrReg.view.sc.UPDATE'))
+                             }
+                             else {   
+                                age = Ext.getCmp('ageSearchedPatient').value;
+                                data = JSON.stringify(Ext.getCmp('fieldsetSearchedPatient').updateData);
+                                Ext.Ajax.request({
+                                    url: HOST+'/ws/rest/v1/raxacore/patient/'+localStorage.getItem('newPatientUuid'),
+                                    useDefaultXhrHeader: false,
+                                    headers: Util.getBasicAuthHeaders(),
+                                    params: data,
+                                    success: function(response){
+                                        var text = response.responseText;
+                                    }
+                                });
+                            }
+                        }
                     }]
                 }]
             // }]
